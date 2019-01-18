@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
+  <DUT Name="ST_EL7031CoEParams" Id="{a8bf542f-5e38-4778-8d02-5f932a5939fc}">
+    <Declaration><![CDATA[TYPE ST_EL7031CoEParams :
+STRUCT
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

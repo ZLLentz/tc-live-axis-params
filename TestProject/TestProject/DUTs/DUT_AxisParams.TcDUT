@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
+  <DUT Name="DUT_AxisParams" Id="{3cafee99-db25-43c6-98e3-7fe336a53c10}">
+    <Declaration><![CDATA[TYPE DUT_AxisParams :
+STRUCT
+	unit: STRING := "mm";
+	ref_vel: LREAL;
+	max_vel: LREAL;
+	max_acc: LREAL := 15000;
+	max_dec: LREAL := 15000;
+	acc: LREAL := 1500;
+	dec: LREAL := 1500;
+	jerk: LREAL := 2250;
+	home_search: LREAL;
+	home_sync: LREAL;
+	man_fast: LREAL;
+	man_slow: LREAL;
+	jog_fwd: LREAL := 1;
+	jog_rev: LREAL := 1;
+	dead_time: LREAL := 0.008;
+	enc_invert: BOOL;
+	enc_numerator: LREAL;
+	enc_denominator: LREAL := 1;
+	mot_invert: BOOL;
+	max_current: UINT;
+	holding_current: UINT := 100;
+	voltage: UINT := 24000;
+	resistance: UINT := 100;
+	emf: UINT := 0;
+	full_steps: UINT := 200;
+	speed_range: UINT := 1;
+	enc_supply: UINT := 50;
+	enc_clock: UINT := 9;
+	enc_multi_bits: UINT := 0;
+	enc_single_bits: UINT := 32;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

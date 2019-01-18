@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
+  <POU Name="MAIN" Id="{372593b4-1746-4f2d-8630-4bf2374df086}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+	M1: PCDSMotion;
+	M1Cfg: DUT_AxisParams;
+	bLimitFwdM1: BOOL := TRUE;
+	bLimitBwdM1: BOOL := TRUE;
+	M2: PCDSMotion;
+	M2Cfg: DUT_AxisParams;
+	bLimitFwdM2 AT %I*: BOOL;
+	bLimitBwdM2 AT %I*: BOOL;
+	M3: PCDSMotion;
+	M3Cfg: DUT_AxisParams;
+	bLimitFwdM3 AT %I*: BOOL;
+	bLimitBwdM3 AT %I*: BOOL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[M1.bLimitFwd := bLimitFwdM1;
+M1.bLimitBwd := bLimitBwdM1;
+M1Cfg.ref_vel := 20;
+M1Cfg.max_vel := 50;
+M1Cfg.man_fast := 40;
+M1Cfg.man_slow := 5;
+M1Cfg.enc_numerator := 0.001;
+M1.stConfigSet := M1Cfg;
+
+M2.bLimitFwd := bLimitFwdM2;
+M2.bLimitBwd := bLimitBwdM2;
+M2Cfg.ref_vel := 10;
+M2Cfg.max_vel := 20;
+M2Cfg.man_fast := 15;
+M2Cfg.man_slow := 5;
+M2Cfg.enc_numerator := 0.001;
+M2Cfg.max_current := 1100;
+M2.stConfigSet := M2Cfg;
+
+M3.bLimitFwd := bLimitFwdM3;
+M3.bLimitBwd := bLimitBwdM3;
+M3Cfg.ref_vel := 11;
+M3Cfg.max_vel := 21;
+M3Cfg.man_fast := 16;
+M3Cfg.man_slow := 6;
+M3Cfg.enc_numerator := 0.002;
+M3Cfg.max_current := 1234;
+M3.stConfigSet := M3Cfg;
+
+M1(bEnable:=TRUE);
+M2(bEnable:=TRUE);
+M3(bEnable:=TRUE);]]></ST>
+    </Implementation>
+    <LineIds Name="MAIN">
+      <LineId Id="58" Count="0" />
+      <LineId Id="57" Count="0" />
+      <LineId Id="49" Count="4" />
+      <LineId Id="67" Count="0" />
+      <LineId Id="61" Count="1" />
+      <LineId Id="72" Count="4" />
+      <LineId Id="82" Count="0" />
+      <LineId Id="63" Count="0" />
+      <LineId Id="70" Count="0" />
+      <LineId Id="64" Count="1" />
+      <LineId Id="77" Count="4" />
+      <LineId Id="83" Count="0" />
+      <LineId Id="66" Count="0" />
+      <LineId Id="71" Count="0" />
+      <LineId Id="48" Count="0" />
+      <LineId Id="59" Count="1" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

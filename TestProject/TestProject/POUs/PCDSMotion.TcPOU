@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
+  <POU Name="PCDSMotion" Id="{ffde42e9-8ab9-4b2d-b01e-b36e19e1042f}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK PCDSMotion
+VAR_INPUT
+	stConfigSet: DUT_AxisParams;
+	En: BOOL := TRUE;
+	bEnable: BOOL;
+	bReset: BOOL;
+	bExecute: BOOL;
+	nCommand: UINT;
+	nCmdData: UINT;
+	fVelocity: LREAL;
+	fPosition: LREAL;
+	fAcceleration: LREAL;
+	fDeceleration: LREAL;
+	bJogFwd: BOOL;
+	bJogBwd: BOOL;
+	bLimitFwd: BOOL;
+	bLimitBwd: BOOL;
+	fOverride: LREAL := 100;
+	bHomeSensor: BOOL;
+	fHomePosition:LREAL;
+	nHomeRevOffset: UINT;
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	fbLink: FB_NcAxis;
+	fbConfig: FB_AxisConfig;
+	fbDrive: FB_DriveVirtual;
+	stAxisStatus: DUT_AxisStatus_v0_01;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[fbLink(En:=En);
+fbConfig(stConfigSet:=stConfigSet,
+	Axis:=fbLink.Axis);
+fbDrive(En:=En,
+	bEnable:=bEnable,
+	bReset:=bReset,
+	bExecute:=bExecute,
+	nCommand:=nCommand,
+	nCmdData:=nCmdData,
+	fVelocity:=fVelocity,
+	fPosition:=fPosition,
+	fAcceleration:=fAcceleration,
+	fDeceleration:=fDeceleration,
+	bJogFwd:=bJogFwd,
+	bJogBwd:=bJogBwd,
+	bLimitFwd:=bLimitFwd,
+	bLimitBwd:=bLimitBwd,
+	fOverride:=fOverride,
+	bHomeSensor:=bHomeSensor,
+	fHomePosition:=fHomePosition,
+	nHomeRevOffset:=nHomeRevOffset,
+	Axis:=fbLink.Axis);
+stAxisStatus := fbDrive.stAxisStatus;
+IF fbDrive.bDone THEN
+	fbDrive.bExecute := FALSE;
+END_IF]]></ST>
+    </Implementation>
+    <LineIds Name="PCDSMotion">
+      <LineId Id="75" Count="0" />
+      <LineId Id="119" Count="0" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="47" Count="0" />
+      <LineId Id="64" Count="0" />
+      <LineId Id="49" Count="14" />
+      <LineId Id="65" Count="0" />
+      <LineId Id="77" Count="0" />
+      <LineId Id="17" Count="2" />
+      <LineId Id="9" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
