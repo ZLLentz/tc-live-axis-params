@@ -1,15 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
-  <POU Name="FB_AxisConfig" Id="{fcb6a2ad-e399-41e9-a4d8-8a9b39418313}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_AxisConfig
+  <POU Name="FB_AxisReadParams" Id="{e92502d6-67ee-4fa0-a7de-4596fc050760}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_AxisReadParams
 VAR_INPUT
-	stConfigSet: DUT_AxisParams;
-	bExecute: BOOL; // Set, then get
-	bExecGet: BOOL; // Only get
+	bExecute: BOOL;
 	bReset: BOOL;
 END_VAR
 VAR_OUTPUT
-	stConfigGet: DUT_AxisParams;
+	stConfig: DUT_AxisParams;
 	bDone: BOOL;
 	bBusy: BOOL;
 	bError: BOOL;
@@ -19,25 +17,24 @@ VAR_IN_OUT
 	Axis: AXIS_REF;
 END_VAR
 VAR
-	fbRead: FB_AxisReadParams;
+	fbNCRead: FB_AxisReadNC;
+	fbCoERead: FB_AxisReadCoE;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[// Write first
-// Read after write is fully done
-fbRead(bExecute:=bExecute OR bExecGet,
+      <ST><![CDATA[fbNCRead(bExecute:=bExecute,
 	bReset:=bReset,
+	stConfig:=stConfig,
 	Axis:=Axis,
-	stConfig=>stConfigGet,
 	bDone=>bDone,
 	bBusy=>bBusy,
 	bError=>bError,
 	iErrorID=>iErrorID);]]></ST>
     </Implementation>
-    <LineIds Name="FB_AxisConfig">
-      <LineId Id="30" Count="1" />
+    <LineIds Name="FB_AxisReadParams">
       <LineId Id="9" Count="0" />
-      <LineId Id="19" Count="2" />
+      <LineId Id="25" Count="0" />
+      <LineId Id="31" Count="1" />
       <LineId Id="26" Count="3" />
     </LineIds>
   </POU>

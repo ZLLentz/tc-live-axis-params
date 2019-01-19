@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<TcSmItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmItem" TcSmVersion="1.0" TcVersion="3.1.4020.32" ClassName="CNestedPlcProjDef">
+<TcSmItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmItem" TcSmVersion="1.0" TcVersion="3.1.4022.22" ClassName="CNestedPlcProjDef">
 	<DataTypes>
 		<DataType>
 			<Name GUID="{4C3FC5AC-D5AA-44C6-AC5A-159774BA0F6D}" Namespace="MC" TcBaseType="true" HideType="true" IecDeclaration="DWORD;">NCTOPLC_AXIS_REF_STATE</Name>
@@ -880,7 +880,7 @@ External Setpoint Generation:
 		</DataType>
 	</DataTypes>
 	<Project GUID="{3A3EAEE6-78AF-4B48-BD1E-B43A5DD5D386}" Name="TestProject" PrjFilePath="..\..\TestProject\TestProject.plcproj" TmcFilePath="..\..\TestProject\TestProject.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e">
-		<Instance Id="#x01010010" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2">
+		<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="TestProject\TestProject.tmc">
 			<Name>TestProject Instance</Name>
 			<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 			<Vars VarGrpType="1">
@@ -902,7 +902,7 @@ External Setpoint Generation:
 					<Type>BOOL</Type>
 				</Var>
 				<Var>
-					<Name>MAIN.M1.Drive.MasterAxis.NcToPlc</Name>
+					<Name>MAIN.M1.fbLink.Axis.NcToPlc</Name>
 					<Type GUID="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
 					<SubVar>
 						<Name>AxisState</Name>
@@ -951,60 +951,11 @@ External Setpoint Generation:
 					</SubVar>
 				</Var>
 				<Var>
-					<Name>MAIN.M1.Link.Axis.NcToPlc</Name>
-					<Type GUID="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
-					<SubVar>
-						<Name>AxisState</Name>
-						<Comment>
-							<![CDATA[Present State Of The Axis Movement (continuous axis):
-0  = INACTIVE:		axis has no job
-1  = RUNNING:		axis is executing a motion job
-2  = OVERRIDE_ZERO:	axis is executing a job but override is zero
-3  = PHASE_VELOCONST:	axis is moving at constant velocity
-4  = PHASE_ACCPOS:	axis is accelerating
-5  = PHASE_ACCNEG:	axis is decelerating
-Slaves only:
-11 = PREPHASE:		slave axis is in a motion pre-phase
-12 = SYNCHRONIZING:	slave axis is synchronizing
-13 = SYNCHRONOUS:	slave axis is moving synchronously
-External Setpoint Generation:
-41 = EXTSETGEN_MODE1:	external setpoint generation active
-42 = EXTSETGEN_MODE2:	internal and external setpoint gen. active
-]]>
-						</Comment>
-					</SubVar>
-					<SubVar>
-						<Name>HomingState</Name>
-						<Comment>
-							<![CDATA[Axis Homing Status:
-0: idle
-1: start homing
-2: searching home switch
-3: stopping on home switch
-4: moving off home switch
-5: searching sync pulse
-6: stopping after homing
-]]>
-						</Comment>
-					</SubVar>
-					<SubVar>
-						<Name>CoupleState</Name>
-						<Comment>
-							<![CDATA[Axis Coupling Status:
-0: axis is a single axis (not coupled)
-1: axis is a master axis
-2: axis is master and slave
-3: axis is a slave axis
-]]>
-						</Comment>
-					</SubVar>
-				</Var>
-				<Var>
-					<Name>MAIN.M1.Link.InfoData_State</Name>
+					<Name>MAIN.M1.fbLink.InfoData_State</Name>
 					<Type>UINT</Type>
 				</Var>
 				<Var>
-					<Name>MAIN.M2.Drive.MasterAxis.NcToPlc</Name>
+					<Name>MAIN.M1.fbDrive.MasterAxis.NcToPlc</Name>
 					<Type GUID="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
 					<SubVar>
 						<Name>AxisState</Name>
@@ -1053,7 +1004,7 @@ External Setpoint Generation:
 					</SubVar>
 				</Var>
 				<Var>
-					<Name>MAIN.M2.Link.Axis.NcToPlc</Name>
+					<Name>MAIN.M2.fbLink.Axis.NcToPlc</Name>
 					<Type GUID="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
 					<SubVar>
 						<Name>AxisState</Name>
@@ -1102,11 +1053,11 @@ External Setpoint Generation:
 					</SubVar>
 				</Var>
 				<Var>
-					<Name>MAIN.M2.Link.InfoData_State</Name>
+					<Name>MAIN.M2.fbLink.InfoData_State</Name>
 					<Type>UINT</Type>
 				</Var>
 				<Var>
-					<Name>MAIN.M3.Drive.MasterAxis.NcToPlc</Name>
+					<Name>MAIN.M2.fbDrive.MasterAxis.NcToPlc</Name>
 					<Type GUID="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
 					<SubVar>
 						<Name>AxisState</Name>
@@ -1155,7 +1106,7 @@ External Setpoint Generation:
 					</SubVar>
 				</Var>
 				<Var>
-					<Name>MAIN.M3.Link.Axis.NcToPlc</Name>
+					<Name>MAIN.M3.fbLink.Axis.NcToPlc</Name>
 					<Type GUID="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
 					<SubVar>
 						<Name>AxisState</Name>
@@ -1204,39 +1155,112 @@ External Setpoint Generation:
 					</SubVar>
 				</Var>
 				<Var>
-					<Name>MAIN.M3.Link.InfoData_State</Name>
+					<Name>MAIN.M3.fbLink.InfoData_State</Name>
 					<Type>UINT</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.M3.fbDrive.MasterAxis.NcToPlc</Name>
+					<Type GUID="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
+					<SubVar>
+						<Name>AxisState</Name>
+						<Comment>
+							<![CDATA[Present State Of The Axis Movement (continuous axis):
+0  = INACTIVE:		axis has no job
+1  = RUNNING:		axis is executing a motion job
+2  = OVERRIDE_ZERO:	axis is executing a job but override is zero
+3  = PHASE_VELOCONST:	axis is moving at constant velocity
+4  = PHASE_ACCPOS:	axis is accelerating
+5  = PHASE_ACCNEG:	axis is decelerating
+Slaves only:
+11 = PREPHASE:		slave axis is in a motion pre-phase
+12 = SYNCHRONIZING:	slave axis is synchronizing
+13 = SYNCHRONOUS:	slave axis is moving synchronously
+External Setpoint Generation:
+41 = EXTSETGEN_MODE1:	external setpoint generation active
+42 = EXTSETGEN_MODE2:	internal and external setpoint gen. active
+]]>
+						</Comment>
+					</SubVar>
+					<SubVar>
+						<Name>HomingState</Name>
+						<Comment>
+							<![CDATA[Axis Homing Status:
+0: idle
+1: start homing
+2: searching home switch
+3: stopping on home switch
+4: moving off home switch
+5: searching sync pulse
+6: stopping after homing
+]]>
+						</Comment>
+					</SubVar>
+					<SubVar>
+						<Name>CoupleState</Name>
+						<Comment>
+							<![CDATA[Axis Coupling Status:
+0: axis is a single axis (not coupled)
+1: axis is a master axis
+2: axis is master and slave
+3: axis is a slave axis
+]]>
+						</Comment>
+					</SubVar>
 				</Var>
 			</Vars>
 			<Vars VarGrpType="2">
 				<Name>PlcTask Outputs</Name>
 				<Var>
-					<Name>MAIN.M1.Drive.MasterAxis.PlcToNc</Name>
+					<Name>MAIN.M1.fbLink.Axis.PlcToNc</Name>
 					<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
 				</Var>
 				<Var>
-					<Name>MAIN.M1.Link.Axis.PlcToNc</Name>
+					<Name>MAIN.M1.fbDrive.MasterAxis.PlcToNc</Name>
 					<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
 				</Var>
 				<Var>
-					<Name>MAIN.M2.Drive.MasterAxis.PlcToNc</Name>
+					<Name>MAIN.M2.fbLink.Axis.PlcToNc</Name>
 					<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
 				</Var>
 				<Var>
-					<Name>MAIN.M2.Link.Axis.PlcToNc</Name>
+					<Name>MAIN.M2.fbDrive.MasterAxis.PlcToNc</Name>
 					<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
 				</Var>
 				<Var>
-					<Name>MAIN.M3.Drive.MasterAxis.PlcToNc</Name>
+					<Name>MAIN.M3.fbLink.Axis.PlcToNc</Name>
 					<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
 				</Var>
 				<Var>
-					<Name>MAIN.M3.Link.Axis.PlcToNc</Name>
+					<Name>MAIN.M3.fbDrive.MasterAxis.PlcToNc</Name>
 					<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
 				</Var>
 			</Vars>
+			<UnrestoredVarLinks ImportTime="2019-01-18T18:45:25">
+				<OwnerA Name="OutputSrc" Prefix="TIPC^TestProject^TestProject Instance" Type="2">
+					<OwnerB Name="TINC^NC-Task 1 SAF^Axes^Axis 1">
+						<Link VarA="MAIN.M1.Link.Axis.PlcToNc" TypeA="MC.PLCTONC_AXIS_REF" InOutA="1" GuidA="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" VarB="Inputs^FromPlc" RestoreInfo="ANotFound"/>
+					</OwnerB>
+					<OwnerB Name="TINC^NC-Task 1 SAF^Axes^Axis 2">
+						<Link VarA="MAIN.M2.Link.Axis.PlcToNc" TypeA="MC.PLCTONC_AXIS_REF" InOutA="1" GuidA="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" VarB="Inputs^FromPlc" RestoreInfo="ANotFound"/>
+					</OwnerB>
+					<OwnerB Name="TINC^NC-Task 1 SAF^Axes^Axis 3">
+						<Link VarA="MAIN.M3.Link.Axis.PlcToNc" TypeA="MC.PLCTONC_AXIS_REF" InOutA="1" GuidA="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" VarB="Inputs^FromPlc" RestoreInfo="ANotFound"/>
+					</OwnerB>
+				</OwnerA>
+				<OwnerA Name="InputDst" Prefix="TIPC^TestProject^TestProject Instance" Type="1">
+					<OwnerB Name="TINC^NC-Task 1 SAF^Axes^Axis 1">
+						<Link VarA="MAIN.M1.Link.Axis.NcToPlc" TypeA="MC.NCTOPLC_AXIS_REF" InOutA="0" GuidA="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" VarB="Outputs^ToPlc" RestoreInfo="ANotFound"/>
+					</OwnerB>
+					<OwnerB Name="TINC^NC-Task 1 SAF^Axes^Axis 2">
+						<Link VarA="MAIN.M2.Link.Axis.NcToPlc" TypeA="MC.NCTOPLC_AXIS_REF" InOutA="0" GuidA="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" VarB="Outputs^ToPlc" RestoreInfo="ANotFound"/>
+					</OwnerB>
+					<OwnerB Name="TINC^NC-Task 1 SAF^Axes^Axis 3">
+						<Link VarA="MAIN.M3.Link.Axis.NcToPlc" TypeA="MC.NCTOPLC_AXIS_REF" InOutA="0" GuidA="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" VarB="Outputs^ToPlc" RestoreInfo="ANotFound"/>
+					</OwnerB>
+				</OwnerA>
+			</UnrestoredVarLinks>
 			<TaskPouOids>
-				<TaskPouOid Prio="20" OTCID="#x01010011"/>
+				<TaskPouOid Prio="20" OTCID="#x08502001"/>
 			</TaskPouOids>
 		</Instance>
 	</Project>
@@ -1251,16 +1275,16 @@ External Setpoint Generation:
 				<Link VarA="PlcTask Inputs^MAIN.bLimitFwdM3" VarB="STM Status^Status^Digital input 1"/>
 			</OwnerB>
 			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^Axis 1">
-				<Link VarA="PlcTask Inputs^MAIN.M1.Link.Axis.NcToPlc" VarB="Outputs^ToPlc"/>
-				<Link VarA="PlcTask Outputs^MAIN.M1.Link.Axis.PlcToNc" VarB="Inputs^FromPlc"/>
+				<Link VarA="PlcTask Inputs^MAIN.M1.fbLink.Axis.NcToPlc" VarB="Outputs^ToPlc"/>
+				<Link VarA="PlcTask Outputs^MAIN.M1.fbLink.Axis.PlcToNc" VarB="Inputs^FromPlc"/>
 			</OwnerB>
 			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^Axis 2">
-				<Link VarA="PlcTask Inputs^MAIN.M2.Link.Axis.NcToPlc" VarB="Outputs^ToPlc"/>
-				<Link VarA="PlcTask Outputs^MAIN.M2.Link.Axis.PlcToNc" VarB="Inputs^FromPlc"/>
+				<Link VarA="PlcTask Inputs^MAIN.M2.fbLink.Axis.NcToPlc" VarB="Outputs^ToPlc"/>
+				<Link VarA="PlcTask Outputs^MAIN.M2.fbLink.Axis.PlcToNc" VarB="Inputs^FromPlc"/>
 			</OwnerB>
 			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^Axis 3">
-				<Link VarA="PlcTask Inputs^MAIN.M3.Link.Axis.NcToPlc" VarB="Outputs^ToPlc"/>
-				<Link VarA="PlcTask Outputs^MAIN.M3.Link.Axis.PlcToNc" VarB="Inputs^FromPlc"/>
+				<Link VarA="PlcTask Inputs^MAIN.M3.fbLink.Axis.NcToPlc" VarB="Outputs^ToPlc"/>
+				<Link VarA="PlcTask Outputs^MAIN.M3.fbLink.Axis.PlcToNc" VarB="Inputs^FromPlc"/>
 			</OwnerB>
 		</OwnerA>
 	</Mappings>

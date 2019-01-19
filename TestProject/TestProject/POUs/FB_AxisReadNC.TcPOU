@@ -1,0 +1,153 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
+  <POU Name="FB_AxisReadNC" Id="{ae0d0d38-2171-41e5-b49c-714adaf92c76}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_AxisReadNC
+VAR_INPUT
+	bExecute: BOOL;
+	bReset: BOOL;
+END_VAR
+VAR_OUTPUT
+	bDone: BOOL;
+	bBusy: BOOL;
+	bError: BOOL;
+	iErrorID: UDINT;
+END_VAR
+VAR_IN_OUT
+	stConfig: DUT_AxisParams;
+	Axis: AXIS_REF;
+END_VAR
+VAR
+	fbNCRead: MC_ReadParameterSet;
+	stNC: ST_AxisParameterSet;
+	fbDTRead: MC_ReadParameter;
+	fbMInvRead: MC_ReadBoolParameter;
+	fbEInvRead: MC_ReadBoolParameter;
+	fbNCRisingEdge: R_TRIG;
+	fbDTRisingEdge: R_TRIG;
+	fbMInvRisingEdge: R_TRIG;
+	fbEInvRisingEdge: R_TRIG;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// Clears errors and allows a new read
+IF bReset THEN
+	bExecute := FALSE;
+	bReset := FALSE;
+END_IF
+
+// Raw read of most NC parameters
+fbNCRead(Execute:=bExecute,
+	Parameter:=stNC,
+	Axis:=Axis);
+
+// Stuff NC parameters into the stConfig
+fbNCRisingEdge(CLK:=fbNCRead.Done);
+IF fbNCRisingEdge.Q AND NOT fbNCRead.Error THEN
+	stConfig.ref_vel := stNC.fDriveVeloReferenz;
+	stConfig.max_vel := stNC.fVeloMaximum;
+	stConfig.max_acc := stNC.fAccelerationMax;
+	stConfig.max_dec := stNC.fDecelerationMax;
+	stConfig.acc := stNC.fAcceleration;
+	stConfig.dec := stNC.fDeceleration;
+	stConfig.jerk := stNC.fJerk;
+	stConfig.home_search := stNC.fRefVeloSearch;
+	stConfig.home_sync := stNC.fRefVeloSync;
+	stConfig.man_fast := stNC.fVeloFastManual;
+	stConfig.man_slow := stNC.fVeloSlowManual;
+	stConfig.enc_scale := stNC.fEncScaleFactorNumerator / stNC.fEncScaleFactorDenominator;	
+END_IF
+
+// Raw read of remaining parameters
+// dead time compensation
+fbDTRead(Enable:=bExecute,
+	ParameterNumber:=MC_AxisParameter.AxisDelayTimeVeloPosition,
+	ReadMode:=E_ReadMode.READMODE_ONCE,
+	Axis:=Axis);
+fbDTRisingEdge(CLK:=fbDTRead.Valid);
+IF fbDTRisingEdge.Q AND NOT fbDTRead.Error THEN
+	stConfig.dead_time := fbDTRead.Value;
+END_IF
+
+// mot_invert
+fbMInvRead(Enable:=bExecute,
+	ParameterNumber:=MC_AxisParameter.AxisMotorDirectionInverse,
+	ReadMode:=E_ReadMode.READMODE_ONCE,
+	Axis:=Axis);
+fbMInvRisingEdge(CLK:=fbMInvRead.Valid);
+IF fbMInvRisingEdge.Q AND NOT fbMInvRead.Error THEN
+	stConfig.mot_invert := fbMInvRead.Value;
+END_IF
+
+// enc_invert
+fbEInvRead(Enable:=bExecute,
+	ParameterNumber:=MC_AxisParameter.AxisEncoderDirectionInverse,
+	ReadMode:=E_ReadMode.READMODE_ONCE,
+	Axis:=Axis);
+fbEInvRisingEdge(CLK:=fbEInvRead.Valid);
+IF fbEInvRisingEdge.Q AND NOT fbEInvRead.Error THEN
+	stConfig.enc_invert := fbEInvRead.Value;
+END_IF
+
+// Summarize status and errors for output variables
+bBusy := fbNCRead.Busy OR fbDTRead.Busy OR fbMInvRead.Busy OR fbEInvRead.Busy;
+bDone := fbNCRead.Done AND NOT bBusy;
+bError := fbNCRead.Error OR fbDTRead.Error OR fbMInvRead.Error OR fbEInvRead.Error;
+IF fbNCRead.Error THEN
+	iErrorID := fbNCRead.ErrorID;
+ELSIF fbDTRead.Error THEN
+	iErrorID := fbDTRead.ErrorID;
+ELSIF fbMInvRead.Error THEN
+	iErrorID := fbMInvRead.ErrorID;
+ELSIF fbEInvRead.Error THEN
+	iErrorID := fbEInvRead.ErrorID;
+ELSE
+	iErrorID := 0;
+END_IF
+]]></ST>
+    </Implementation>
+    <LineIds Name="FB_AxisReadNC">
+      <LineId Id="43" Count="0" />
+      <LineId Id="39" Count="1" />
+      <LineId Id="42" Count="0" />
+      <LineId Id="41" Count="0" />
+      <LineId Id="44" Count="0" />
+      <LineId Id="38" Count="0" />
+      <LineId Id="20" Count="1" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="86" Count="0" />
+      <LineId Id="71" Count="14" />
+      <LineId Id="67" Count="0" />
+      <LineId Id="87" Count="0" />
+      <LineId Id="66" Count="0" />
+      <LineId Id="68" Count="0" />
+      <LineId Id="117" Count="1" />
+      <LineId Id="121" Count="0" />
+      <LineId Id="127" Count="1" />
+      <LineId Id="132" Count="2" />
+      <LineId Id="110" Count="0" />
+      <LineId Id="151" Count="0" />
+      <LineId Id="139" Count="2" />
+      <LineId Id="147" Count="3" />
+      <LineId Id="138" Count="0" />
+      <LineId Id="152" Count="0" />
+      <LineId Id="111" Count="0" />
+      <LineId Id="153" Count="2" />
+      <LineId Id="161" Count="3" />
+      <LineId Id="136" Count="0" />
+      <LineId Id="165" Count="0" />
+      <LineId Id="135" Count="0" />
+      <LineId Id="167" Count="0" />
+      <LineId Id="48" Count="0" />
+      <LineId Id="168" Count="2" />
+      <LineId Id="172" Count="0" />
+      <LineId Id="178" Count="0" />
+      <LineId Id="174" Count="0" />
+      <LineId Id="179" Count="0" />
+      <LineId Id="175" Count="0" />
+      <LineId Id="180" Count="0" />
+      <LineId Id="176" Count="1" />
+      <LineId Id="171" Count="0" />
+      <LineId Id="166" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

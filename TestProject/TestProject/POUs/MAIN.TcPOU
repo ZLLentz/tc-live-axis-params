@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
   <POU Name="MAIN" Id="{372593b4-1746-4f2d-8630-4bf2374df086}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
@@ -24,7 +24,7 @@ M1Cfg.ref_vel := 20;
 M1Cfg.max_vel := 50;
 M1Cfg.man_fast := 40;
 M1Cfg.man_slow := 5;
-M1Cfg.enc_numerator := 0.001;
+M1Cfg.enc_scale := 0.001;
 M1.stConfigSet := M1Cfg;
 
 M2.bLimitFwd := bLimitFwdM2;
@@ -33,7 +33,7 @@ M2Cfg.ref_vel := 10;
 M2Cfg.max_vel := 20;
 M2Cfg.man_fast := 15;
 M2Cfg.man_slow := 5;
-M2Cfg.enc_numerator := 0.001;
+M2Cfg.enc_scale := 0.001;
 M2Cfg.max_current := 1100;
 M2.stConfigSet := M2Cfg;
 
@@ -43,7 +43,7 @@ M3Cfg.ref_vel := 11;
 M3Cfg.max_vel := 21;
 M3Cfg.man_fast := 16;
 M3Cfg.man_slow := 6;
-M3Cfg.enc_numerator := 0.002;
+M3Cfg.enc_scale := 0.002;
 M3Cfg.max_current := 1234;
 M3.stConfigSet := M3Cfg;
 

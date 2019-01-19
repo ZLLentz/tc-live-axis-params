@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
   <POU Name="PCDSMotion" Id="{ffde42e9-8ab9-4b2d-b01e-b36e19e1042f}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK PCDSMotion
 VAR_INPUT
@@ -30,12 +30,20 @@ VAR
 	fbConfig: FB_AxisConfig;
 	fbDrive: FB_DriveVirtual;
 	stAxisStatus: DUT_AxisStatus_v0_01;
+	stConfigGet: DUT_AxisParams;
+	bExecConfig: BOOL := TRUE;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[fbLink(En:=En);
-fbConfig(stConfigSet:=stConfigSet,
-	Axis:=fbLink.Axis);
+      <ST><![CDATA[// Landing zone to link the AXIS_REF and update it
+fbLink(En:=En);
+// Read and/or write the config
+fbConfig(bExecute:=bExecConfig,
+	stConfigSet:=stConfigSet,
+	Axis:=fbLink.Axis,
+	stConfigGet=>stConfigGet);
+// After the initial config is done, go to OP mode
+// Execute incoming motion commands
 fbDrive(En:=En,
 	bEnable:=bEnable,
 	bReset:=bReset,
@@ -56,20 +64,29 @@ fbDrive(En:=En,
 	nHomeRevOffset:=nHomeRevOffset,
 	Axis:=fbLink.Axis);
 stAxisStatus := fbDrive.stAxisStatus;
+// Reset the execute bool
 IF fbDrive.bDone THEN
 	fbDrive.bExecute := FALSE;
 END_IF]]></ST>
     </Implementation>
     <LineIds Name="PCDSMotion">
+      <LineId Id="155" Count="0" />
       <LineId Id="75" Count="0" />
+      <LineId Id="156" Count="0" />
       <LineId Id="119" Count="0" />
+      <LineId Id="152" Count="0" />
       <LineId Id="12" Count="0" />
+      <LineId Id="151" Count="0" />
+      <LineId Id="154" Count="0" />
+      <LineId Id="157" Count="0" />
       <LineId Id="47" Count="0" />
       <LineId Id="64" Count="0" />
       <LineId Id="49" Count="14" />
       <LineId Id="65" Count="0" />
       <LineId Id="77" Count="0" />
-      <LineId Id="17" Count="2" />
+      <LineId Id="17" Count="0" />
+      <LineId Id="158" Count="0" />
+      <LineId Id="18" Count="1" />
       <LineId Id="9" Count="0" />
     </LineIds>
   </POU>
