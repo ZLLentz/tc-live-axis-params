@@ -17,33 +17,32 @@ VAR_IN_OUT
 	Axis: AXIS_REF;
 END_VAR
 VAR
-	fbNCWriteFloat: MC_WriteParameter;
-	fbNCWriteBool: MC_WriteBoolParameter;
 	iCycles: INT := 0;
 	bReadOk: BOOL := FALSE;
-	iFloatParam: INT := 0;
-	iBoolParam: INT := 0;
-	arrFloatAdr: ARRAY [0..10] OF POINTER TO LREAL;
-	arrBoolAdr: ARRAY [0..10] OF POINTER TO BOOL;
-	arrFloatNum: ARRAY [0..10] OF INT;
-	arrBoolNum: ARRAY [0..10] OF INT;
+	bInnerExec: BOOL := FALSE;
+	fbWriteRefVel: MC_WriteParameter;
+	fbWriteMaxVel: MC_WriteParameter;
+	fbWriteMaxAcc: MC_WriteParameter;
+	fbWriteMaxDec: MC_WriteParameter;
+	fbWriteAcc: MC_WriteParameter;
+	fbWriteDec: MC_WriteParameter;
+	fbWriteJerk: MC_WriteParameter;
+	fbWriteHomeSearch: MC_WriteParameter;
+	fbWriteHomeSync: MC_WriteParameter;
+	fbWriteManFast: MC_WriteParameter;
+	fbWriteManSlow: MC_WriteParameter;
+	fbWriteDeadTime: MC_WriteParameter;
+	fbWriteEncScale: MC_WriteParameter;
+	fbWriteEncInvert: MC_WriteBoolParameter;
+	fbWriteMotInvert: MC_WriteBoolParameter;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[// First cycle, set up our arrays
-IF iCycles = 0 THEN
-	arrFloatAdr[0] := ADR(stConfig.ref_vel);
-	arrFloatAdr[1] := ADR(stConfig.max_vel);
-	arrFloatAdr[2] := ADR(stConfig.max_acc);
-	arrFloatAdr[3] := ADR(stConfig.max_dec);
-	arrFloatAdr[4] := ADR(stConfig.acc);
-	arrFloatAdr[5] := ADR(stConfig.dec);
-	arrFloatAdr[6] := ADR(stConfig.jerk);
-	arrFloatAdr[7] := ADR(stConfig.home_search);
-	arrFloatAdr[8] := ADR(stConfig.home_sync);
-	arrFloatAdr[9] := ADR(stConfig.man_fast);
-	arrFloatAdr[10] := ADR(stConfig.man_slow);
-	arrFloatAdr[11] := ADR(stConfig.dead_time);
+      <ST><![CDATA[// File auto-generated! Take care editing!
+// Clears errors and allows a new read
+IF bReset THEN
+	bExecute := FALSE;
+	bReset := FALSE;
 END_IF
 // Fails in the first n cycles depending on terminals, wait a bit
 IF NOT bReadOk THEN
@@ -51,16 +50,105 @@ IF NOT bReadOk THEN
 	IF iCycles > 100 THEN
 		bReadOk := TRUE;
 	END_IF
-END_IF]]></ST>
+END_IF
+bInnerExec := bExecute AND bReadOk;
+fbWriteRefVel(Execute:=bInnerExec,
+	ParameterNumber:=MC_AxisParameter.AxisRefVeloOnRefOutput,
+	Value:=stConfig.ref_vel,
+	Axis:=Axis)
+fbWriteMaxVel(Execute:=bInnerExec,
+	ParameterNumber:=MC_AxisParameter.AxisMaxVelocity,
+	Value:=stConfig.max_vel,
+	Axis:=Axis)
+fbWriteMaxAcc(Execute:=bInnerExec,
+	ParameterNumber:=MC_AxisParameter.MaxAccelerationSystem,
+	Value:=stConfig.max_acc,
+	Axis:=Axis)
+fbWriteMaxDec(Execute:=bInnerExec,
+	ParameterNumber:=MC_AxisParameter.MaxDecelerationSystem,
+	Value:=stConfig.max_dec,
+	Axis:=Axis)
+fbWriteAcc(Execute:=bInnerExec,
+	ParameterNumber:=MC_AxisParameter.AxisAcc,
+	Value:=stConfig.acc,
+	Axis:=Axis)
+fbWriteDec(Execute:=bInnerExec,
+	ParameterNumber:=MC_AxisParameter.AxisDec,
+	Value:=stConfig.dec,
+	Axis:=Axis)
+fbWriteJerk(Execute:=bInnerExec,
+	ParameterNumber:=MC_AxisParameter.AxisJerk,
+	Value:=stConfig.jerk,
+	Axis:=Axis)
+fbWriteHomeSearch(Execute:=bInnerExec,
+	ParameterNumber:=MC_AxisParameter.AxisCalibrationVelocityForward,
+	Value:=stConfig.home_search,
+	Axis:=Axis)
+fbWriteHomeSync(Execute:=bInnerExec,
+	ParameterNumber:=MC_AxisParameter.AxisCalibrationVelocityBackward,
+	Value:=stConfig.home_sync,
+	Axis:=Axis)
+fbWriteManFast(Execute:=bInnerExec,
+	ParameterNumber:=MC_AxisParameter.AxisManualVelocityFast,
+	Value:=stConfig.man_fast,
+	Axis:=Axis)
+fbWriteManSlow(Execute:=bInnerExec,
+	ParameterNumber:=MC_AxisParameter.AxisManualVelocitySlow,
+	Value:=stConfig.man_slow,
+	Axis:=Axis)
+fbWriteDeadTime(Execute:=bInnerExec,
+	ParameterNumber:=MC_AxisParameter.AxisDelayTimeVeloPosition,
+	Value:=stConfig.dead_time,
+	Axis:=Axis)
+fbWriteEncScale(Execute:=bInnerExec,
+	ParameterNumber:=MC_AxisParameter.AxisEncoderScalingFactor,
+	Value:=stConfig.enc_scale,
+	Axis:=Axis)
+fbWriteEncInvert(Execute:=bInnerExec,
+	ParameterNumber:=MC_AxisParameter.AxisEncoderDirectionInverse,
+	Value:=stConfig.enc_invert,
+	Axis:=Axis)
+fbWriteMotInvert(Execute:=bInnerExec,
+	ParameterNumber:=MC_AxisParameter.AxisMotorDirectionInverse,
+	Value:=stConfig.mot_invert,
+	Axis:=Axis)
+bDone := fbWriteRefVel.Done AND fbWriteMaxVel.Done AND fbWriteMaxAcc.Done AND fbWriteMaxDec.Done AND fbWriteAcc.Done AND fbWriteDec.Done AND fbWriteJerk.Done AND fbWriteHomeSearch.Done AND fbWriteHomeSync.Done AND fbWriteManFast.Done AND fbWriteManSlow.Done AND fbWriteDeadTime.Done AND fbWriteEncScale.Done AND fbWriteEncInvert.Done AND fbWriteMotInvert.Done
+bBusy := fbWriteRefVel.Busy OR fbWriteMaxVel.Busy OR fbWriteMaxAcc.Busy OR fbWriteMaxDec.Busy OR fbWriteAcc.Busy OR fbWriteDec.Busy OR fbWriteJerk.Busy OR fbWriteHomeSearch.Busy OR fbWriteHomeSync.Busy OR fbWriteManFast.Busy OR fbWriteManSlow.Busy OR fbWriteDeadTime.Busy OR fbWriteEncScale.Busy OR fbWriteEncInvert.Busy OR fbWriteMotInvert.Busy
+bError := fbWriteRefVel.Error OR fbWriteMaxVel.Error OR fbWriteMaxAcc.Error OR fbWriteMaxDec.Error OR fbWriteAcc.Error OR fbWriteDec.Error OR fbWriteJerk.Error OR fbWriteHomeSearch.Error OR fbWriteHomeSync.Error OR fbWriteManFast.Error OR fbWriteManSlow.Error OR fbWriteDeadTime.Error OR fbWriteEncScale.Error OR fbWriteEncInvert.Error OR fbWriteMotInvert.Error
+IF NOT bError THEN
+	iErrorID := 0;
+ELSIF fbWriteRefVel.ErrorID != 0 THEN
+	iErrorID := fbWriteRefVel.ErrorID;
+ELSIF fbWriteMaxVel.ErrorID != 0 THEN
+	iErrorID := fbWriteMaxVel.ErrorID;
+ELSIF fbWriteMaxAcc.ErrorID != 0 THEN
+	iErrorID := fbWriteMaxAcc.ErrorID;
+ELSIF fbWriteMaxDec.ErrorID != 0 THEN
+	iErrorID := fbWriteMaxDec.ErrorID;
+ELSIF fbWriteAcc.ErrorID != 0 THEN
+	iErrorID := fbWriteAcc.ErrorID;
+ELSIF fbWriteDec.ErrorID != 0 THEN
+	iErrorID := fbWriteDec.ErrorID;
+ELSIF fbWriteJerk.ErrorID != 0 THEN
+	iErrorID := fbWriteJerk.ErrorID;
+ELSIF fbWriteHomeSearch.ErrorID != 0 THEN
+	iErrorID := fbWriteHomeSearch.ErrorID;
+ELSIF fbWriteHomeSync.ErrorID != 0 THEN
+	iErrorID := fbWriteHomeSync.ErrorID;
+ELSIF fbWriteManFast.ErrorID != 0 THEN
+	iErrorID := fbWriteManFast.ErrorID;
+ELSIF fbWriteManSlow.ErrorID != 0 THEN
+	iErrorID := fbWriteManSlow.ErrorID;
+ELSIF fbWriteDeadTime.ErrorID != 0 THEN
+	iErrorID := fbWriteDeadTime.ErrorID;
+ELSIF fbWriteEncScale.ErrorID != 0 THEN
+	iErrorID := fbWriteEncScale.ErrorID;
+ELSIF fbWriteEncInvert.ErrorID != 0 THEN
+	iErrorID := fbWriteEncInvert.ErrorID;
+ELSIF fbWriteMotInvert.ErrorID != 0 THEN
+	iErrorID := fbWriteMotInvert.ErrorID;
+END_IF
+]]></ST>
     </Implementation>
-    <LineIds Name="FB_AxisWriteNC">
-      <LineId Id="45" Count="0" />
-      <LineId Id="43" Count="0" />
-      <LineId Id="48" Count="10" />
-      <LineId Id="44" Count="0" />
-      <LineId Id="42" Count="0" />
-      <LineId Id="34" Count="5" />
-      <LineId Id="9" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

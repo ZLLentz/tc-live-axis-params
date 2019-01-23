@@ -17,49 +17,48 @@ VAR_IN_OUT
 	Axis: AXIS_REF;
 END_VAR
 VAR
-	fbNCRead: MC_ReadParameterSet;
-	stNC: ST_AxisParameterSet;
-	fbDTRead: MC_ReadParameter;
-	fbMInvRead: MC_ReadBoolParameter;
-	fbEInvRead: MC_ReadBoolParameter;
-	fbNCRisingEdge: R_TRIG;
-	fbDTRisingEdge: R_TRIG;
-	fbMInvRisingEdge: R_TRIG;
-	fbEInvRisingEdge: R_TRIG;
 	iCycles: INT := 0;
 	bReadOk: BOOL := FALSE;
+	bInnerExec: BOOL := FALSE;
+	fbReadRefVel: MC_ReadParameter;
+  	fbReadRefVelRisingEdge: R_TRIG;
+	fbReadMaxVel: MC_ReadParameter;
+  	fbReadMaxVelRisingEdge: R_TRIG;
+	fbReadMaxAcc: MC_ReadParameter;
+  	fbReadMaxAccRisingEdge: R_TRIG;
+	fbReadMaxDec: MC_ReadParameter;
+  	fbReadMaxDecRisingEdge: R_TRIG;
+	fbReadAcc: MC_ReadParameter;
+  	fbReadAccRisingEdge: R_TRIG;
+	fbReadDec: MC_ReadParameter;
+  	fbReadDecRisingEdge: R_TRIG;
+	fbReadJerk: MC_ReadParameter;
+  	fbReadJerkRisingEdge: R_TRIG;
+	fbReadHomeSearch: MC_ReadParameter;
+  	fbReadHomeSearchRisingEdge: R_TRIG;
+	fbReadHomeSync: MC_ReadParameter;
+  	fbReadHomeSyncRisingEdge: R_TRIG;
+	fbReadManFast: MC_ReadParameter;
+  	fbReadManFastRisingEdge: R_TRIG;
+	fbReadManSlow: MC_ReadParameter;
+  	fbReadManSlowRisingEdge: R_TRIG;
+	fbReadDeadTime: MC_ReadParameter;
+  	fbReadDeadTimeRisingEdge: R_TRIG;
+	fbReadEncScale: MC_ReadParameter;
+  	fbReadEncScaleRisingEdge: R_TRIG;
+	fbReadEncInvert: MC_ReadBoolParameter;
+  	fbReadEncInvertRisingEdge: R_TRIG;
+	fbReadMotInvert: MC_ReadBoolParameter;
+  	fbReadMotInvertRisingEdge: R_TRIG;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[// Clears errors and allows a new read
+      <ST><![CDATA[// File auto-generated! Take care editing!
+// Clears errors and allows a new read
 IF bReset THEN
 	bExecute := FALSE;
 	bReset := FALSE;
 END_IF
-
-// Raw read of most NC parameters
-fbNCRead(Execute:=bExecute,
-	Parameter:=stNC,
-	Axis:=Axis);
-
-// Stuff NC parameters into the stConfig
-fbNCRisingEdge(CLK:=fbNCRead.Done);
-IF fbNCRisingEdge.Q AND NOT fbNCRead.Error THEN
-	stConfig.ref_vel := stNC.fDriveVeloReferenz;
-	stConfig.max_vel := stNC.fVeloMaximum;
-	stConfig.max_acc := stNC.fAccelerationMax;
-	stConfig.max_dec := stNC.fDecelerationMax;
-	stConfig.acc := stNC.fAcceleration;
-	stConfig.dec := stNC.fDeceleration;
-	stConfig.jerk := stNC.fJerk;
-	stConfig.home_search := stNC.fRefVeloSearch;
-	stConfig.home_sync := stNC.fRefVeloSync;
-	stConfig.man_fast := stNC.fVeloFastManual;
-	stConfig.man_slow := stNC.fVeloSlowManual;
-	stConfig.enc_scale := stNC.fEncScaleFactorNumerator / stNC.fEncScaleFactorDenominator;	
-END_IF
-
-// Raw read of remaining parameters
 // Fails in the first n cycles depending on terminals, wait a bit
 IF NOT bReadOk THEN
 	iCycles := iCycles + 1;
@@ -67,99 +66,164 @@ IF NOT bReadOk THEN
 		bReadOk := TRUE;
 	END_IF
 END_IF
-// dead time compensation
-fbDTRead(Enable:=bExecute AND bReadOk,
+bInnerExec := bExecute AND bReadOk;
+fbReadRefVel(Execute:=bInnerExec,
+	ParameterNumber:=MC_AxisParameter.AxisRefVeloOnRefOutput,
+	ReadMode:=E_ReadMode.READMODE_ONCE,
+	Axis:=Axis);
+fbReadRefVelRisingEdge(CLK:=fbReadRefVel.Done);
+IF fbReadRefVelRisingEdge.Q AND NOT fbReadRefVel.Error THEN
+	stConfig.ref_vel := fbReadRefVel.Value;
+END_IF
+fbReadMaxVel(Execute:=bInnerExec,
+	ParameterNumber:=MC_AxisParameter.AxisMaxVelocity,
+	ReadMode:=E_ReadMode.READMODE_ONCE,
+	Axis:=Axis);
+fbReadMaxVelRisingEdge(CLK:=fbReadMaxVel.Done);
+IF fbReadMaxVelRisingEdge.Q AND NOT fbReadMaxVel.Error THEN
+	stConfig.max_vel := fbReadMaxVel.Value;
+END_IF
+fbReadMaxAcc(Execute:=bInnerExec,
+	ParameterNumber:=MC_AxisParameter.MaxAccelerationSystem,
+	ReadMode:=E_ReadMode.READMODE_ONCE,
+	Axis:=Axis);
+fbReadMaxAccRisingEdge(CLK:=fbReadMaxAcc.Done);
+IF fbReadMaxAccRisingEdge.Q AND NOT fbReadMaxAcc.Error THEN
+	stConfig.max_acc := fbReadMaxAcc.Value;
+END_IF
+fbReadMaxDec(Execute:=bInnerExec,
+	ParameterNumber:=MC_AxisParameter.MaxDecelerationSystem,
+	ReadMode:=E_ReadMode.READMODE_ONCE,
+	Axis:=Axis);
+fbReadMaxDecRisingEdge(CLK:=fbReadMaxDec.Done);
+IF fbReadMaxDecRisingEdge.Q AND NOT fbReadMaxDec.Error THEN
+	stConfig.max_dec := fbReadMaxDec.Value;
+END_IF
+fbReadAcc(Execute:=bInnerExec,
+	ParameterNumber:=MC_AxisParameter.AxisAcc,
+	ReadMode:=E_ReadMode.READMODE_ONCE,
+	Axis:=Axis);
+fbReadAccRisingEdge(CLK:=fbReadAcc.Done);
+IF fbReadAccRisingEdge.Q AND NOT fbReadAcc.Error THEN
+	stConfig.acc := fbReadAcc.Value;
+END_IF
+fbReadDec(Execute:=bInnerExec,
+	ParameterNumber:=MC_AxisParameter.AxisDec,
+	ReadMode:=E_ReadMode.READMODE_ONCE,
+	Axis:=Axis);
+fbReadDecRisingEdge(CLK:=fbReadDec.Done);
+IF fbReadDecRisingEdge.Q AND NOT fbReadDec.Error THEN
+	stConfig.dec := fbReadDec.Value;
+END_IF
+fbReadJerk(Execute:=bInnerExec,
+	ParameterNumber:=MC_AxisParameter.AxisJerk,
+	ReadMode:=E_ReadMode.READMODE_ONCE,
+	Axis:=Axis);
+fbReadJerkRisingEdge(CLK:=fbReadJerk.Done);
+IF fbReadJerkRisingEdge.Q AND NOT fbReadJerk.Error THEN
+	stConfig.jerk := fbReadJerk.Value;
+END_IF
+fbReadHomeSearch(Execute:=bInnerExec,
+	ParameterNumber:=MC_AxisParameter.AxisCalibrationVelocityForward,
+	ReadMode:=E_ReadMode.READMODE_ONCE,
+	Axis:=Axis);
+fbReadHomeSearchRisingEdge(CLK:=fbReadHomeSearch.Done);
+IF fbReadHomeSearchRisingEdge.Q AND NOT fbReadHomeSearch.Error THEN
+	stConfig.home_search := fbReadHomeSearch.Value;
+END_IF
+fbReadHomeSync(Execute:=bInnerExec,
+	ParameterNumber:=MC_AxisParameter.AxisCalibrationVelocityBackward,
+	ReadMode:=E_ReadMode.READMODE_ONCE,
+	Axis:=Axis);
+fbReadHomeSyncRisingEdge(CLK:=fbReadHomeSync.Done);
+IF fbReadHomeSyncRisingEdge.Q AND NOT fbReadHomeSync.Error THEN
+	stConfig.home_sync := fbReadHomeSync.Value;
+END_IF
+fbReadManFast(Execute:=bInnerExec,
+	ParameterNumber:=MC_AxisParameter.AxisManualVelocityFast,
+	ReadMode:=E_ReadMode.READMODE_ONCE,
+	Axis:=Axis);
+fbReadManFastRisingEdge(CLK:=fbReadManFast.Done);
+IF fbReadManFastRisingEdge.Q AND NOT fbReadManFast.Error THEN
+	stConfig.man_fast := fbReadManFast.Value;
+END_IF
+fbReadManSlow(Execute:=bInnerExec,
+	ParameterNumber:=MC_AxisParameter.AxisManualVelocitySlow,
+	ReadMode:=E_ReadMode.READMODE_ONCE,
+	Axis:=Axis);
+fbReadManSlowRisingEdge(CLK:=fbReadManSlow.Done);
+IF fbReadManSlowRisingEdge.Q AND NOT fbReadManSlow.Error THEN
+	stConfig.man_slow := fbReadManSlow.Value;
+END_IF
+fbReadDeadTime(Execute:=bInnerExec,
 	ParameterNumber:=MC_AxisParameter.AxisDelayTimeVeloPosition,
 	ReadMode:=E_ReadMode.READMODE_ONCE,
 	Axis:=Axis);
-fbDTRisingEdge(CLK:=fbDTRead.Valid);
-IF fbDTRisingEdge.Q AND NOT fbDTRead.Error THEN
-	stConfig.dead_time := fbDTRead.Value;
+fbReadDeadTimeRisingEdge(CLK:=fbReadDeadTime.Done);
+IF fbReadDeadTimeRisingEdge.Q AND NOT fbReadDeadTime.Error THEN
+	stConfig.dead_time := fbReadDeadTime.Value;
 END_IF
-
-// mot_invert
-fbMInvRead(Enable:=bExecute AND bReadOk,
-	ParameterNumber:=MC_AxisParameter.AxisMotorDirectionInverse,
+fbReadEncScale(Execute:=bInnerExec,
+	ParameterNumber:=MC_AxisParameter.AxisEncoderScalingFactor,
 	ReadMode:=E_ReadMode.READMODE_ONCE,
 	Axis:=Axis);
-fbMInvRisingEdge(CLK:=fbMInvRead.Valid);
-IF fbMInvRisingEdge.Q AND NOT fbMInvRead.Error THEN
-	stConfig.mot_invert := fbMInvRead.Value;
+fbReadEncScaleRisingEdge(CLK:=fbReadEncScale.Done);
+IF fbReadEncScaleRisingEdge.Q AND NOT fbReadEncScale.Error THEN
+	stConfig.enc_scale := fbReadEncScale.Value;
 END_IF
-
-// enc_invert
-fbEInvRead(Enable:=bExecute AND bReadOk,
+fbReadEncInvert(Execute:=bInnerExec,
 	ParameterNumber:=MC_AxisParameter.AxisEncoderDirectionInverse,
 	ReadMode:=E_ReadMode.READMODE_ONCE,
 	Axis:=Axis);
-fbEInvRisingEdge(CLK:=fbEInvRead.Valid);
-IF fbEInvRisingEdge.Q AND NOT fbEInvRead.Error THEN
-	stConfig.enc_invert := fbEInvRead.Value;
+fbReadEncInvertRisingEdge(CLK:=fbReadEncInvert.Done);
+IF fbReadEncInvertRisingEdge.Q AND NOT fbReadEncInvert.Error THEN
+	stConfig.enc_invert := fbReadEncInvert.Value;
 END_IF
-
-// Summarize status and errors for output variables
-bBusy := fbNCRead.Busy OR fbDTRead.Busy OR fbMInvRead.Busy OR fbEInvRead.Busy AND bReadOk;
-bDone := fbNCRead.Done AND NOT bBusy;
-bError := fbNCRead.Error OR fbDTRead.Error OR fbMInvRead.Error OR fbEInvRead.Error;
-IF fbNCRead.Error THEN
-	iErrorID := fbNCRead.ErrorID;
-ELSIF fbDTRead.Error THEN
-	iErrorID := fbDTRead.ErrorID;
-ELSIF fbMInvRead.Error THEN
-	iErrorID := fbMInvRead.ErrorID;
-ELSIF fbEInvRead.Error THEN
-	iErrorID := fbEInvRead.ErrorID;
-ELSE
+fbReadMotInvert(Execute:=bInnerExec,
+	ParameterNumber:=MC_AxisParameter.AxisMotorDirectionInverse,
+	ReadMode:=E_ReadMode.READMODE_ONCE,
+	Axis:=Axis);
+fbReadMotInvertRisingEdge(CLK:=fbReadMotInvert.Done);
+IF fbReadMotInvertRisingEdge.Q AND NOT fbReadMotInvert.Error THEN
+	stConfig.mot_invert := fbReadMotInvert.Value;
+END_IF
+bDone := fbReadRefVel.Done AND fbReadMaxVel.Done AND fbReadMaxAcc.Done AND fbReadMaxDec.Done AND fbReadAcc.Done AND fbReadDec.Done AND fbReadJerk.Done AND fbReadHomeSearch.Done AND fbReadHomeSync.Done AND fbReadManFast.Done AND fbReadManSlow.Done AND fbReadDeadTime.Done AND fbReadEncScale.Done AND fbReadEncInvert.Done AND fbReadMotInvert.Done
+bBusy := fbReadRefVel.Busy OR fbReadMaxVel.Busy OR fbReadMaxAcc.Busy OR fbReadMaxDec.Busy OR fbReadAcc.Busy OR fbReadDec.Busy OR fbReadJerk.Busy OR fbReadHomeSearch.Busy OR fbReadHomeSync.Busy OR fbReadManFast.Busy OR fbReadManSlow.Busy OR fbReadDeadTime.Busy OR fbReadEncScale.Busy OR fbReadEncInvert.Busy OR fbReadMotInvert.Busy
+bError := fbReadRefVel.Error OR fbReadMaxVel.Error OR fbReadMaxAcc.Error OR fbReadMaxDec.Error OR fbReadAcc.Error OR fbReadDec.Error OR fbReadJerk.Error OR fbReadHomeSearch.Error OR fbReadHomeSync.Error OR fbReadManFast.Error OR fbReadManSlow.Error OR fbReadDeadTime.Error OR fbReadEncScale.Error OR fbReadEncInvert.Error OR fbReadMotInvert.Error
+IF NOT bError THEN
 	iErrorID := 0;
+ELSIF fbReadRefVel.ErrorID != 0 THEN
+	iErrorID := fbReadRefVel.ErrorID;
+ELSIF fbReadMaxVel.ErrorID != 0 THEN
+	iErrorID := fbReadMaxVel.ErrorID;
+ELSIF fbReadMaxAcc.ErrorID != 0 THEN
+	iErrorID := fbReadMaxAcc.ErrorID;
+ELSIF fbReadMaxDec.ErrorID != 0 THEN
+	iErrorID := fbReadMaxDec.ErrorID;
+ELSIF fbReadAcc.ErrorID != 0 THEN
+	iErrorID := fbReadAcc.ErrorID;
+ELSIF fbReadDec.ErrorID != 0 THEN
+	iErrorID := fbReadDec.ErrorID;
+ELSIF fbReadJerk.ErrorID != 0 THEN
+	iErrorID := fbReadJerk.ErrorID;
+ELSIF fbReadHomeSearch.ErrorID != 0 THEN
+	iErrorID := fbReadHomeSearch.ErrorID;
+ELSIF fbReadHomeSync.ErrorID != 0 THEN
+	iErrorID := fbReadHomeSync.ErrorID;
+ELSIF fbReadManFast.ErrorID != 0 THEN
+	iErrorID := fbReadManFast.ErrorID;
+ELSIF fbReadManSlow.ErrorID != 0 THEN
+	iErrorID := fbReadManSlow.ErrorID;
+ELSIF fbReadDeadTime.ErrorID != 0 THEN
+	iErrorID := fbReadDeadTime.ErrorID;
+ELSIF fbReadEncScale.ErrorID != 0 THEN
+	iErrorID := fbReadEncScale.ErrorID;
+ELSIF fbReadEncInvert.ErrorID != 0 THEN
+	iErrorID := fbReadEncInvert.ErrorID;
+ELSIF fbReadMotInvert.ErrorID != 0 THEN
+	iErrorID := fbReadMotInvert.ErrorID;
 END_IF
 ]]></ST>
     </Implementation>
-    <LineIds Name="FB_AxisReadNC">
-      <LineId Id="43" Count="0" />
-      <LineId Id="39" Count="1" />
-      <LineId Id="42" Count="0" />
-      <LineId Id="41" Count="0" />
-      <LineId Id="44" Count="0" />
-      <LineId Id="38" Count="0" />
-      <LineId Id="20" Count="1" />
-      <LineId Id="31" Count="0" />
-      <LineId Id="86" Count="0" />
-      <LineId Id="71" Count="14" />
-      <LineId Id="67" Count="0" />
-      <LineId Id="87" Count="0" />
-      <LineId Id="207" Count="1" />
-      <LineId Id="213" Count="3" />
-      <LineId Id="210" Count="0" />
-      <LineId Id="66" Count="0" />
-      <LineId Id="68" Count="0" />
-      <LineId Id="117" Count="1" />
-      <LineId Id="121" Count="0" />
-      <LineId Id="127" Count="1" />
-      <LineId Id="132" Count="2" />
-      <LineId Id="110" Count="0" />
-      <LineId Id="151" Count="0" />
-      <LineId Id="139" Count="2" />
-      <LineId Id="147" Count="3" />
-      <LineId Id="138" Count="0" />
-      <LineId Id="152" Count="0" />
-      <LineId Id="111" Count="0" />
-      <LineId Id="153" Count="2" />
-      <LineId Id="161" Count="3" />
-      <LineId Id="136" Count="0" />
-      <LineId Id="165" Count="0" />
-      <LineId Id="135" Count="0" />
-      <LineId Id="167" Count="0" />
-      <LineId Id="48" Count="0" />
-      <LineId Id="168" Count="2" />
-      <LineId Id="172" Count="0" />
-      <LineId Id="178" Count="0" />
-      <LineId Id="174" Count="0" />
-      <LineId Id="179" Count="0" />
-      <LineId Id="175" Count="0" />
-      <LineId Id="180" Count="0" />
-      <LineId Id="176" Count="1" />
-      <LineId Id="171" Count="0" />
-      <LineId Id="166" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

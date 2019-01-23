@@ -1,0 +1,45 @@
+ref_vel: 
+  mc: "AxisRefVeloOnRefOutput"
+  type: "float"
+max_vel:
+  mc: "AxisMaxVelocity"
+  type: "float"
+max_acc:
+  mc: "MaxAccelerationSystem"
+  type: "float"
+max_dec:
+  mc: "MaxDecelerationSystem"
+  type: "float"
+acc:
+  mc: "AxisAcc"
+  type: "float"
+dec:
+  mc: "AxisDec"
+  type: "float"
+jerk:
+  mc: "AxisJerk"
+  type: "float"
+home_search:
+  mc: "AxisCalibrationVelocityForward"
+  type: "float"
+home_sync:
+  mc: "AxisCalibrationVelocityBackward"
+  type: "float"
+man_fast:
+  mc: "AxisManualVelocityFast"
+  type: "float"
+man_slow:
+  mc: "AxisManualVelocitySlow"
+  type: "float"
+dead_time:
+  mc: "AxisDelayTimeVeloPosition"
+  type: "float"
+enc_scale:
+  mc: "AxisEncoderScalingFactor"
+  type: "float"
+enc_invert:
+  mc: "AxisEncoderDirectionInverse"
+  type: "bool"
+mot_invert:
+  mc: "AxisMotorDirectionInverse"
+  type: "bool"
