@@ -42,7 +42,7 @@ fbConfig(bExecute:=bExecConfig,
 	stConfigSet:=stConfigSet,
 	Axis:=fbLink.Axis,
 	stConfigGet=>stConfigGet);
-// After the initial config is done, go to OP mode
+// After the initial config is done, go to OP mode (** TODO **)
 // Execute incoming motion commands
 fbDrive(En:=En,
 	bEnable:=bEnable,

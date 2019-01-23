@@ -8,7 +8,7 @@ VAR_INPUT
 END_VAR
 VAR_OUTPUT
 	stConfig: ST_AxisParams;
-	bDone: BOOL;
+	bValid: BOOL;
 	bBusy: BOOL;
 	bError: BOOL;
 	iErrorID: UDINT;
@@ -26,7 +26,7 @@ END_VAR
 	bReset:=bReset,
 	stConfig:=stConfig,
 	Axis:=Axis,
-	bDone=>bDone,
+	bValid=>bValid,
 	bBusy=>bBusy,
 	bError=>bError,
 	iErrorID=>iErrorID);]]></ST>
