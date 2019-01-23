@@ -46,7 +46,7 @@ IF NOT bReadOk THEN
 END_IF
 bInnerExec := bExecute AND bReadOk;
 {% for item in nc_params %}
-{{ item.fb_read }}(Execute:=bInnerExec,
+{{ item.fb_read }}(Enable:=bInnerExec,
 	ParameterNumber:=MC_AxisParameter.{{ item.MC_AxisParameter }},
 	ReadMode:=E_ReadMode.READMODE_ONCE,
 	Axis:=Axis);
@@ -55,9 +55,9 @@ IF {{ item.fb_read }}RisingEdge.Q AND NOT {{ item.fb_read_error }} THEN
 	stConfig.{{ item.stConfig }} := {{ item.fb_read }}.Value;
 END_IF
 {% endfor %}
-bDone := {{ nc_params|join(' AND ', attribute='fb_read_done') }}
-bBusy := {{ nc_params|join(' OR ', attribute='fb_read_busy') }}
-bError := {{ nc_params|join(' OR ', attribute='fb_read_error') }}
+bDone := {{ nc_params|join(' AND ', attribute='fb_read_done') }};
+bBusy := {{ nc_params|join(' OR ', attribute='fb_read_busy') }};
+bError := {{ nc_params|join(' OR ', attribute='fb_read_error') }};
 IF NOT bError THEN
 	iErrorID := 0;
 {% for item in nc_params %}

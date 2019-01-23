@@ -48,11 +48,11 @@ bInnerExec := bExecute AND bReadOk;
 {{ item.fb_write }}(Execute:=bInnerExec,
 	ParameterNumber:=MC_AxisParameter.{{ item.MC_AxisParameter }},
 	Value:=stConfig.{{ item.stConfig }},
-	Axis:=Axis)
+	Axis:=Axis);
 {% endfor %}
-bDone := {{ nc_params|join(' AND ', attribute='fb_write_done') }}
-bBusy := {{ nc_params|join(' OR ', attribute='fb_write_busy') }}
-bError := {{ nc_params|join(' OR ', attribute='fb_write_error') }}
+bDone := {{ nc_params|join(' AND ', attribute='fb_write_done') }};
+bBusy := {{ nc_params|join(' OR ', attribute='fb_write_busy') }};
+bError := {{ nc_params|join(' OR ', attribute='fb_write_error') }};
 IF NOT bError THEN
 	iErrorID := 0;
 {% for item in nc_params %}
