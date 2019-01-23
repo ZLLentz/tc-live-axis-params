@@ -1,18 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
   <POU Name="MAIN" Id="{372593b4-1746-4f2d-8630-4bf2374df086}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
 	M1: PCDSMotion;
-	M1Cfg: DUT_AxisParams;
+	M1Cfg: ST_AxisParams;
 	bLimitFwdM1: BOOL := TRUE;
 	bLimitBwdM1: BOOL := TRUE;
 	M2: PCDSMotion;
-	M2Cfg: DUT_AxisParams;
+	M2Cfg: ST_AxisParams;
 	bLimitFwdM2 AT %I*: BOOL;
 	bLimitBwdM2 AT %I*: BOOL;
 	M3: PCDSMotion;
-	M3Cfg: DUT_AxisParams;
+	M3Cfg: ST_AxisParams;
 	bLimitFwdM3 AT %I*: BOOL;
 	bLimitBwdM3 AT %I*: BOOL;
 END_VAR

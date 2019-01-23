@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
   <POU Name="FB_AxisConfig_Old" Id="{13c2a29c-c79d-423f-9560-f54711b0e7b3}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_AxisConfig_Old
 VAR_INPUT
-	stConfigSet: DUT_AxisParams;
+	stConfigSet: ST_AxisParams;
 	bExecReadNC: BOOL := TRUE;
 	bExecReadCoE: BOOL := TRUE;
 	bExecWriteNC: BOOL := FALSE;
@@ -12,7 +12,7 @@ VAR_INPUT
 	nWriteIndex: INT;
 END_VAR
 VAR_OUTPUT
-	stConfig: DUT_AxisParams;
+	stConfig: ST_AxisParams;
 	nErrId: UDINT;
 	bErr: BOOL;
 	bHasInit: BOOL;

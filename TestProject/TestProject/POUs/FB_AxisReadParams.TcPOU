@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
   <POU Name="FB_AxisReadParams" Id="{e92502d6-67ee-4fa0-a7de-4596fc050760}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_AxisReadParams
 VAR_INPUT
@@ -7,7 +7,7 @@ VAR_INPUT
 	bReset: BOOL;
 END_VAR
 VAR_OUTPUT
-	stConfig: DUT_AxisParams;
+	stConfig: ST_AxisParams;
 	bDone: BOOL;
 	bBusy: BOOL;
 	bError: BOOL;

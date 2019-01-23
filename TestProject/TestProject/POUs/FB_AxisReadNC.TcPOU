@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
   <POU Name="FB_AxisReadNC" Id="{ae0d0d38-2171-41e5-b49c-714adaf92c76}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_AxisReadNC
 VAR_INPUT
@@ -13,7 +13,7 @@ VAR_OUTPUT
 	iErrorID: UDINT;
 END_VAR
 VAR_IN_OUT
-	stConfig: DUT_AxisParams;
+	stConfig: ST_AxisParams;
 	Axis: AXIS_REF;
 END_VAR
 VAR
@@ -26,6 +26,8 @@ VAR
 	fbDTRisingEdge: R_TRIG;
 	fbMInvRisingEdge: R_TRIG;
 	fbEInvRisingEdge: R_TRIG;
+	iCycles: INT := 0;
+	bReadOk: BOOL := FALSE;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -58,8 +60,15 @@ IF fbNCRisingEdge.Q AND NOT fbNCRead.Error THEN
 END_IF
 
 // Raw read of remaining parameters
+// Fails in the first n cycles depending on terminals, wait a bit
+IF NOT bReadOk THEN
+	iCycles := iCycles + 1;
+	IF iCycles > 100 THEN
+		bReadOk := TRUE;
+	END_IF
+END_IF
 // dead time compensation
-fbDTRead(Enable:=bExecute,
+fbDTRead(Enable:=bExecute AND bReadOk,
 	ParameterNumber:=MC_AxisParameter.AxisDelayTimeVeloPosition,
 	ReadMode:=E_ReadMode.READMODE_ONCE,
 	Axis:=Axis);
@@ -69,7 +78,7 @@ IF fbDTRisingEdge.Q AND NOT fbDTRead.Error THEN
 END_IF
 
 // mot_invert
-fbMInvRead(Enable:=bExecute,
+fbMInvRead(Enable:=bExecute AND bReadOk,
 	ParameterNumber:=MC_AxisParameter.AxisMotorDirectionInverse,
 	ReadMode:=E_ReadMode.READMODE_ONCE,
 	Axis:=Axis);
@@ -79,7 +88,7 @@ IF fbMInvRisingEdge.Q AND NOT fbMInvRead.Error THEN
 END_IF
 
 // enc_invert
-fbEInvRead(Enable:=bExecute,
+fbEInvRead(Enable:=bExecute AND bReadOk,
 	ParameterNumber:=MC_AxisParameter.AxisEncoderDirectionInverse,
 	ReadMode:=E_ReadMode.READMODE_ONCE,
 	Axis:=Axis);
@@ -89,7 +98,7 @@ IF fbEInvRisingEdge.Q AND NOT fbEInvRead.Error THEN
 END_IF
 
 // Summarize status and errors for output variables
-bBusy := fbNCRead.Busy OR fbDTRead.Busy OR fbMInvRead.Busy OR fbEInvRead.Busy;
+bBusy := fbNCRead.Busy OR fbDTRead.Busy OR fbMInvRead.Busy OR fbEInvRead.Busy AND bReadOk;
 bDone := fbNCRead.Done AND NOT bBusy;
 bError := fbNCRead.Error OR fbDTRead.Error OR fbMInvRead.Error OR fbEInvRead.Error;
 IF fbNCRead.Error THEN
@@ -118,6 +127,9 @@ END_IF
       <LineId Id="71" Count="14" />
       <LineId Id="67" Count="0" />
       <LineId Id="87" Count="0" />
+      <LineId Id="207" Count="1" />
+      <LineId Id="213" Count="3" />
+      <LineId Id="210" Count="0" />
       <LineId Id="66" Count="0" />
       <LineId Id="68" Count="0" />
       <LineId Id="117" Count="1" />

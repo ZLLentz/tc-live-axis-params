@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
   <POU Name="PCDSMotion" Id="{ffde42e9-8ab9-4b2d-b01e-b36e19e1042f}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK PCDSMotion
 VAR_INPUT
-	stConfigSet: DUT_AxisParams;
+	stConfigSet: ST_AxisParams;
 	En: BOOL := TRUE;
 	bEnable: BOOL;
 	bReset: BOOL;
@@ -30,7 +30,7 @@ VAR
 	fbConfig: FB_AxisConfig;
 	fbDrive: FB_DriveVirtual;
 	stAxisStatus: DUT_AxisStatus_v0_01;
-	stConfigGet: DUT_AxisParams;
+	stConfigGet: ST_AxisParams;
 	bExecConfig: BOOL := TRUE;
 END_VAR
 ]]></Declaration>

@@ -15,7 +15,7 @@
     <LibraryReferences>{d96f1e16-a1e9-4cf6-a22e-ba31379984fd}</LibraryReferences>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="DUTs\DUT_AxisParams.TcDUT">
+    <Compile Include="DUTs\ST_AxisParams.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DUTs\ST_EL7031CoEParams.TcDUT">

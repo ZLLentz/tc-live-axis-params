@@ -1,18 +1,65 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
   <POU Name="FB_AxisWriteNC" Id="{f7f47c17-7b1c-42c7-9653-657995f4107e}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_AxisWriteNC
 VAR_INPUT
+	bExecute: BOOL;
+	bReset: BOOL;
 END_VAR
 VAR_OUTPUT
+	bDone: BOOL;
+	bBusy: BOOL;
+	bError: BOOL;
+	iErrorID: UDINT;
+END_VAR
+VAR_IN_OUT
+	stConfig: ST_AxisParams;
+	Axis: AXIS_REF;
 END_VAR
 VAR
+	fbNCWriteFloat: MC_WriteParameter;
+	fbNCWriteBool: MC_WriteBoolParameter;
+	iCycles: INT := 0;
+	bReadOk: BOOL := FALSE;
+	iFloatParam: INT := 0;
+	iBoolParam: INT := 0;
+	arrFloatAdr: ARRAY [0..10] OF POINTER TO LREAL;
+	arrBoolAdr: ARRAY [0..10] OF POINTER TO BOOL;
+	arrFloatNum: ARRAY [0..10] OF INT;
+	arrBoolNum: ARRAY [0..10] OF INT;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[]]></ST>
+      <ST><![CDATA[// First cycle, set up our arrays
+IF iCycles = 0 THEN
+	arrFloatAdr[0] := ADR(stConfig.ref_vel);
+	arrFloatAdr[1] := ADR(stConfig.max_vel);
+	arrFloatAdr[2] := ADR(stConfig.max_acc);
+	arrFloatAdr[3] := ADR(stConfig.max_dec);
+	arrFloatAdr[4] := ADR(stConfig.acc);
+	arrFloatAdr[5] := ADR(stConfig.dec);
+	arrFloatAdr[6] := ADR(stConfig.jerk);
+	arrFloatAdr[7] := ADR(stConfig.home_search);
+	arrFloatAdr[8] := ADR(stConfig.home_sync);
+	arrFloatAdr[9] := ADR(stConfig.man_fast);
+	arrFloatAdr[10] := ADR(stConfig.man_slow);
+	arrFloatAdr[11] := ADR(stConfig.dead_time);
+END_IF
+// Fails in the first n cycles depending on terminals, wait a bit
+IF NOT bReadOk THEN
+	iCycles := iCycles + 1;
+	IF iCycles > 100 THEN
+		bReadOk := TRUE;
+	END_IF
+END_IF]]></ST>
     </Implementation>
     <LineIds Name="FB_AxisWriteNC">
+      <LineId Id="45" Count="0" />
+      <LineId Id="43" Count="0" />
+      <LineId Id="48" Count="10" />
+      <LineId Id="44" Count="0" />
+      <LineId Id="42" Count="0" />
+      <LineId Id="34" Count="5" />
       <LineId Id="9" Count="0" />
     </LineIds>
   </POU>

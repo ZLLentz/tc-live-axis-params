@@ -1,15 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
   <POU Name="FB_AxisConfig" Id="{fcb6a2ad-e399-41e9-a4d8-8a9b39418313}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_AxisConfig
 VAR_INPUT
-	stConfigSet: DUT_AxisParams;
+	stConfigSet: ST_AxisParams;
 	bExecute: BOOL; // Set, then get
 	bExecGet: BOOL; // Only get
 	bReset: BOOL;
 END_VAR
 VAR_OUTPUT
-	stConfigGet: DUT_AxisParams;
+	stConfigGet: ST_AxisParams;
 	bDone: BOOL;
 	bBusy: BOOL;
 	bError: BOOL;
