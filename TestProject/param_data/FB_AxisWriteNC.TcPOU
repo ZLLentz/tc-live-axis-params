@@ -56,7 +56,7 @@ bError := {{ nc_params|join(' OR ', attribute='fb_write_error') }};
 IF NOT bError THEN
 	iErrorID := 0;
 {% for item in nc_params %}
-ELSIF {{ item.fb_write }}.ErrorID != 0 THEN
+ELSIF {{ item.fb_write }}.ErrorID > 0 THEN
 	iErrorID := {{ item.fb_write }}.ErrorID;
 {% endfor %}
 END_IF
