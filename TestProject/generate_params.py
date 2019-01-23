@@ -22,7 +22,7 @@ for param, info in data.items():
     ns.fb_write_busy = ns.fb_write + '.Busy'
     ns.fb_write_error = ns.fb_write + '.Error'
     ns.fb_read = 'fbRead' + camelcase
-    ns.fb_read_done = ns.fb_read + '.Done'
+    ns.fb_read_valid = ns.fb_read + '.Valid'
     ns.fb_read_busy = ns.fb_read + '.Busy'
     ns.fb_read_error = ns.fb_read + '.Error'
     nc_params.append(ns)

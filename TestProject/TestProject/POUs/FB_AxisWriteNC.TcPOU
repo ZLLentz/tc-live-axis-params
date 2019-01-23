@@ -117,35 +117,35 @@ bBusy := fbWriteRefVel.Busy OR fbWriteMaxVel.Busy OR fbWriteMaxAcc.Busy OR fbWri
 bError := fbWriteRefVel.Error OR fbWriteMaxVel.Error OR fbWriteMaxAcc.Error OR fbWriteMaxDec.Error OR fbWriteAcc.Error OR fbWriteDec.Error OR fbWriteJerk.Error OR fbWriteHomeSearch.Error OR fbWriteHomeSync.Error OR fbWriteManFast.Error OR fbWriteManSlow.Error OR fbWriteDeadTime.Error OR fbWriteEncScale.Error OR fbWriteEncInvert.Error OR fbWriteMotInvert.Error;
 IF NOT bError THEN
 	iErrorID := 0;
-ELSIF fbWriteRefVel.ErrorID != 0 THEN
+ELSIF fbWriteRefVel.ErrorID > 0 THEN
 	iErrorID := fbWriteRefVel.ErrorID;
-ELSIF fbWriteMaxVel.ErrorID != 0 THEN
+ELSIF fbWriteMaxVel.ErrorID > 0 THEN
 	iErrorID := fbWriteMaxVel.ErrorID;
-ELSIF fbWriteMaxAcc.ErrorID != 0 THEN
+ELSIF fbWriteMaxAcc.ErrorID > 0 THEN
 	iErrorID := fbWriteMaxAcc.ErrorID;
-ELSIF fbWriteMaxDec.ErrorID != 0 THEN
+ELSIF fbWriteMaxDec.ErrorID > 0 THEN
 	iErrorID := fbWriteMaxDec.ErrorID;
-ELSIF fbWriteAcc.ErrorID != 0 THEN
+ELSIF fbWriteAcc.ErrorID > 0 THEN
 	iErrorID := fbWriteAcc.ErrorID;
-ELSIF fbWriteDec.ErrorID != 0 THEN
+ELSIF fbWriteDec.ErrorID > 0 THEN
 	iErrorID := fbWriteDec.ErrorID;
-ELSIF fbWriteJerk.ErrorID != 0 THEN
+ELSIF fbWriteJerk.ErrorID > 0 THEN
 	iErrorID := fbWriteJerk.ErrorID;
-ELSIF fbWriteHomeSearch.ErrorID != 0 THEN
+ELSIF fbWriteHomeSearch.ErrorID > 0 THEN
 	iErrorID := fbWriteHomeSearch.ErrorID;
-ELSIF fbWriteHomeSync.ErrorID != 0 THEN
+ELSIF fbWriteHomeSync.ErrorID > 0 THEN
 	iErrorID := fbWriteHomeSync.ErrorID;
-ELSIF fbWriteManFast.ErrorID != 0 THEN
+ELSIF fbWriteManFast.ErrorID > 0 THEN
 	iErrorID := fbWriteManFast.ErrorID;
-ELSIF fbWriteManSlow.ErrorID != 0 THEN
+ELSIF fbWriteManSlow.ErrorID > 0 THEN
 	iErrorID := fbWriteManSlow.ErrorID;
-ELSIF fbWriteDeadTime.ErrorID != 0 THEN
+ELSIF fbWriteDeadTime.ErrorID > 0 THEN
 	iErrorID := fbWriteDeadTime.ErrorID;
-ELSIF fbWriteEncScale.ErrorID != 0 THEN
+ELSIF fbWriteEncScale.ErrorID > 0 THEN
 	iErrorID := fbWriteEncScale.ErrorID;
-ELSIF fbWriteEncInvert.ErrorID != 0 THEN
+ELSIF fbWriteEncInvert.ErrorID > 0 THEN
 	iErrorID := fbWriteEncInvert.ErrorID;
-ELSIF fbWriteMotInvert.ErrorID != 0 THEN
+ELSIF fbWriteMotInvert.ErrorID > 0 THEN
 	iErrorID := fbWriteMotInvert.ErrorID;
 END_IF
 ]]></ST>
