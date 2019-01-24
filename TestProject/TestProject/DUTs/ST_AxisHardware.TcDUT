@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
+  <DUT Name="ST_AxisHardware" Id="{cb1e3015-8fa8-4223-93e8-e23d4de9bb57}">
+    <Declaration><![CDATA[TYPE ST_AxisHardware :
+STRUCT
+	drive_type: UINT;
+	enc_type: UINT;
+	drive_ref: ST_DriveRef;
+	enc_ref: ST_DriveRef;
+END_STRUCT
+END_TYPE]]></Declaration>
+  </DUT>
+</TcPlcObject>

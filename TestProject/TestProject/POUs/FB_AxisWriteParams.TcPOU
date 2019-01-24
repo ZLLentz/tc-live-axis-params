@@ -1,18 +1,61 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
   <POU Name="FB_AxisWriteParams" Id="{c12a06b7-df78-4119-aa24-9aeca1f8090f}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_AxisWriteParams
 VAR_INPUT
+	bExecute: BOOL;
+	bReset: BOOL;
+	stConfig: ST_AxisParams;
+END_VAR
+VAR_IN_OUT
+	Axis: AXIS_REF;
 END_VAR
 VAR_OUTPUT
+	bDone: BOOL;
+	bBusy: BOOL;
+	bWriting: BOOL;
+	bError: BOOL;
+	iErrorID: UDINT;
 END_VAR
 VAR
+	fbNCWrite: FB_AxisWriteNC;
+	fbCoEWrite: FB_AxisWriteCoE;
+	fbWriteReqRisingEdge: R_TRIG;
+	fbWriteDoneRisingEdge: R_TRIG;
+	bDoWrite: BOOL;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[]]></ST>
+      <ST><![CDATA[// Report bWriting := TRUE when a write is asked for so we can disable the axis
+fbWriteReqRisingEdge(CLK:=bExecute);
+IF fbWriteReqRisingEdge.Q THEN
+	bWriting := TRUE;
+END_IF
+// Do not write unless axis is disabled. Leave TRUE after done to avoid resetting errors, etc.
+bDoWrite := bExecute AND (Axis.Status.MotionState = MC_AXISSTATE_DISABLED OR bDone);
+fbNCWrite(bExecute:=bDoWrite,
+	bReset:=bReset,
+	stConfig:=stConfig,
+	Axis:=Axis,
+	bDone=>bDone,
+	bBusy=>bBusy,
+	bError=>bError,
+	iErrorID=>iErrorID);
+// Report bWriting := FALSE when a write ends so we can enable the axis
+fbWriteDoneRisingEdge(CLK:=bDone);
+IF fbWriteDoneRisingEdge.Q THEN
+	bWriting := FALSE;
+END_IF]]></ST>
     </Implementation>
     <LineIds Name="FB_AxisWriteParams">
+      <LineId Id="48" Count="3" />
+      <LineId Id="43" Count="0" />
+      <LineId Id="47" Count="0" />
+      <LineId Id="38" Count="0" />
+      <LineId Id="29" Count="1" />
+      <LineId Id="32" Count="4" />
+      <LineId Id="52" Count="0" />
+      <LineId Id="54" Count="3" />
       <LineId Id="9" Count="0" />
     </LineIds>
   </POU>

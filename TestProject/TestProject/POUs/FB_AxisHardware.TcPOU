@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
+  <POU Name="FB_AxisHardware" Id="{1564163d-e493-4d9a-b680-85c98f09b3c4}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_AxisHardware
+VAR_INPUT
+	bExecute: BOOL;
+END_VAR
+VAR_IN_OUT
+	Axis: AXIS_REF;
+END_VAR
+VAR_OUTPUT
+	bDone: BOOL;
+	bBusy: BOOL;
+	bError: BOOL;
+	iErrorID: UDINT;
+	stHardware: ST_AxisHardware;
+END_VAR
+VAR
+	fbReadDriveAddress: MC_ReadDriveAddress;
+	fbSlaveId: FB_EcGetSlaveIdentity;
+	stDriveAddr: ST_DriveAddress;
+	stDriveRef: ST_DriveRef;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// Get basic information
+fbReadDriveAddress(Execute:=bExecute,
+	Axis:=Axis,
+	DriveAddress=>stDriveAddr);
+stDriveRef.sNetId := stDriveAddr.NetID;
+stDriveRef.nSlaveAddr := stDriveAddr.SlaveAddress;
+stDriveRef.nDriveNo := stDriveAddr.Channel;
+stHardware.drive_ref := stDriveRef;
+fbSlaveId(bExecute:=bExecute AND fbReadDriveAddress.Done,
+	sNetId:=stDriveAddr.NetID,
+	nSlaveAddr:=stDriveAddr.SlaveAddress);
+stHardware.drive_type := UDINT_TO_UINT(SHR(fbSlaveID.identity.productCode, 16));
+bDone := fbReadDriveAddress.Done AND NOT fbSlaveId.bBusy;
+bBusy := fbReadDriveAddress.Busy OR fbSlaveId.bBusy;
+bError := fbReadDriveAddress.Error OR fbSlaveId.bError;
+IF fbReadDriveAddress.ErrorID > 0 THEN
+	iErrorID := fbReadDriveAddress.ErrorID;
+ELSE
+	iErrorID := fbSlaveId.nErrId;
+END_IF]]></ST>
+    </Implementation>
+    <LineIds Name="FB_AxisHardware">
+      <LineId Id="18" Count="1" />
+      <LineId Id="38" Count="1" />
+      <LineId Id="44" Count="2" />
+      <LineId Id="20" Count="2" />
+      <LineId Id="27" Count="0" />
+      <LineId Id="47" Count="4" />
+      <LineId Id="53" Count="1" />
+      <LineId Id="52" Count="0" />
+      <LineId Id="9" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

@@ -3,43 +3,77 @@
   <POU Name="FB_AxisConfig" Id="{fcb6a2ad-e399-41e9-a4d8-8a9b39418313}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_AxisConfig
 VAR_INPUT
-	stConfigSet: ST_AxisParams;
 	bExecute: BOOL; // Set, then get
 	bExecGet: BOOL; // Only get
 	bReset: BOOL;
+	stConfigSet: ST_AxisParams;
 END_VAR
 VAR_OUTPUT
-	stConfigGet: ST_AxisParams;
 	bDone: BOOL;
 	bValid: BOOL;
 	bBusy: BOOL;
+	bWriting: BOOL;
 	bError: BOOL;
 	iErrorID: UDINT;
+	stConfigGet: ST_AxisParams;
 END_VAR
 VAR_IN_OUT
 	Axis: AXIS_REF;
 END_VAR
 VAR
 	fbRead: FB_AxisReadParams;
+	fbWrite: FB_AxisWriteParams;
+	bDoRead: BOOL;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[// Write first
-// Read after write is fully done
-fbRead(bExecute:=bExecute OR bExecGet,
+fbWrite(bExecute:=bExecute,
+	bReset:=bReset,
+	stConfig:=stConfigSet,
+	Axis:=Axis,
+	bWriting=>bWriting);
+// Reset bDoRead if both execs are false
+IF NOT bExecute AND NOT bExecGet THEN
+	bDoRead := FALSE;
+END_IF
+// If bExecute is TRUE, wait untill after the write to read
+IF bExecute AND fbWrite.bDone THEN
+	bDoRead := TRUE;
+ELSE
+	bDoRead := bExecGet;
+END_IF
+// Read now
+fbRead(bExecute:=bDoRead,
 	bReset:=bReset,
 	Axis:=Axis,
 	stConfig=>stConfigGet,
-	bValid=>bValid,
-	bBusy=>bBusy,
-	bError=>bError,
-	iErrorID=>iErrorID);]]></ST>
+	bValid=>bValid);
+// Set the status outputs
+bDone := fbWrite.bDone AND NOT fbRead.bBusy;
+bBusy := fbWrite.bBusy OR fbRead.bBusy;
+bError := fbWrite.bError OR fbRead.bError;
+IF fbWrite.iErrorID > 0 THEN
+	iErrorID := fbWrite.iErrorID;
+ELSE
+	iErrorID := fbRead.iErrorID;
+END_IF]]></ST>
     </Implementation>
     <LineIds Name="FB_AxisConfig">
+      <LineId Id="57" Count="3" />
+      <LineId Id="86" Count="0" />
+      <LineId Id="78" Count="4" />
+      <LineId Id="72" Count="0" />
+      <LineId Id="74" Count="0" />
+      <LineId Id="76" Count="1" />
+      <LineId Id="75" Count="0" />
       <LineId Id="30" Count="1" />
       <LineId Id="9" Count="0" />
       <LineId Id="19" Count="2" />
-      <LineId Id="26" Count="3" />
+      <LineId Id="61" Count="5" />
+      <LineId Id="68" Count="1" />
+      <LineId Id="67" Count="0" />
+      <LineId Id="29" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>
