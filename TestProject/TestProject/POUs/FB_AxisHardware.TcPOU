@@ -18,12 +18,14 @@ END_VAR
 VAR
 	fbReadDriveAddress: MC_ReadDriveAddress;
 	fbSlaveId: FB_EcGetSlaveIdentity;
+	fbADSRead: ADSREADEX;
 	stDriveAddr: ST_DriveAddress;
 	stDriveRef: ST_DriveRef;
+	test: UDINT;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[// Get basic information
+      <ST><![CDATA[// Get drive information
 fbReadDriveAddress(Execute:=bExecute,
 	Axis:=Axis,
 	DriveAddress=>stDriveAddr);

@@ -15,12 +15,6 @@ VAR
 	M3Cfg: ST_AxisParams;
 	bLimitFwdM3 AT %I*: BOOL;
 	bLimitBwdM3 AT %I*: BOOL;
-	fbGetSlaveAddr: FB_EcGetAllSlaveAddr;
-	arrAddrBuf: ARRAY[0..10] OF UINT;
-	arrSlaveId: ARRAY[0..10] OF ST_EcSlaveIdentity;
-	iSlaveId: UINT := 0;
-	sNetId: T_AmsNetId := '5.45.6.154.2.1';
-	fbSlaveId: FB_EcGetSlaveIdentity;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -41,6 +35,8 @@ M2Cfg.man_fast := 15;
 M2Cfg.man_slow := 5;
 M2Cfg.enc_scale := 0.001;
 M2Cfg.max_current := 1100;
+M2Cfg.enc_ads_port := 1003;
+M2Cfg.enc_ads_channel := 0;
 M2.stConfigSet := M2Cfg;
 
 M3.bLimitFwd := bLimitFwdM3;
@@ -51,20 +47,13 @@ M3Cfg.man_fast := 16;
 M3Cfg.man_slow := 6;
 M3Cfg.enc_scale := 0.002;
 M3Cfg.max_current := 1234;
+M3Cfg.enc_ads_port := 1003;
+M3Cfg.enc_ads_channel := 1;
 M3.stConfigSet := M3Cfg;
 
 M1(bEnable:=TRUE);
 M2(bEnable:=TRUE);
-M3(bEnable:=TRUE);
-
-fbGetSlaveAddr(bExecute:=TRUE,
-	sNetId:=sNetId,
-	pAddrBuf:=ADR(arrAddrBuf),
-	cbBufLen:=SIZEOF(arrAddrBuf));
-fbSlaveId(bExecute:=TRUE,
-	sNetId:=sNetId,
-	nSlaveAddr:=1002);
-]]></ST>
+M3(bEnable:=TRUE);]]></ST>
     </Implementation>
     <LineIds Name="MAIN">
       <LineId Id="58" Count="0" />
@@ -74,21 +63,19 @@ fbSlaveId(bExecute:=TRUE,
       <LineId Id="61" Count="1" />
       <LineId Id="72" Count="4" />
       <LineId Id="82" Count="0" />
+      <LineId Id="142" Count="0" />
+      <LineId Id="144" Count="0" />
       <LineId Id="63" Count="0" />
       <LineId Id="70" Count="0" />
       <LineId Id="64" Count="1" />
       <LineId Id="77" Count="4" />
       <LineId Id="83" Count="0" />
+      <LineId Id="143" Count="0" />
+      <LineId Id="146" Count="0" />
       <LineId Id="66" Count="0" />
       <LineId Id="71" Count="0" />
       <LineId Id="48" Count="0" />
       <LineId Id="59" Count="1" />
-      <LineId Id="99" Count="1" />
-      <LineId Id="104" Count="0" />
-      <LineId Id="107" Count="1" />
-      <LineId Id="110" Count="0" />
-      <LineId Id="119" Count="1" />
-      <LineId Id="114" Count="0" />
       <LineId Id="2" Count="0" />
     </LineIds>
   </POU>

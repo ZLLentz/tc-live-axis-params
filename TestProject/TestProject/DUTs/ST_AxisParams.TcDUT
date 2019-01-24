@@ -30,6 +30,8 @@ STRUCT
 	enc_clock: UINT := 9;
 	enc_multi_bits: UINT := 0;
 	enc_single_bits: UINT := 32;
+	enc_ads_port: UINT;
+	enc_ads_channel: UINT;
 END_STRUCT
 END_TYPE
 ]]></Declaration>
