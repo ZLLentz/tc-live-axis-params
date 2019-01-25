@@ -37,5 +37,44 @@ template = env.get_template('FB_AxisReadNC.TcPOU')
 stream = template.stream(nc_params=nc_params)
 stream.dump('TestProject/POUs/FB_AxisReadNC.TcPOU')
 
-# Make the axis write CoE file
-# Make the axis read CoE file
+# Load the CoE params data
+terms = ['5042', '70x1']
+coe_params_dict = {}
+for term in terms:
+    with open(f'param_data/{term}_coe.yaml', 'r') as fd:
+        data = yaml.safe_load(fd)
+    coe_params = []
+    for param, info in data.items():
+        ns = SimpleNamespace(stConfig=param)
+        camelcase = ''.join(txt.capitalize() for txt in param.split('_'))
+        ns.fb_name = 'fbRead' + camelcase
+        ns.nindex = 'nInd' + camelcase
+
+        ns.multi_channel=isinstance(data.index, list))
+
+
+# write_filename = f'TestProject/POUs/FB_AxisWrite{term}.TcPOU'
+# Find and edit the existing files
+# Template is partial, we fill in an existing file's structure
+template = env.get_template('FB_AxisReadCoE.template')
+for term in terms:
+    read_filename = f'TestProject/POUs/FB_AxisRead{term}.TcPOU'
+    with open(read_filename, 'r') as fd:
+        lines = read_filename.readlines()
+    # split file into before and after the target lines
+    before = []
+    overwrite = []
+    after = []
+    curr = before
+    for line in lines:
+        curr.append(line)
+        if '<Declaration>' in line:
+            curr = overwrite
+        if '</Implementation>' in line:
+            curr = after
+    # use the template
+    stream = template.stream(coe_params=coe_params_dict[term])
+    new = list(stream)
+    # write the new file
+    with open(read_filename, 'w') as fd:
+        read_filename.writelines(before + new + after)
