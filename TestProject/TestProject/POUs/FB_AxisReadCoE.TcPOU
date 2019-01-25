@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
   <POU Name="FB_AxisReadCoE" Id="{111a1f06-3939-4985-b7dd-5290f17e9dec}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_AxisReadCoE
 VAR_INPUT
 	bExecute: BOOL;
 	bReset: BOOL;
-	stHardware: ST_AxisHardware
+	stHardware: ST_AxisHardware;
 END_VAR
 VAR_IN_OUT
 	stConfig: ST_AxisParams;
@@ -27,7 +27,6 @@ VAR
 	iErrorEncADS: UDINT;
 	iErrorDriveCAN: UDINT;
 	iErrorEncCAN: UDINT;
-{% endfor %}
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -41,7 +40,7 @@ END_VAR
 		fbRead70x1(bExecute:=bExecute,
 			bReset:=bReset,
 			stDriveRef:=stHardware.drive_ref,
-			stConifg:=stConfig,
+			stConfig:=stConfig,
 			Axis:=Axis,
 			bBusy=>bBusyDrive,
 			bError=>bErrorDrive,
@@ -63,7 +62,7 @@ CASE stHardware.enc_type OF
 		fbRead5042(bExecute:=bExecute,
 			bReset:=bReset,
 			stDriveRef:=stHardware.enc_ref,
-			stConifg:=stConfig,
+			stConfig:=stConfig,
 			Axis:=Axis,
 			bBusy=>bBusyEnc,
 			bError=>bErrorEnc,
@@ -78,15 +77,19 @@ END_CASE
 bBusy := bBusyDrive OR bBusyEnc;
 bError := bErrorDrive OR bErrorEnc;
 IF iErrorDriveAds > 0 THEN
-	iError := iErrorDriveAds;
+	iErrorID := iErrorDriveAds;
 ELSIF iErrorDriveCAN > 0 THEN
-	iError := iErrorDriveCAN;
+	iErrorID := iErrorDriveCAN;
 ELSIF iErrorEncAds > 0 THEN
-	iError := iErrorEncAds;
+	iErrorID := iErrorEncAds;
 ELSE
-	iError := iErrorEncCAN;
+	iErrorID := iErrorEncCAN;
 END_IF
 ]]></ST>
     </Implementation>
+    <LineIds Name="FB_AxisReadCoE">
+      <LineId Id="3" Count="54" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>

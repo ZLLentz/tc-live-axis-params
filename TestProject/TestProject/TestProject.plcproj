@@ -36,6 +36,12 @@
     <Compile Include="POUs\FB_AxisHardware.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\FB_AxisRead5042.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\FB_AxisRead70x1.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\FB_AxisReadCoE.TcPOU">
       <SubType>Code</SubType>
     </Compile>

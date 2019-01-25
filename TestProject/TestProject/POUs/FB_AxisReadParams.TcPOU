@@ -5,6 +5,7 @@
 VAR_INPUT
 	bExecute: BOOL;
 	bReset: BOOL;
+	stHardware: ST_AxisHardware;
 END_VAR
 VAR_OUTPUT
 	stConfig: ST_AxisParams;
@@ -25,17 +26,31 @@ END_VAR
       <ST><![CDATA[fbNCRead(bExecute:=bExecute,
 	bReset:=bReset,
 	stConfig:=stConfig,
-	Axis:=Axis,
-	bValid=>bValid,
-	bBusy=>bBusy,
-	bError=>bError,
-	iErrorID=>iErrorID);]]></ST>
+	Axis:=Axis);
+fbCoERead(bExecute:=bExecute,
+	bReset:=bReset,
+	stHardware:=stHardware,
+	stConfig:=stConfig,
+	Axis:=Axis);
+bValid := fbNCRead.bValid AND NOT fbCoERead.bBusy AND NOT fbCoERead.bError;
+bBusy := fbNCRead.bBusy OR fbCoERead.bBusy;
+bError := fbNCRead.bError OR fbCoERead.bError;
+IF fbNCRead.iErrorID > 0 THEN
+	iErrorID := fbNCRead.iErrorID;
+ELSE
+	iErrorID := fbCoERead.iErrorID;
+END_IF]]></ST>
     </Implementation>
     <LineIds Name="FB_AxisReadParams">
       <LineId Id="9" Count="0" />
       <LineId Id="25" Count="0" />
-      <LineId Id="31" Count="1" />
-      <LineId Id="26" Count="3" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="52" Count="2" />
+      <LineId Id="56" Count="0" />
+      <LineId Id="58" Count="5" />
+      <LineId Id="65" Count="1" />
+      <LineId Id="64" Count="0" />
+      <LineId Id="29" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>
