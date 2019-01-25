@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
+  <POU Name="FB_AxisRead5042" Id="{f8e69a50-2a54-4489-b7d7-965f7b44587e}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_AxisRead5042
+VAR_INPUT
+	bExecute: BOOL;
+	bReset: BOOL;
+	stDriveRef: ST_DriveRef;
+END_VAR
+VAR_IN_OUT
+	stConfig: ST_AxisParams;
+	Axis: AXIS_REF;
+END_VAR
+VAR_OUTPUT
+	bBusy: BOOL;
+	bError: BOOL;
+	iAdsErrId: UINT;
+	iCANopenErrId: UINT;
+END_VAR
+VAR
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <LineIds Name="FB_AxisRead5042">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
