@@ -48,7 +48,7 @@ END_CASE
 {% else %}
 {{ item.nindex }} := {{ item.index }};
 {% endif %}
-{{ item.fb_read }}(bExecute:=bInnerExec,
+{{ item.fb_name }}(bExecute:=bInnerExec,
 	stDriveRef:=stDriveRef,
 	nindex:={{ item.nindex }},
 	nSubIndex:={{ item.subindex }},

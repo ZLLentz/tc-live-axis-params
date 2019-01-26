@@ -49,9 +49,14 @@ for term in terms:
         camelcase = ''.join(txt.capitalize() for txt in param.split('_'))
         ns.fb_name = 'fbRead' + camelcase
         ns.nindex = 'nInd' + camelcase
-
-        ns.multi_channel=isinstance(data.index, list))
-
+        ns.multi_channel = isinstance(info['index'], list)
+        if ns.multi_channel:
+            ns.subindex = info['index'][0].split(':')
+            ns.index = [ind.split(':')[0] for ind in info['index']]
+        else:
+            ns.index, ns.subindex = info['index'].split(':')
+        coe_params.append(ns)
+    coe_params_dict[term] = coe_params
 
 # write_filename = f'TestProject/POUs/FB_AxisWrite{term}.TcPOU'
 # Find and edit the existing files
@@ -60,7 +65,7 @@ template = env.get_template('FB_AxisReadCoE.template')
 for term in terms:
     read_filename = f'TestProject/POUs/FB_AxisRead{term}.TcPOU'
     with open(read_filename, 'r') as fd:
-        lines = read_filename.readlines()
+        lines = fd.readlines()
     # split file into before and after the target lines
     before = []
     overwrite = []
@@ -77,4 +82,4 @@ for term in terms:
     new = list(stream)
     # write the new file
     with open(read_filename, 'w') as fd:
-        read_filename.writelines(before + new + after)
+        fd.writelines(before + new + after)
