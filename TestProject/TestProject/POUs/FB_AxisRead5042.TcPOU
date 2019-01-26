@@ -45,7 +45,7 @@ IF NOT bReadOk THEN
 	END_IF
 END_IF
 bInnerExec := bExecute AND bReadOk;
-nIndEncSupply := 8008;
+nIndEncSupply := 16#8008;
 fbReadEncSupply(bExecute:=bInnerExec,
 	stDriveRef:=stDriveRef,
 	nindex:=nIndEncSupply,
@@ -54,9 +54,9 @@ fbReadEncSupply(bExecute:=bInnerExec,
 	cbBufLen:=SIZEOF(stConfig.enc_supply));
 CASE stDriveRef.nDriveNo OF
 	0:
-		nIndEncClock := 8008;
+		nIndEncClock := 16#8008;
 	1:
-		nIndEncClock := 8018;
+		nIndEncClock := 16#8018;
 END_CASE
 fbReadEncClock(bExecute:=bInnerExec,
 	stDriveRef:=stDriveRef,
@@ -66,9 +66,9 @@ fbReadEncClock(bExecute:=bInnerExec,
 	cbBufLen:=SIZEOF(stConfig.enc_clock));
 CASE stDriveRef.nDriveNo OF
 	0:
-		nIndEncMultiBits := 8008;
+		nIndEncMultiBits := 16#8008;
 	1:
-		nIndEncMultiBits := 8018;
+		nIndEncMultiBits := 16#8018;
 END_CASE
 fbReadEncMultiBits(bExecute:=bInnerExec,
 	stDriveRef:=stDriveRef,
@@ -78,9 +78,9 @@ fbReadEncMultiBits(bExecute:=bInnerExec,
 	cbBufLen:=SIZEOF(stConfig.enc_multi_bits));
 CASE stDriveRef.nDriveNo OF
 	0:
-		nIndEncSingleBits := 8008;
+		nIndEncSingleBits := 16#8008;
 	1:
-		nIndEncSingleBits := 8018;
+		nIndEncSingleBits := 16#8018;
 END_CASE
 fbReadEncSingleBits(bExecute:=bInnerExec,
 	stDriveRef:=stDriveRef,
