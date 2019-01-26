@@ -18,9 +18,89 @@ VAR_OUTPUT
 	iCANopenErrId: UINT;
 END_VAR
 VAR
+	iCycles: INT := 0;
+	bReadOk: BOOL := FALSE;
+	bInnerExec: BOOL := FALSE;
+	fbReadMaxCurrent: FB_CoERead_ByDriveRef;
+	nIndMaxCurrent: WORD;
+	fbReadHoldingCurrent: FB_CoERead_ByDriveRef;
+	nIndHoldingCurrent: WORD;
+	fbReadVoltage: FB_CoERead_ByDriveRef;
+	nIndVoltage: WORD;
+	fbReadResistance: FB_CoERead_ByDriveRef;
+	nIndResistance: WORD;
+	fbReadEmf: FB_CoERead_ByDriveRef;
+	nIndEmf: WORD;
+	fbReadFullSteps: FB_CoERead_ByDriveRef;
+	nIndFullSteps: WORD;
+	fbReadSpeedRange: FB_CoERead_ByDriveRef;
+	nIndSpeedRange: WORD;
 END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[]]></ST>
+      <ST><![CDATA[// File auto-generated! Take care editing!
+// Clears errors and allows a new read
+IF bReset THEN
+	bExecute := FALSE;
+	bReset := FALSE;
+END_IF
+// Fails in the first n cycles depending on terminals, wait a bit
+IF NOT bReadOk THEN
+	iCycles := iCycles + 1;
+	IF iCycles > 100 THEN
+		bReadOk := TRUE;
+	END_IF
+END_IF
+bInnerExec := bExecute AND bReadOk;
+nIndMaxCurrent := 8010;
+fbReadMaxCurrent(bExecute:=bInnerExec,
+	stDriveRef:=stDriveRef,
+	nindex:=nIndMaxCurrent,
+	nSubIndex:=01,
+	pDstBuf:=ADR(stConfig.max_current),
+	cbBufLen:=SIZEOF(stConfig.max_current));
+nIndHoldingCurrent := 8010;
+fbReadHoldingCurrent(bExecute:=bInnerExec,
+	stDriveRef:=stDriveRef,
+	nindex:=nIndHoldingCurrent,
+	nSubIndex:=02,
+	pDstBuf:=ADR(stConfig.holding_current),
+	cbBufLen:=SIZEOF(stConfig.holding_current));
+nIndVoltage := 8010;
+fbReadVoltage(bExecute:=bInnerExec,
+	stDriveRef:=stDriveRef,
+	nindex:=nIndVoltage,
+	nSubIndex:=03,
+	pDstBuf:=ADR(stConfig.voltage),
+	cbBufLen:=SIZEOF(stConfig.voltage));
+nIndResistance := 8010;
+fbReadResistance(bExecute:=bInnerExec,
+	stDriveRef:=stDriveRef,
+	nindex:=nIndResistance,
+	nSubIndex:=04,
+	pDstBuf:=ADR(stConfig.resistance),
+	cbBufLen:=SIZEOF(stConfig.resistance));
+nIndEmf := 8010;
+fbReadEmf(bExecute:=bInnerExec,
+	stDriveRef:=stDriveRef,
+	nindex:=nIndEmf,
+	nSubIndex:=05,
+	pDstBuf:=ADR(stConfig.emf),
+	cbBufLen:=SIZEOF(stConfig.emf));
+nIndFullSteps := 8010;
+fbReadFullSteps(bExecute:=bInnerExec,
+	stDriveRef:=stDriveRef,
+	nindex:=nIndFullSteps,
+	nSubIndex:=06,
+	pDstBuf:=ADR(stConfig.full_steps),
+	cbBufLen:=SIZEOF(stConfig.full_steps));
+nIndSpeedRange := 8012;
+fbReadSpeedRange(bExecute:=bInnerExec,
+	stDriveRef:=stDriveRef,
+	nindex:=nIndSpeedRange,
+	nSubIndex:=05,
+	pDstBuf:=ADR(stConfig.speed_range),
+	cbBufLen:=SIZEOF(stConfig.speed_range));
+]]></ST>
     </Implementation>
     <LineIds Name="FB_AxisRead70x1">
       <LineId Id="9" Count="0" />

@@ -18,9 +18,77 @@ VAR_OUTPUT
 	iCANopenErrId: UINT;
 END_VAR
 VAR
+	iCycles: INT := 0;
+	bReadOk: BOOL := FALSE;
+	bInnerExec: BOOL := FALSE;
+	fbReadEncSupply: FB_CoERead_ByDriveRef;
+	nIndEncSupply: WORD;
+	fbReadEncClock: FB_CoERead_ByDriveRef;
+	nIndEncClock: WORD;
+	fbReadEncMultiBits: FB_CoERead_ByDriveRef;
+	nIndEncMultiBits: WORD;
+	fbReadEncSingleBits: FB_CoERead_ByDriveRef;
+	nIndEncSingleBits: WORD;
 END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[]]></ST>
+      <ST><![CDATA[// File auto-generated! Take care editing!
+// Clears errors and allows a new read
+IF bReset THEN
+	bExecute := FALSE;
+	bReset := FALSE;
+END_IF
+// Fails in the first n cycles depending on terminals, wait a bit
+IF NOT bReadOk THEN
+	iCycles := iCycles + 1;
+	IF iCycles > 100 THEN
+		bReadOk := TRUE;
+	END_IF
+END_IF
+bInnerExec := bExecute AND bReadOk;
+nIndEncSupply := 8008;
+fbReadEncSupply(bExecute:=bInnerExec,
+	stDriveRef:=stDriveRef,
+	nindex:=nIndEncSupply,
+	nSubIndex:=12,
+	pDstBuf:=ADR(stConfig.enc_supply),
+	cbBufLen:=SIZEOF(stConfig.enc_supply));
+CASE stDriveRef.DriveNo OF
+	0:
+		nIndEncClock := 8008;
+	1:
+		nIndEncClock := 8018;
+END_CASE
+fbReadEncClock(bExecute:=bInnerExec,
+	stDriveRef:=stDriveRef,
+	nindex:=nIndEncClock,
+	nSubIndex:=['8008', '13'],
+	pDstBuf:=ADR(stConfig.enc_clock),
+	cbBufLen:=SIZEOF(stConfig.enc_clock));
+CASE stDriveRef.DriveNo OF
+	0:
+		nIndEncMultiBits := 8008;
+	1:
+		nIndEncMultiBits := 8018;
+END_CASE
+fbReadEncMultiBits(bExecute:=bInnerExec,
+	stDriveRef:=stDriveRef,
+	nindex:=nIndEncMultiBits,
+	nSubIndex:=['8008', '15'],
+	pDstBuf:=ADR(stConfig.enc_multi_bits),
+	cbBufLen:=SIZEOF(stConfig.enc_multi_bits));
+CASE stDriveRef.DriveNo OF
+	0:
+		nIndEncSingleBits := 8008;
+	1:
+		nIndEncSingleBits := 8018;
+END_CASE
+fbReadEncSingleBits(bExecute:=bInnerExec,
+	stDriveRef:=stDriveRef,
+	nindex:=nIndEncSingleBits,
+	nSubIndex:=['8008', '16'],
+	pDstBuf:=ADR(stConfig.enc_single_bits),
+	cbBufLen:=SIZEOF(stConfig.enc_single_bits));
+]]></ST>
     </Implementation>
     <LineIds Name="FB_AxisRead5042">
       <LineId Id="9" Count="0" />
