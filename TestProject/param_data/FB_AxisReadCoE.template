@@ -42,11 +42,11 @@ bInnerExec := bExecute AND bReadOk;
 CASE stDriveRef.nDriveNo OF
 {% for index in item.index %}
 	{{ loop.index0 }}:
-		{{ item.nindex }} := {{ index }};
+		{{ item.nindex }} := 16#{{ index }};
 {% endfor %}
 END_CASE
 {% else %}
-{{ item.nindex }} := {{ item.index }};
+{{ item.nindex }} := 16#{{ item.index }};
 {% endif %}
 {{ item.fb_name }}(bExecute:=bInnerExec,
 	stDriveRef:=stDriveRef,
