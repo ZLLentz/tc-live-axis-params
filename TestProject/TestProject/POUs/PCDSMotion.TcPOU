@@ -42,14 +42,15 @@ fbLink(En:=En);
 fbHardware(bExecute:=En,
 	Axis:=fbLink.Axis);
 // Read and/or write the config
-fbConfig(bExecute:=bExecConfig,
+fbConfig(bExecute:=bExecConfig AND fbHardware.bDone,
 	stConfigSet:=stConfigSet,
+	stHardware:=fbHardware.stHardware,
 	Axis:=fbLink.Axis,
 	stConfigGet=>stConfigGet);
 // After the initial config is done, go to OP mode (** TODO **)
 // Execute incoming motion commands
 fbDrive(En:=En,
-	bEnable:=bEnable AND NOT fbConfig.bWriting,
+	bEnable:=bEnable AND fbConfig.bDone AND NOT fbConfig.bWriting,
 	bReset:=bReset,
 	bExecute:=bExecute,
 	nCommand:=nCommand,
@@ -81,6 +82,7 @@ END_IF]]></ST>
       <LineId Id="75" Count="0" />
       <LineId Id="156" Count="0" />
       <LineId Id="119" Count="0" />
+      <LineId Id="249" Count="0" />
       <LineId Id="152" Count="0" />
       <LineId Id="12" Count="0" />
       <LineId Id="151" Count="0" />

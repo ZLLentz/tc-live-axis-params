@@ -7,6 +7,7 @@ VAR_INPUT
 	bExecGet: BOOL; // Only get
 	bReset: BOOL;
 	stConfigSet: ST_AxisParams;
+	stHardware: ST_AxisHardware;
 END_VAR
 VAR_OUTPUT
 	bDone: BOOL;
@@ -31,6 +32,7 @@ END_VAR
 fbWrite(bExecute:=bExecute,
 	bReset:=bReset,
 	stConfig:=stConfigSet,
+	stHardware:=stHardware,
 	Axis:=Axis,
 	bWriting=>bWriting);
 // Reset bDoRead if both execs are false
@@ -46,6 +48,7 @@ END_IF
 // Read now
 fbRead(bExecute:=bDoRead,
 	bReset:=bReset,
+	stHardware:=stHardware,
 	Axis:=Axis,
 	stConfig=>stConfigGet,
 	bValid=>bValid);
@@ -60,7 +63,9 @@ ELSE
 END_IF]]></ST>
     </Implementation>
     <LineIds Name="FB_AxisConfig">
-      <LineId Id="57" Count="3" />
+      <LineId Id="57" Count="2" />
+      <LineId Id="112" Count="0" />
+      <LineId Id="60" Count="0" />
       <LineId Id="86" Count="0" />
       <LineId Id="78" Count="4" />
       <LineId Id="72" Count="0" />
@@ -69,6 +74,7 @@ END_IF]]></ST>
       <LineId Id="75" Count="0" />
       <LineId Id="30" Count="1" />
       <LineId Id="9" Count="0" />
+      <LineId Id="113" Count="0" />
       <LineId Id="19" Count="2" />
       <LineId Id="61" Count="5" />
       <LineId Id="68" Count="1" />

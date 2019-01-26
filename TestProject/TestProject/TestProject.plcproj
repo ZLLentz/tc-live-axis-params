@@ -30,9 +30,6 @@
     <Compile Include="POUs\FB_AxisConfig.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\FB_AxisConfig_Old.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="POUs\FB_AxisHardware.TcPOU">
       <SubType>Code</SubType>
     </Compile>
