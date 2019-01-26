@@ -80,6 +80,8 @@ for term in terms:
     # use the template
     stream = template.stream(coe_params=coe_params_dict[term])
     new = list(stream)
+    # drop the byte order mark U+FEFF
+    new[0] = new[0][1:]
     # write the new file
     with open(read_filename, 'w') as fd:
         fd.writelines(before + new + after)
