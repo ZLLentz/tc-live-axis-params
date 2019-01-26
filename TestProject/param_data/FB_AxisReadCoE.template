@@ -39,7 +39,7 @@ END_IF
 bInnerExec := bExecute AND bReadOk;
 {% for item in coe_params %}
 {% if item.multi_channel %}
-CASE stDriveRef.DriveNo OF
+CASE stDriveRef.nDriveNo OF
 {% for index in item.index %}
 	{{ loop.index0 }}:
 		{{ item.nindex }} := {{ index }};

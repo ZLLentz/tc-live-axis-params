@@ -52,7 +52,7 @@ fbReadEncSupply(bExecute:=bInnerExec,
 	nSubIndex:=12,
 	pDstBuf:=ADR(stConfig.enc_supply),
 	cbBufLen:=SIZEOF(stConfig.enc_supply));
-CASE stDriveRef.DriveNo OF
+CASE stDriveRef.nDriveNo OF
 	0:
 		nIndEncClock := 8008;
 	1:
@@ -64,7 +64,7 @@ fbReadEncClock(bExecute:=bInnerExec,
 	nSubIndex:=13,
 	pDstBuf:=ADR(stConfig.enc_clock),
 	cbBufLen:=SIZEOF(stConfig.enc_clock));
-CASE stDriveRef.DriveNo OF
+CASE stDriveRef.nDriveNo OF
 	0:
 		nIndEncMultiBits := 8008;
 	1:
@@ -76,7 +76,7 @@ fbReadEncMultiBits(bExecute:=bInnerExec,
 	nSubIndex:=15,
 	pDstBuf:=ADR(stConfig.enc_multi_bits),
 	cbBufLen:=SIZEOF(stConfig.enc_multi_bits));
-CASE stDriveRef.DriveNo OF
+CASE stDriveRef.nDriveNo OF
 	0:
 		nIndEncSingleBits := 8008;
 	1:
