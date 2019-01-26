@@ -55,6 +55,22 @@ END_CASE
 	pDstBuf:=ADR(stConfig.{{ item.stConfig }}),
 	cbBufLen:=SIZEOF(stConfig.{{ item.stConfig }}));
 {% endfor %}
+bBusy := {{ coe_params|join(' OR ', attribute='fb_busy') }};
+bError := {{ coe_params|join(' OR ', attribute='fb_error') }};
+IF NOT bError THEN
+	iAdsErrId := 0;
+{% for item in coe_params %}
+ELSIF {{ item.fb_ads_err_id }} > 0 THEN
+	iAdsErrId := {{ item.fb_ads_err_id }};
+{% endfor %}
+END_IF
+IF NOT bError THEN
+	iCANopenErrId := 0;
+{% for item in coe_params %}
+ELSIF {{ item.fb_can_err_id }} > 0 THEN
+	iCANopenErrId := {{ item.fb_can_err_id }};
+{% endfor %}
+END_IF
 ]]></ST>
     </Implementation>
 

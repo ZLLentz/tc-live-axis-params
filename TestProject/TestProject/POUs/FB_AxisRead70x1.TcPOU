@@ -100,6 +100,42 @@ fbReadSpeedRange(bExecute:=bInnerExec,
 	nSubIndex:=05,
 	pDstBuf:=ADR(stConfig.speed_range),
 	cbBufLen:=SIZEOF(stConfig.speed_range));
+bBusy := fbReadMaxCurrent.bBusy OR fbReadHoldingCurrent.bBusy OR fbReadVoltage.bBusy OR fbReadResistance.bBusy OR fbReadEmf.bBusy OR fbReadFullSteps.bBusy OR fbReadSpeedRange.bBusy;
+bError := fbReadMaxCurrent.bError OR fbReadHoldingCurrent.bError OR fbReadVoltage.bError OR fbReadResistance.bError OR fbReadEmf.bError OR fbReadFullSteps.bError OR fbReadSpeedRange.bError;
+IF NOT bError THEN
+	iAdsErrId := 0;
+ELSIF fbReadMaxCurrent.iAdsErrId > 0 THEN
+	iAdsErrId := fbReadMaxCurrent.iAdsErrId;
+ELSIF fbReadHoldingCurrent.iAdsErrId > 0 THEN
+	iAdsErrId := fbReadHoldingCurrent.iAdsErrId;
+ELSIF fbReadVoltage.iAdsErrId > 0 THEN
+	iAdsErrId := fbReadVoltage.iAdsErrId;
+ELSIF fbReadResistance.iAdsErrId > 0 THEN
+	iAdsErrId := fbReadResistance.iAdsErrId;
+ELSIF fbReadEmf.iAdsErrId > 0 THEN
+	iAdsErrId := fbReadEmf.iAdsErrId;
+ELSIF fbReadFullSteps.iAdsErrId > 0 THEN
+	iAdsErrId := fbReadFullSteps.iAdsErrId;
+ELSIF fbReadSpeedRange.iAdsErrId > 0 THEN
+	iAdsErrId := fbReadSpeedRange.iAdsErrId;
+END_IF
+IF NOT bError THEN
+	iCANopenErrId := 0;
+ELSIF fbReadMaxCurrent.iCANopenErrId > 0 THEN
+	iCANopenErrId := fbReadMaxCurrent.iCANopenErrId;
+ELSIF fbReadHoldingCurrent.iCANopenErrId > 0 THEN
+	iCANopenErrId := fbReadHoldingCurrent.iCANopenErrId;
+ELSIF fbReadVoltage.iCANopenErrId > 0 THEN
+	iCANopenErrId := fbReadVoltage.iCANopenErrId;
+ELSIF fbReadResistance.iCANopenErrId > 0 THEN
+	iCANopenErrId := fbReadResistance.iCANopenErrId;
+ELSIF fbReadEmf.iCANopenErrId > 0 THEN
+	iCANopenErrId := fbReadEmf.iCANopenErrId;
+ELSIF fbReadFullSteps.iCANopenErrId > 0 THEN
+	iCANopenErrId := fbReadFullSteps.iCANopenErrId;
+ELSIF fbReadSpeedRange.iCANopenErrId > 0 THEN
+	iCANopenErrId := fbReadSpeedRange.iCANopenErrId;
+END_IF
 ]]></ST>
     </Implementation>
     <LineIds Name="FB_AxisRead70x1">

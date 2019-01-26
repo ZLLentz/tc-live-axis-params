@@ -88,6 +88,30 @@ fbReadEncSingleBits(bExecute:=bInnerExec,
 	nSubIndex:=16,
 	pDstBuf:=ADR(stConfig.enc_single_bits),
 	cbBufLen:=SIZEOF(stConfig.enc_single_bits));
+bBusy := fbReadEncSupply.bBusy OR fbReadEncClock.bBusy OR fbReadEncMultiBits.bBusy OR fbReadEncSingleBits.bBusy;
+bError := fbReadEncSupply.bError OR fbReadEncClock.bError OR fbReadEncMultiBits.bError OR fbReadEncSingleBits.bError;
+IF NOT bError THEN
+	iAdsErrId := 0;
+ELSIF fbReadEncSupply.iAdsErrId > 0 THEN
+	iAdsErrId := fbReadEncSupply.iAdsErrId;
+ELSIF fbReadEncClock.iAdsErrId > 0 THEN
+	iAdsErrId := fbReadEncClock.iAdsErrId;
+ELSIF fbReadEncMultiBits.iAdsErrId > 0 THEN
+	iAdsErrId := fbReadEncMultiBits.iAdsErrId;
+ELSIF fbReadEncSingleBits.iAdsErrId > 0 THEN
+	iAdsErrId := fbReadEncSingleBits.iAdsErrId;
+END_IF
+IF NOT bError THEN
+	iCANopenErrId := 0;
+ELSIF fbReadEncSupply.iCANopenErrId > 0 THEN
+	iCANopenErrId := fbReadEncSupply.iCANopenErrId;
+ELSIF fbReadEncClock.iCANopenErrId > 0 THEN
+	iCANopenErrId := fbReadEncClock.iCANopenErrId;
+ELSIF fbReadEncMultiBits.iCANopenErrId > 0 THEN
+	iCANopenErrId := fbReadEncMultiBits.iCANopenErrId;
+ELSIF fbReadEncSingleBits.iCANopenErrId > 0 THEN
+	iCANopenErrId := fbReadEncSingleBits.iCANopenErrId;
+END_IF
 ]]></ST>
     </Implementation>
     <LineIds Name="FB_AxisRead5042">

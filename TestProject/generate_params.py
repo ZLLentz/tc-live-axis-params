@@ -48,6 +48,10 @@ for term in terms:
         ns = SimpleNamespace(stConfig=param)
         camelcase = ''.join(txt.capitalize() for txt in param.split('_'))
         ns.fb_name = 'fbRead' + camelcase
+        ns.fb_busy = ns.fb_name + '.bBusy'
+        ns.fb_error = ns.fb_name + '.bError'
+        ns.fb_ads_err_id = ns.fb_name + '.iAdsErrId'
+        ns.fb_can_err_id = ns.fb_name + '.iCANopenErrId'
         ns.nindex = 'nInd' + camelcase
         ns.multi_channel = isinstance(info['index'], list)
         if ns.multi_channel:
