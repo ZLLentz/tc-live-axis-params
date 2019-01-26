@@ -51,7 +51,7 @@ for term in terms:
         ns.nindex = 'nInd' + camelcase
         ns.multi_channel = isinstance(info['index'], list)
         if ns.multi_channel:
-            ns.subindex = info['index'][0].split(':')
+            ns.subindex = info['index'][0].split(':')[1]
             ns.index = [ind.split(':')[0] for ind in info['index']]
         else:
             ns.index, ns.subindex = info['index'].split(':')
