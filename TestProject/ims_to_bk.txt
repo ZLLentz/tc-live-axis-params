@@ -1,0 +1,27 @@
+unit = EGU
+ref_vel = MRES / 64 * 1000 * 2^speed_range
+max_vel = VMAX
+max_acc = VMAX / ACCL
+max_dec = VMAX / ACCL
+acc = VELO / ACCL
+dec = VELO / ACCL
+jerk = just ignore this, use default
+home_search = HVEL
+home_sync = HVEL
+man_fast = VELO
+man_slow = just ignore this, use default
+dead_time = just ignore this, use default
+enc_scale = ERES
+enc_invert = leave FALSE unless needed
+mot_invert = leave FALSE unless needed
+max_current = read spec sheet OR min(3000 * RC, termmax)
+holding_current = read spec sheet OR min(3000 * HC, termmax)
+voltage = set to rail voltage * 1000
+resistance = use motor spec sheet or skip
+emf = use motor spec sheet or skip
+full_steps = SREV
+speed_range = if you need more than 2000 full steps per second, set enum according to max_steps_per_sec = 1000 * 2^speed_range
+enc_supply = ignore, these are always 5V for the old encoders
+enc_clock = ignore unless biss-c
+enc_multi_bits = ignore unless biss-c
+enc_single_bits = ignore unless biss-c
