@@ -2,9 +2,14 @@
 	bExecute: BOOL;
 	bReset: BOOL;
 	stDriveRef: ST_DriveRef;
+{% if write %}
+	stConfig: ST_AxisParam;
+{% endif %}
 END_VAR
 VAR_IN_OUT
+{% if read %}
 	stConfig: ST_AxisParams;
+{% endif %}
 	Axis: AXIS_REF;
 END_VAR
 VAR_OUTPUT
@@ -18,7 +23,11 @@ VAR
 	bReadOk: BOOL := FALSE;
 	bInnerExec: BOOL := FALSE;
 {% for item in coe_params %}
+{% if read %}
 	{{ item.fb_name }}: FB_CoERead_ByDriveRef;
+{% elif write %}
+	{{ item.fb_name }}: FB_CoEWrite_ByDriveRef;
+{% endif %}
 	{{ item.nindex }}: WORD;
 {% endfor %}
 END_VAR]]></Declaration>
@@ -52,7 +61,11 @@ END_CASE
 	stDriveRef:=stDriveRef,
 	nindex:={{ item.nindex }},
 	nSubIndex:={{ item.subindex }},
+{% if read %}
 	pDstBuf:=ADR(stConfig.{{ item.stConfig }}),
+{% elif write %}
+	pSrcBuf:=ADR(stConfig.{{ item.stConfig }}),
+{% endif %}
 	cbBufLen:=SIZEOF(stConfig.{{ item.stConfig }}));
 {% endfor %}
 bBusy := {{ coe_params|join(' OR ', attribute='fb_busy') }};
