@@ -9,17 +9,18 @@ VAR_INPUT
 	stConfigSet: ST_AxisParams;
 	stHardware: ST_AxisHardware;
 END_VAR
+VAR_IN_OUT
+	Axis: AXIS_REF;
+END_VAR
 VAR_OUTPUT
 	bDone: BOOL;
 	bValid: BOOL;
 	bBusy: BOOL;
 	bWriting: BOOL;
 	bError: BOOL;
-	iErrorID: UDINT;
+	nErrorID: UDINT;
+	bInit: BOOL;
 	stConfigGet: ST_AxisParams;
-END_VAR
-VAR_IN_OUT
-	Axis: AXIS_REF;
 END_VAR
 VAR
 	fbRead: FB_AxisReadParams;
@@ -40,8 +41,8 @@ IF NOT bExecute AND NOT bExecGet THEN
 	bDoRead := FALSE;
 END_IF
 // If bExecute is TRUE, wait untill after the write to read
-IF bExecute AND fbWrite.bDone THEN
-	bDoRead := TRUE;
+IF bExecute THEN
+	bDoRead := fbWrite.bDone;
 ELSE
 	bDoRead := bExecGet;
 END_IF
@@ -56,10 +57,16 @@ fbRead(bExecute:=bDoRead,
 bDone := fbWrite.bDone AND NOT fbRead.bBusy;
 bBusy := fbWrite.bBusy OR fbRead.bBusy;
 bError := fbWrite.bError OR fbRead.bError;
-IF fbWrite.iErrorID > 0 THEN
-	iErrorID := fbWrite.iErrorID;
+IF fbWrite.nErrorID > 0 THEN
+	nErrorID := fbWrite.nErrorID;
 ELSE
-	iErrorID := fbRead.iErrorID;
+	nErrorID := fbRead.nErrorID;
+END_IF
+IF bDone THEN
+	bInit := TRUE;
+END_IF
+IF bError THEN
+	bInit := FALSE;
 END_IF]]></ST>
     </Implementation>
     <LineIds Name="FB_AxisConfig">
@@ -79,6 +86,7 @@ END_IF]]></ST>
       <LineId Id="61" Count="5" />
       <LineId Id="68" Count="1" />
       <LineId Id="67" Count="0" />
+      <LineId Id="144" Count="5" />
       <LineId Id="29" Count="0" />
     </LineIds>
   </POU>

@@ -16,7 +16,7 @@ VAR_OUTPUT
 	bBusy: BOOL;
 	bWriting: BOOL;
 	bError: BOOL;
-	iErrorID: UDINT;
+	nErrorID: UDINT;
 END_VAR
 VAR
 	fbNCWrite: FB_AxisWriteNC;
@@ -41,7 +41,7 @@ fbNCWrite(bExecute:=bDoWrite,
 	bDone=>bDone,
 	bBusy=>bBusy,
 	bError=>bError,
-	iErrorID=>iErrorID);
+	nErrorID=>nErrorID);
 // Report bWriting := FALSE when a write ends so we can enable the axis
 fbWriteDoneRisingEdge(CLK:=bDone);
 IF fbWriteDoneRisingEdge.Q THEN

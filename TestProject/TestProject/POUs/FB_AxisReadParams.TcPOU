@@ -12,7 +12,7 @@ VAR_OUTPUT
 	bValid: BOOL;
 	bBusy: BOOL;
 	bError: BOOL;
-	iErrorID: UDINT;
+	nErrorID: UDINT;
 END_VAR
 VAR_IN_OUT
 	Axis: AXIS_REF;
@@ -35,10 +35,10 @@ fbCoERead(bExecute:=bExecute,
 bValid := fbNCRead.bValid AND NOT fbCoERead.bBusy AND NOT fbCoERead.bError;
 bBusy := fbNCRead.bBusy OR fbCoERead.bBusy;
 bError := fbNCRead.bError OR fbCoERead.bError;
-IF fbNCRead.iErrorID > 0 THEN
-	iErrorID := fbNCRead.iErrorID;
+IF fbNCRead.nErrorID > 0 THEN
+	nErrorID := fbNCRead.nErrorID;
 ELSE
-	iErrorID := fbCoERead.iErrorID;
+	nErrorID := fbCoERead.nErrorID;
 END_IF]]></ST>
     </Implementation>
     <LineIds Name="FB_AxisReadParams">

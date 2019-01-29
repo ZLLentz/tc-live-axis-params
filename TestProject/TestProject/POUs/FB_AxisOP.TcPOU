@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
+  <POU Name="FB_AxisOP" Id="{2d312ae8-fcfa-4504-9380-5754eab57884}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_AxisOP
+VAR_INPUT
+	bEnable: BOOL;
+	stHardware: ST_AxisHardware;
+END_VAR
+VAR_OUTPUT
+	bDone: BOOL;
+	bBusy: BOOL;
+	bError: BOOL;
+	nErrorID: UDINT;
+	currDriveState: ST_EcSlaveState;
+	currEncState: ST_EcSlaveState;
+END_VAR
+VAR
+	fbSetDriveState: FB_EcSetSlaveState;
+	fbSetEncState: FB_EcSetSlaveState;
+	bDriveDone: BOOL;
+	bEncDone: BOOL;
+	bDriveBusy: BOOL;
+	bEncBusy: BOOL;
+	bDriveErr: BOOL;
+	bEncErr: BOOL;
+	nDriveErrID: UDINT;
+	nEncErrID: UDINT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// Only do it once
+IF bEnable AND NOT bDone THEN
+	IF stHardware.drive_type = 0 THEN
+		bDriveDone := TRUE;
+		bDriveBusy := FALSE;
+		bDriveErr := FALSE;
+		nDriveErrID := 0;
+	ELSE
+		fbSetDriveState(sNetID:=stHardware.drive_ref.sNetId,
+			nSlaveAddr:=stHardware.drive_ref.nSlaveAddr,
+			bExecute:=bEnable,
+			reqState:=EC_DEVICE_STATE_OP,
+			bBusy=>bDriveBusy,
+			bError=>bDriveErr,
+			nErrId=>nDriveErrID,
+			currState=>currDriveState);
+		bDriveDone := bEnable AND NOT fbSetDriveState.bBusy AND currDriveState.deviceState = EC_DEVICE_STATE_OP;
+	END_IF
+	IF stHardware.enc_type = 0 THEN
+		bEncDone := TRUE;
+		bEncBusy := FALSE;
+		bEncErr := FALSE;
+		nEncErrID := 0;
+	ELSE
+		fbSetEncState(sNetID:=stHardware.enc_ref.sNetId,
+			nSlaveAddr:=stHardware.enc_ref.nSlaveAddr,
+			bExecute:=bEnable,
+			reqState:=EC_DEVICE_STATE_OP,
+			bBusy=>bEncBusy,
+			bError=>bEncErr,
+			nErrId=>nEncErrID,
+			currState=>currEncState);
+		bEncDone := bEnable AND NOT fbSetEncState.bBusy AND currEncState.deviceState = EC_DEVICE_STATE_OP;
+	END_IF
+END_IF
+bDone := bDriveDone AND bEncDone;
+bBusy := bDriveBusy OR bEncBusy;
+bError := bDriveErr OR bEncErr;
+IF nDriveErrID > 0 THEN
+	nErrorID := nDriveErrID;
+ELSE
+	nErrorID := nEncErrID;
+END_IF]]></ST>
+    </Implementation>
+    <LineIds Name="FB_AxisOP">
+      <LineId Id="29" Count="0" />
+      <LineId Id="27" Count="0" />
+      <LineId Id="32" Count="0" />
+      <LineId Id="42" Count="2" />
+      <LineId Id="30" Count="0" />
+      <LineId Id="33" Count="0" />
+      <LineId Id="45" Count="1" />
+      <LineId Id="48" Count="4" />
+      <LineId Id="68" Count="0" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="53" Count="1" />
+      <LineId Id="56" Count="11" />
+      <LineId Id="69" Count="0" />
+      <LineId Id="55" Count="0" />
+      <LineId Id="28" Count="0" />
+      <LineId Id="70" Count="4" />
+      <LineId Id="76" Count="1" />
+      <LineId Id="75" Count="0" />
+      <LineId Id="9" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

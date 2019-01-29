@@ -14,7 +14,7 @@ VAR_OUTPUT
 	bValid: BOOL;
 	bBusy: BOOL;
 	bError: BOOL;
-	iErrorID: UDINT;
+	nErrorID: UDINT;
 END_VAR
 VAR
 	iCycles: INT := 0;
@@ -191,39 +191,43 @@ bValid := fbReadRefVel.Valid AND fbReadMaxVel.Valid AND fbReadMaxAcc.Valid AND f
 bBusy := fbReadRefVel.Busy OR fbReadMaxVel.Busy OR fbReadMaxAcc.Busy OR fbReadMaxDec.Busy OR fbReadAcc.Busy OR fbReadDec.Busy OR fbReadJerk.Busy OR fbReadHomeSearch.Busy OR fbReadHomeSync.Busy OR fbReadManFast.Busy OR fbReadManSlow.Busy OR fbReadDeadTime.Busy OR fbReadEncScale.Busy OR fbReadEncInvert.Busy OR fbReadMotInvert.Busy;
 bError := fbReadRefVel.Error OR fbReadMaxVel.Error OR fbReadMaxAcc.Error OR fbReadMaxDec.Error OR fbReadAcc.Error OR fbReadDec.Error OR fbReadJerk.Error OR fbReadHomeSearch.Error OR fbReadHomeSync.Error OR fbReadManFast.Error OR fbReadManSlow.Error OR fbReadDeadTime.Error OR fbReadEncScale.Error OR fbReadEncInvert.Error OR fbReadMotInvert.Error;
 IF NOT bError THEN
-	iErrorID := 0;
+	nErrorID := 0;
 ELSIF fbReadRefVel.ErrorID > 0 THEN
-	iErrorID := fbReadRefVel.ErrorID;
+	nErrorID := fbReadRefVel.ErrorID;
 ELSIF fbReadMaxVel.ErrorID > 0 THEN
-	iErrorID := fbReadMaxVel.ErrorID;
+	nErrorID := fbReadMaxVel.ErrorID;
 ELSIF fbReadMaxAcc.ErrorID > 0 THEN
-	iErrorID := fbReadMaxAcc.ErrorID;
+	nErrorID := fbReadMaxAcc.ErrorID;
 ELSIF fbReadMaxDec.ErrorID > 0 THEN
-	iErrorID := fbReadMaxDec.ErrorID;
+	nErrorID := fbReadMaxDec.ErrorID;
 ELSIF fbReadAcc.ErrorID > 0 THEN
-	iErrorID := fbReadAcc.ErrorID;
+	nErrorID := fbReadAcc.ErrorID;
 ELSIF fbReadDec.ErrorID > 0 THEN
-	iErrorID := fbReadDec.ErrorID;
+	nErrorID := fbReadDec.ErrorID;
 ELSIF fbReadJerk.ErrorID > 0 THEN
-	iErrorID := fbReadJerk.ErrorID;
+	nErrorID := fbReadJerk.ErrorID;
 ELSIF fbReadHomeSearch.ErrorID > 0 THEN
-	iErrorID := fbReadHomeSearch.ErrorID;
+	nErrorID := fbReadHomeSearch.ErrorID;
 ELSIF fbReadHomeSync.ErrorID > 0 THEN
-	iErrorID := fbReadHomeSync.ErrorID;
+	nErrorID := fbReadHomeSync.ErrorID;
 ELSIF fbReadManFast.ErrorID > 0 THEN
-	iErrorID := fbReadManFast.ErrorID;
+	nErrorID := fbReadManFast.ErrorID;
 ELSIF fbReadManSlow.ErrorID > 0 THEN
-	iErrorID := fbReadManSlow.ErrorID;
+	nErrorID := fbReadManSlow.ErrorID;
 ELSIF fbReadDeadTime.ErrorID > 0 THEN
-	iErrorID := fbReadDeadTime.ErrorID;
+	nErrorID := fbReadDeadTime.ErrorID;
 ELSIF fbReadEncScale.ErrorID > 0 THEN
-	iErrorID := fbReadEncScale.ErrorID;
+	nErrorID := fbReadEncScale.ErrorID;
 ELSIF fbReadEncInvert.ErrorID > 0 THEN
-	iErrorID := fbReadEncInvert.ErrorID;
+	nErrorID := fbReadEncInvert.ErrorID;
 ELSIF fbReadMotInvert.ErrorID > 0 THEN
-	iErrorID := fbReadMotInvert.ErrorID;
+	nErrorID := fbReadMotInvert.ErrorID;
 END_IF
 ]]></ST>
     </Implementation>
+    <LineIds Name="FB_AxisReadNC">
+      <LineId Id="3" Count="169" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>

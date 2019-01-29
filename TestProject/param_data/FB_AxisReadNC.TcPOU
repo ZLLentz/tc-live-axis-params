@@ -14,7 +14,7 @@ VAR_OUTPUT
 	bValid: BOOL;
 	bBusy: BOOL;
 	bError: BOOL;
-	iErrorID: UDINT;
+	nErrorID: UDINT;
 END_VAR
 VAR
 	iCycles: INT := 0;
@@ -59,10 +59,10 @@ bValid := {{ nc_params|join(' AND ', attribute='fb_read_valid') }};
 bBusy := {{ nc_params|join(' OR ', attribute='fb_read_busy') }};
 bError := {{ nc_params|join(' OR ', attribute='fb_read_error') }};
 IF NOT bError THEN
-	iErrorID := 0;
+	nErrorID := 0;
 {% for item in nc_params %}
 ELSIF {{ item.fb_read }}.ErrorID > 0 THEN
-	iErrorID := {{ item.fb_read }}.ErrorID;
+	nErrorID := {{ item.fb_read }}.ErrorID;
 {% endfor %}
 END_IF
 ]]></ST>

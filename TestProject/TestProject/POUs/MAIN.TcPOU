@@ -3,6 +3,7 @@
   <POU Name="MAIN" Id="{372593b4-1746-4f2d-8630-4bf2374df086}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
+	bFirstCycle: BOOL := TRUE;
 	M1: PCDSMotion;
 	M1Cfg: ST_AxisParams;
 	bLimitFwdM1: BOOL := TRUE;
@@ -15,67 +16,87 @@ VAR
 	M3Cfg: ST_AxisParams;
 	bLimitFwdM3 AT %I*: BOOL;
 	bLimitBwdM3 AT %I*: BOOL;
+	ams23Enc AT %I*: AMSADDR;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[M1.bLimitFwd := bLimitFwdM1;
-M1.bLimitBwd := bLimitBwdM1;
-M1Cfg.ref_vel := 20;
-M1Cfg.max_vel := 50;
-M1Cfg.man_fast := 40;
-M1Cfg.man_slow := 5;
-M1Cfg.enc_scale := 0.001;
-M1.stConfigSet := M1Cfg;
+      <ST><![CDATA[// Set the initial configs
+IF bFirstCycle THEN
+	M2Cfg.ref_vel := 10;
+	M2Cfg.max_vel := 20;
+	M2Cfg.man_fast := 15;
+	M2Cfg.man_slow := 5;
+	M2Cfg.enc_scale := 0.001;
+	M2Cfg.max_current := 1100;
+	M3Cfg.ref_vel := 11;
+	M3Cfg.max_vel := 21;
+	M3Cfg.man_fast := 16;
+	M3Cfg.man_slow := 6;
+	M3Cfg.enc_scale := 0.002;
+	M3Cfg.max_current := 1234;
+	bFirstCycle := FALSE;
+END_IF
 
+// Link from hardware
+// Simulated hardware
+M1.bLimitFwd := bLimitFwdM1;
+M1.bLimitBwd := bLimitBwdM1;
+// EL7031 and ch1 of EL5042
 M2.bLimitFwd := bLimitFwdM2;
 M2.bLimitBwd := bLimitBwdM2;
-M2Cfg.ref_vel := 10;
-M2Cfg.max_vel := 20;
-M2Cfg.man_fast := 15;
-M2Cfg.man_slow := 5;
-M2Cfg.enc_scale := 0.001;
-M2Cfg.max_current := 1100;
-M2Cfg.enc_ads_port := 1003;
-M2Cfg.enc_ads_channel := 0;
-M2.stConfigSet := M2Cfg;
-
+M2.amsEncAddr := ams23Enc;
+M2.nEncCh := 1;
+// EL7041 and ch2 of EL5042
 M3.bLimitFwd := bLimitFwdM3;
 M3.bLimitBwd := bLimitBwdM3;
-M3Cfg.ref_vel := 11;
-M3Cfg.max_vel := 21;
-M3Cfg.man_fast := 16;
-M3Cfg.man_slow := 6;
-M3Cfg.enc_scale := 0.002;
-M3Cfg.max_current := 1234;
-M3Cfg.enc_ads_port := 1003;
-M3Cfg.enc_ads_channel := 1;
-M3.stConfigSet := M3Cfg;
+M3.amsEncAddr := ams23Enc;
+M3.nEncCh := 2;
 
-M1(bEnable:=TRUE);
-M2(bEnable:=TRUE);
-M3(bEnable:=TRUE);]]></ST>
+// Enable and pass Cfg
+M1(bEnable:=TRUE,
+	bInitCfg:=FALSE,
+	bCfgRO:=FALSE,
+	stConfigSet:=M1Cfg);
+M2(bEnable:=TRUE,
+	bInitCfg:=TRUE,
+	bCfgRO:=FALSE,
+	stConfigSet:=M2Cfg);
+M3(bEnable:=TRUE,
+	bInitCfg:=TRUE,
+	bCfgRO:=TRUE,
+	stConfigSet:=M3Cfg,
+	bCfgRO:=TRUE);]]></ST>
     </Implementation>
     <LineIds Name="MAIN">
-      <LineId Id="58" Count="0" />
-      <LineId Id="57" Count="0" />
-      <LineId Id="49" Count="4" />
-      <LineId Id="67" Count="0" />
-      <LineId Id="61" Count="1" />
+      <LineId Id="208" Count="0" />
       <LineId Id="72" Count="4" />
       <LineId Id="82" Count="0" />
-      <LineId Id="142" Count="0" />
-      <LineId Id="144" Count="0" />
-      <LineId Id="63" Count="0" />
-      <LineId Id="70" Count="0" />
-      <LineId Id="64" Count="1" />
       <LineId Id="77" Count="4" />
       <LineId Id="83" Count="0" />
-      <LineId Id="143" Count="0" />
-      <LineId Id="146" Count="0" />
-      <LineId Id="66" Count="0" />
+      <LineId Id="170" Count="0" />
       <LineId Id="71" Count="0" />
+      <LineId Id="167" Count="0" />
+      <LineId Id="209" Count="0" />
+      <LineId Id="211" Count="0" />
+      <LineId Id="196" Count="0" />
+      <LineId Id="198" Count="0" />
+      <LineId Id="212" Count="0" />
+      <LineId Id="200" Count="2" />
+      <LineId Id="207" Count="0" />
+      <LineId Id="213" Count="0" />
+      <LineId Id="197" Count="0" />
+      <LineId Id="203" Count="3" />
+      <LineId Id="210" Count="0" />
       <LineId Id="48" Count="0" />
-      <LineId Id="59" Count="1" />
+      <LineId Id="171" Count="0" />
+      <LineId Id="173" Count="1" />
+      <LineId Id="59" Count="0" />
+      <LineId Id="175" Count="1" />
+      <LineId Id="163" Count="0" />
+      <LineId Id="60" Count="0" />
+      <LineId Id="177" Count="1" />
+      <LineId Id="164" Count="0" />
+      <LineId Id="172" Count="0" />
       <LineId Id="2" Count="0" />
     </LineIds>
   </POU>

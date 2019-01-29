@@ -14,7 +14,7 @@ END_VAR
 VAR_OUTPUT
 	bBusy: BOOL;
 	bError: BOOL;
-	iErrorID: UDINT;
+	nErrorID: UDINT;
 END_VAR
 VAR
 	fbRead70x1: FB_AxisRead70x1;
@@ -77,13 +77,13 @@ END_CASE
 bBusy := bBusyDrive OR bBusyEnc;
 bError := bErrorDrive OR bErrorEnc;
 IF iErrorDriveAds > 0 THEN
-	iErrorID := iErrorDriveAds;
+	nErrorID := iErrorDriveAds;
 ELSIF iErrorDriveCAN > 0 THEN
-	iErrorID := iErrorDriveCAN;
+	nErrorID := iErrorDriveCAN;
 ELSIF iErrorEncAds > 0 THEN
-	iErrorID := iErrorEncAds;
+	nErrorID := iErrorEncAds;
 ELSE
-	iErrorID := iErrorEncCAN;
+	nErrorID := iErrorEncCAN;
 END_IF
 ]]></ST>
     </Implementation>

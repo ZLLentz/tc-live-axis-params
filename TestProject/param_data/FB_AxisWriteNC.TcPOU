@@ -14,7 +14,7 @@ VAR_OUTPUT
 	bDone: BOOL;
 	bBusy: BOOL;
 	bError: BOOL;
-	iErrorID: UDINT;
+	nErrorID: UDINT;
 END_VAR
 VAR
 	iCycles: INT := 0;
@@ -54,10 +54,10 @@ bDone := {{ nc_params|join(' AND ', attribute='fb_write_done') }};
 bBusy := {{ nc_params|join(' OR ', attribute='fb_write_busy') }};
 bError := {{ nc_params|join(' OR ', attribute='fb_write_error') }};
 IF NOT bError THEN
-	iErrorID := 0;
+	nErrorID := 0;
 {% for item in nc_params %}
 ELSIF {{ item.fb_write }}.ErrorID > 0 THEN
-	iErrorID := {{ item.fb_write }}.ErrorID;
+	nErrorID := {{ item.fb_write }}.ErrorID;
 {% endfor %}
 END_IF
 ]]></ST>
