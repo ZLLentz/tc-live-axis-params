@@ -50,7 +50,7 @@ bInnerExec := bExecute AND bReadOk;
 {% if item.multi_channel %}
 CASE stDriveRef.nDriveNo OF
 {% for index in item.index %}
-	{{ loop.index0 }}:
+	{{ loop.index }}:
 		{{ item.nindex }} := 16#{{ index }};
 {% endfor %}
 END_CASE
