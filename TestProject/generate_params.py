@@ -65,7 +65,7 @@ for term in terms:
 # write_filename = f'TestProject/POUs/FB_AxisWrite{term}.TcPOU'
 # Find and edit the existing files
 # Template is partial, we fill in an existing file's structure
-template = env.get_template('FB_AxisReadCoE.template')
+template = env.get_template('FB_AxisCoE.template')
 for term in terms:
     read_filename = f'TestProject/POUs/FB_AxisRead{term}.TcPOU'
     with open(read_filename, 'r') as fd:
