@@ -51,6 +51,12 @@
     <Compile Include="POUs\FB_AxisReadParams.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\FB_AxisWrite5042.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\FB_AxisWrite70x1.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\FB_AxisWriteCoE.TcPOU">
       <SubType>Code</SubType>
     </Compile>
