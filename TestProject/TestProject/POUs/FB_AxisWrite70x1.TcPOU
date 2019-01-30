@@ -6,7 +6,7 @@ VAR_INPUT
 	bExecute: BOOL;
 	bReset: BOOL;
 	stDriveRef: ST_DriveRef;
-	stConfig: ST_AxisParam;
+	stConfig: ST_AxisParams;
 END_VAR
 VAR_IN_OUT
 	Axis: AXIS_REF;

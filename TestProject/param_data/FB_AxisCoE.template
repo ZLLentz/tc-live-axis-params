@@ -3,7 +3,7 @@
 	bReset: BOOL;
 	stDriveRef: ST_DriveRef;
 {% if write %}
-	stConfig: ST_AxisParam;
+	stConfig: ST_AxisParams;
 {% endif %}
 END_VAR
 VAR_IN_OUT
