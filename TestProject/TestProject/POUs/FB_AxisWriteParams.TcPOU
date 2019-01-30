@@ -37,12 +37,21 @@ bDoWrite := bExecute AND (Axis.Status.MotionState = MC_AXISSTATE_DISABLED OR bDo
 fbNCWrite(bExecute:=bDoWrite,
 	bReset:=bReset,
 	stConfig:=stConfig,
-	Axis:=Axis,
-	bDone=>bDone,
-	bBusy=>bBusy,
-	bError=>bError,
-	nErrorID=>nErrorID);
+	Axis:=Axis);
+fbCoEWrite(bExecute:=bDoWrite,
+	bReset:=bReset,
+	stHardware:=stHardware,
+	stConfig:=stConfig,
+	Axis:=Axis);
 // Report bWriting := FALSE when a write ends so we can enable the axis
+bDone := fbNCWrite.bDone AND NOT fbCoEWrite.bBusy AND bDoWrite;
+bBusy := fbNCWrite.bBusy OR fbCoEWrite.bBusy;
+bError := fbNCWrite.bError OR fbCoEWrite.bError;
+IF fbNCWrite.nErrorID > 0 THEN
+	nErrorID := fbNCWrite.nErrorID;
+ELSE
+	nErrorID := fbCoEWrite.nErrorID;
+END_IF
 fbWriteDoneRisingEdge(CLK:=bDone);
 IF fbWriteDoneRisingEdge.Q THEN
 	bWriting := FALSE;
@@ -54,8 +63,12 @@ END_IF]]></ST>
       <LineId Id="47" Count="0" />
       <LineId Id="38" Count="0" />
       <LineId Id="29" Count="1" />
-      <LineId Id="32" Count="4" />
+      <LineId Id="32" Count="0" />
+      <LineId Id="82" Count="4" />
       <LineId Id="52" Count="0" />
+      <LineId Id="89" Count="4" />
+      <LineId Id="95" Count="1" />
+      <LineId Id="94" Count="0" />
       <LineId Id="54" Count="3" />
       <LineId Id="9" Count="0" />
     </LineIds>

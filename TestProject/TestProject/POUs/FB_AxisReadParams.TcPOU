@@ -32,7 +32,7 @@ fbCoERead(bExecute:=bExecute,
 	stHardware:=stHardware,
 	stConfig:=stConfig,
 	Axis:=Axis);
-bValid := fbNCRead.bValid AND NOT fbCoERead.bBusy AND NOT fbCoERead.bError;
+bValid := fbNCRead.bValid AND NOT fbCoERead.bBusy AND NOT fbCoERead.bError AND bExecute;
 bBusy := fbNCRead.bBusy OR fbCoERead.bBusy;
 bError := fbNCRead.bError OR fbCoERead.bError;
 IF fbNCRead.nErrorID > 0 THEN

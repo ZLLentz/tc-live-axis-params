@@ -116,6 +116,10 @@ END_IF
     </Implementation>
     <LineIds Name="FB_AxisWrite5042">
       <LineId Id="9" Count="0" />
+      <LineId Id="4" Count="4" />
+      <LineId Id="84" Count="0" />
+      <LineId Id="10" Count="73" />
+      <LineId Id="2" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

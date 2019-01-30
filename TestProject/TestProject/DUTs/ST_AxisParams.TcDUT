@@ -25,11 +25,11 @@ STRUCT
 	resistance: UINT := 100;
 	emf: UINT := 0;
 	full_steps: UINT := 200;
-	speed_range: UINT := 1;
-	enc_supply: UINT := 50;
-	enc_clock: UINT := 9;
-	enc_multi_bits: UINT := 0;
-	enc_single_bits: UINT := 32;
+	speed_range: USINT := 1;
+	enc_supply: USINT := 50;
+	enc_clock: USINT := 9;
+	enc_multi_bits: USINT := 0;
+	enc_single_bits: USINT := 32;
 END_STRUCT
 END_TYPE
 ]]></Declaration>
