@@ -150,9 +150,5 @@ ELSIF fbWriteMotInvert.ErrorID > 0 THEN
 END_IF
 ]]></ST>
     </Implementation>
-    <LineIds Name="FB_AxisWriteNC">
-      <LineId Id="3" Count="109" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

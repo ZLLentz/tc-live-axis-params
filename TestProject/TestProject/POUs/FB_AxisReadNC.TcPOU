@@ -225,9 +225,5 @@ ELSIF fbReadMotInvert.ErrorID > 0 THEN
 END_IF
 ]]></ST>
     </Implementation>
-    <LineIds Name="FB_AxisReadNC">
-      <LineId Id="3" Count="169" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>
