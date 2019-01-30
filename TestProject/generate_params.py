@@ -1,4 +1,5 @@
 from types import SimpleNamespace
+from copy import deepcopy
 
 from jinja2 import Environment, FileSystemLoader
 import yaml
@@ -46,13 +47,8 @@ for term in terms:
     coe_params = []
     for param, info in data.items():
         ns = SimpleNamespace(stConfig=param)
-        camelcase = ''.join(txt.capitalize() for txt in param.split('_'))
-        ns.fb_name = 'fbRead' + camelcase
-        ns.fb_busy = ns.fb_name + '.bBusy'
-        ns.fb_error = ns.fb_name + '.bError'
-        ns.fb_ads_err_id = ns.fb_name + '.iAdsErrId'
-        ns.fb_can_err_id = ns.fb_name + '.iCANopenErrId'
-        ns.nindex = 'nInd' + camelcase
+        ns.title = ''.join(txt.capitalize() for txt in param.split('_'))
+        ns.nindex = 'nInd' + ns.title
         ns.multi_channel = isinstance(info['index'], list)
         if ns.multi_channel:
             ns.subindex = info['index'][0].split(':')[1]
@@ -62,30 +58,41 @@ for term in terms:
         coe_params.append(ns)
     coe_params_dict[term] = coe_params
 
-# write_filename = f'TestProject/POUs/FB_AxisWrite{term}.TcPOU'
 # Find and edit the existing files
 # Template is partial, we fill in an existing file's structure
 template = env.get_template('FB_AxisCoE.template')
 for term in terms:
-    read_filename = f'TestProject/POUs/FB_AxisRead{term}.TcPOU'
-    with open(read_filename, 'r') as fd:
-        lines = fd.readlines()
-    # split file into before and after the target lines
-    before = []
-    overwrite = []
-    after = []
-    curr = before
-    for line in lines:
-        curr.append(line)
-        if '<Declaration>' in line:
-            curr = overwrite
-        if '</Implementation>' in line:
-            curr = after
-    # use the template
-    stream = template.stream(coe_params=coe_params_dict[term])
-    new = list(stream)
-    # drop the byte order mark U+FEFF
-    new[0] = new[0][1:]
-    # write the new file
-    with open(read_filename, 'w') as fd:
-        fd.writelines(before + new + after)
+    for mode in ('read', 'write'):
+        filename = f'TestProject/POUs/FB_Axis{mode.capitalize()}{term}.TcPOU'
+        with open(filename, 'r') as fd:
+            lines = fd.readlines()
+        # split file into before and after the target lines
+        before = []
+        overwrite = []
+        after = []
+        curr = before
+        for line in lines:
+            curr.append(line)
+            if '<Declaration>' in line:
+                curr = overwrite
+            if '</Implementation>' in line:
+                curr = after
+        # update the coe params with read/write info
+        coe_params = deepcopy(coe_params_dict[term])
+        for ns in coe_params:
+            camelcase = ''.join(txt.capitalize() for txt in param.split('_'))
+            ns.fb_name = f'fb{mode.capitalize()}{ns.title}'
+            ns.fb_busy = ns.fb_name + '.bBusy'
+            ns.fb_error = ns.fb_name + '.bError'
+            ns.fb_ads_err_id = ns.fb_name + '.iAdsErrId'
+            ns.fb_can_err_id = ns.fb_name + '.iCANopenErrId'
+        # use the template
+        stream = template.stream(coe_params=coe_params,
+                                 read=(mode == 'read'),
+                                 write=(mode == 'write'))
+        new = list(stream)
+        # drop the byte order mark U+FEFF
+        new[0] = new[0][1:]
+        # write the new file
+        with open(filename, 'w') as fd:
+            fd.writelines(before + new + after)
