@@ -49,7 +49,7 @@ nIndEncSupply := 16#8008;
 fbWriteEncSupply(bExecute:=bInnerExec,
 	stDriveRef:=stDriveRef,
 	nindex:=nIndEncSupply,
-	nSubIndex:=12,
+	nSubIndex:=16#12,
 	pSrcBuf:=ADR(stConfig.enc_supply),
 	cbBufLen:=SIZEOF(stConfig.enc_supply));
 CASE stDriveRef.nDriveNo OF
@@ -61,7 +61,7 @@ END_CASE
 fbWriteEncClock(bExecute:=bInnerExec,
 	stDriveRef:=stDriveRef,
 	nindex:=nIndEncClock,
-	nSubIndex:=13,
+	nSubIndex:=16#13,
 	pSrcBuf:=ADR(stConfig.enc_clock),
 	cbBufLen:=SIZEOF(stConfig.enc_clock));
 CASE stDriveRef.nDriveNo OF
@@ -73,7 +73,7 @@ END_CASE
 fbWriteEncMultiBits(bExecute:=bInnerExec,
 	stDriveRef:=stDriveRef,
 	nindex:=nIndEncMultiBits,
-	nSubIndex:=15,
+	nSubIndex:=16#15,
 	pSrcBuf:=ADR(stConfig.enc_multi_bits),
 	cbBufLen:=SIZEOF(stConfig.enc_multi_bits));
 CASE stDriveRef.nDriveNo OF
@@ -85,7 +85,7 @@ END_CASE
 fbWriteEncSingleBits(bExecute:=bInnerExec,
 	stDriveRef:=stDriveRef,
 	nindex:=nIndEncSingleBits,
-	nSubIndex:=16,
+	nSubIndex:=16#16,
 	pSrcBuf:=ADR(stConfig.enc_single_bits),
 	cbBufLen:=SIZEOF(stConfig.enc_single_bits));
 bBusy := fbWriteEncSupply.bBusy OR fbWriteEncClock.bBusy OR fbWriteEncMultiBits.bBusy OR fbWriteEncSingleBits.bBusy;

@@ -60,7 +60,7 @@ END_CASE
 {{ item.fb_name }}(bExecute:=bInnerExec,
 	stDriveRef:=stDriveRef,
 	nindex:={{ item.nindex }},
-	nSubIndex:={{ item.subindex }},
+	nSubIndex:=16#{{ item.subindex }},
 {% if read %}
 	pDstBuf:=ADR(stConfig.{{ item.stConfig }}),
 {% elif write %}
