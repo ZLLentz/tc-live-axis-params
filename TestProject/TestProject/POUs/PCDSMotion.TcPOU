@@ -16,6 +16,7 @@ VAR_IN_OUT
 	stConfigSet: ST_AxisParams;
 END_VAR
 VAR_OUTPUT
+	bBrakeOut: BOOL;
 	stConfigGet: ST_AxisParams;
 END_VAR
 VAR
@@ -25,7 +26,7 @@ VAR
 	fbAxisOP: FB_AxisOP;
 	fbDrive: FB_DriveVirtual;
 	stAxisStatus: DUT_AxisStatus_v0_01;
-	bExecConfig: BOOL := TRUE;
+	bExecConfig: BOOL;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -36,6 +37,14 @@ fbHardware(bExecute:=bEnable,
 	Axis:=fbLink.Axis,
 	amsEncAddr:=amsEncAddr,
 	nEncCh:=nEncCh);
+// If asked to initialize and we haven't, then initialize
+IF bInitCfg AND NOT fbConfig.bInit THEN
+	bExecConfig := TRUE;
+// If read-only and not initializing, reject the write command
+ELSIF bCfgRO THEN
+	bExecConfig := FALSE;
+// Otherwise, keep the value written over ADS
+END_IF
 // Read and/or write the config
 fbConfig(bExecute:=bExecConfig AND fbHardware.bDone,
 	stConfigSet:=stConfigSet,
@@ -44,11 +53,13 @@ fbConfig(bExecute:=bExecConfig AND fbHardware.bDone,
 	stConfigGet=>stConfigGet);
 // Reset the execute bool
 IF fbConfig.bDone AND NOT fbConfig.bError THEN
-	fbConfig.bExecute := FALSE;
+	bExecConfig := FALSE;
 END_IF
 // After the initial config is done, go to OP mode
-fbAxisOP(bEnable:=fbConfig.bInit,
+fbAxisOP(bEnable:=fbConfig.bInit OR NOT bInitCfg,
 	stHardware:=fbHardware.stHardware);
+// Disable brake while executing move **TODO** make this robust
+bBrakeOut := fbDrive.bExecute;
 // Execute incoming motion commands
 fbDrive(En:=bEnable,
 	bEnable:=bEnable AND fbConfig.bInit AND NOT fbConfig.bWriting,
@@ -68,6 +79,11 @@ END_IF]]></ST>
       <LineId Id="203" Count="0" />
       <LineId Id="212" Count="0" />
       <LineId Id="439" Count="1" />
+      <LineId Id="484" Count="2" />
+      <LineId Id="490" Count="0" />
+      <LineId Id="488" Count="1" />
+      <LineId Id="491" Count="0" />
+      <LineId Id="487" Count="0" />
       <LineId Id="75" Count="0" />
       <LineId Id="156" Count="0" />
       <LineId Id="119" Count="0" />
@@ -78,6 +94,8 @@ END_IF]]></ST>
       <LineId Id="151" Count="0" />
       <LineId Id="446" Count="1" />
       <LineId Id="154" Count="0" />
+      <LineId Id="481" Count="0" />
+      <LineId Id="483" Count="0" />
       <LineId Id="157" Count="0" />
       <LineId Id="47" Count="0" />
       <LineId Id="451" Count="2" />
