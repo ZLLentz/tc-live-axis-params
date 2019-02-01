@@ -2,6 +2,60 @@
 <TcSmItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmItem" TcSmVersion="1.0" TcVersion="3.1.4020.32" ClassName="CNestedPlcProjDef">
 	<DataTypes>
 		<DataType>
+			<Name GUID="{18071995-0000-0000-0000-000000000041}" TcBaseType="true" HideSubItems="true" CName="AmsNetId">AMSNETID</Name>
+			<BitSize>48</BitSize>
+			<BaseType GUID="{18071995-0000-0000-0000-000000000001}">BYTE</BaseType>
+			<ArrayInfo>
+				<LBound>0</LBound>
+				<Elements>6</Elements>
+			</ArrayInfo>
+			<Format>
+				<Printf>%d.%d.%d.%d.%d.%d</Printf>
+				<Parameter>[0]</Parameter>
+				<Parameter>[1]</Parameter>
+				<Parameter>[2]</Parameter>
+				<Parameter>[3]</Parameter>
+				<Parameter>[4]</Parameter>
+				<Parameter>[5]</Parameter>
+			</Format>
+		</DataType>
+		<DataType>
+			<Name GUID="{18071995-0000-0000-0000-000000000042}" TcBaseType="true" CName="AmsAddr">AMSADDR</Name>
+			<BitSize>64</BitSize>
+			<SubItem>
+				<Name>netId</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000041}">AMSNETID</Type>
+				<BitSize>48</BitSize>
+				<BitOffs>0</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>port</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000004}">WORD</Type>
+				<BitSize>16</BitSize>
+				<BitOffs>48</BitOffs>
+			</SubItem>
+			<Format>
+				<Printf>%d.%d.%d.%d.%d.%d:%d</Printf>
+				<Parameter>.netId[0]</Parameter>
+				<Parameter>.netId[1]</Parameter>
+				<Parameter>.netId[2]</Parameter>
+				<Parameter>.netId[3]</Parameter>
+				<Parameter>.netId[4]</Parameter>
+				<Parameter>.netId[5]</Parameter>
+				<Parameter>.port</Parameter>
+			</Format>
+			<Format Name="Iec">
+				<Printf>(netId:=[%d.%d.%d.%d.%d.%d], port :=%d)</Printf>
+				<Parameter>.netId[0]</Parameter>
+				<Parameter>.netId[1]</Parameter>
+				<Parameter>.netId[2]</Parameter>
+				<Parameter>.netId[3]</Parameter>
+				<Parameter>.netId[4]</Parameter>
+				<Parameter>.netId[5]</Parameter>
+				<Parameter>.port</Parameter>
+			</Format>
+		</DataType>
+		<DataType>
 			<Name GUID="{4C3FC5AC-D5AA-44C6-AC5A-159774BA0F6D}" Namespace="MC" TcBaseType="true" HideType="true" IecDeclaration="DWORD;">NCTOPLC_AXIS_REF_STATE</Name>
 			<BitSize>32</BitSize>
 			<SubItem>
@@ -701,60 +755,6 @@ External Setpoint Generation:
 			</Relations>
 		</DataType>
 		<DataType>
-			<Name GUID="{18071995-0000-0000-0000-000000000041}" TcBaseType="true" HideSubItems="true" CName="AmsNetId">AMSNETID</Name>
-			<BitSize>48</BitSize>
-			<BaseType GUID="{18071995-0000-0000-0000-000000000001}">BYTE</BaseType>
-			<ArrayInfo>
-				<LBound>0</LBound>
-				<Elements>6</Elements>
-			</ArrayInfo>
-			<Format>
-				<Printf>%d.%d.%d.%d.%d.%d</Printf>
-				<Parameter>[0]</Parameter>
-				<Parameter>[1]</Parameter>
-				<Parameter>[2]</Parameter>
-				<Parameter>[3]</Parameter>
-				<Parameter>[4]</Parameter>
-				<Parameter>[5]</Parameter>
-			</Format>
-		</DataType>
-		<DataType>
-			<Name GUID="{18071995-0000-0000-0000-000000000042}" TcBaseType="true" CName="AmsAddr">AMSADDR</Name>
-			<BitSize>64</BitSize>
-			<SubItem>
-				<Name>netId</Name>
-				<Type GUID="{18071995-0000-0000-0000-000000000041}">AMSNETID</Type>
-				<BitSize>48</BitSize>
-				<BitOffs>0</BitOffs>
-			</SubItem>
-			<SubItem>
-				<Name>port</Name>
-				<Type GUID="{18071995-0000-0000-0000-000000000004}">WORD</Type>
-				<BitSize>16</BitSize>
-				<BitOffs>48</BitOffs>
-			</SubItem>
-			<Format>
-				<Printf>%d.%d.%d.%d.%d.%d:%d</Printf>
-				<Parameter>.netId[0]</Parameter>
-				<Parameter>.netId[1]</Parameter>
-				<Parameter>.netId[2]</Parameter>
-				<Parameter>.netId[3]</Parameter>
-				<Parameter>.netId[4]</Parameter>
-				<Parameter>.netId[5]</Parameter>
-				<Parameter>.port</Parameter>
-			</Format>
-			<Format Name="Iec">
-				<Printf>(netId:=[%d.%d.%d.%d.%d.%d], port :=%d)</Printf>
-				<Parameter>.netId[0]</Parameter>
-				<Parameter>.netId[1]</Parameter>
-				<Parameter>.netId[2]</Parameter>
-				<Parameter>.netId[3]</Parameter>
-				<Parameter>.netId[4]</Parameter>
-				<Parameter>.netId[5]</Parameter>
-				<Parameter>.port</Parameter>
-			</Format>
-		</DataType>
-		<DataType>
 			<Name GUID="{875D2B22-B7EB-497E-B933-0C004593CCF3}" Namespace="MC" TcBaseType="true" HideType="true" IecDeclaration="DWORD;">PLCTONC_AXIS_REF_CTRL</Name>
 			<BitSize>32</BitSize>
 			<SubItem>
@@ -940,20 +940,28 @@ External Setpoint Generation:
 			<Vars VarGrpType="1">
 				<Name>PlcTask Inputs</Name>
 				<Var>
-					<Name>MAIN.bLimitFwdM2</Name>
+					<Name>MAIN.fbAxisEthMaster.amsNetID</Name>
+					<Type GUID="{18071995-0000-0000-0000-000000000041}">AMSNETID</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.M1.bBrakeOut</Name>
 					<Type>BOOL</Type>
 				</Var>
 				<Var>
-					<Name>MAIN.bLimitBwdM2</Name>
+					<Name>MAIN.M1.bLimitFwd</Name>
 					<Type>BOOL</Type>
 				</Var>
 				<Var>
-					<Name>MAIN.bLimitFwdM3</Name>
+					<Name>MAIN.M1.bLimitBwd</Name>
 					<Type>BOOL</Type>
 				</Var>
 				<Var>
-					<Name>MAIN.bLimitBwdM3</Name>
+					<Name>MAIN.M1.bHomeSensor</Name>
 					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.M1.amsEncAddr</Name>
+					<Type GUID="{18071995-0000-0000-0000-000000000042}">AMSADDR</Type>
 				</Var>
 				<Var>
 					<Name>MAIN.M1.fbLink.Axis.NcToPlc</Name>
@@ -1058,6 +1066,26 @@ External Setpoint Generation:
 					</SubVar>
 				</Var>
 				<Var>
+					<Name>MAIN.M2.bBrakeOut</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.M2.bLimitFwd</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.M2.bLimitBwd</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.M2.bHomeSensor</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.M2.amsEncAddr</Name>
+					<Type GUID="{18071995-0000-0000-0000-000000000042}">AMSADDR</Type>
+				</Var>
+				<Var>
 					<Name>MAIN.M2.fbLink.Axis.NcToPlc</Name>
 					<Type GUID="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
 					<SubVar>
@@ -1158,6 +1186,26 @@ External Setpoint Generation:
 ]]>
 						</Comment>
 					</SubVar>
+				</Var>
+				<Var>
+					<Name>MAIN.M3.bBrakeOut</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.M3.bLimitFwd</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.M3.bLimitBwd</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.M3.bHomeSensor</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.M3.amsEncAddr</Name>
+					<Type GUID="{18071995-0000-0000-0000-000000000042}">AMSADDR</Type>
 				</Var>
 				<Var>
 					<Name>MAIN.M3.fbLink.Axis.NcToPlc</Name>
@@ -1261,10 +1309,6 @@ External Setpoint Generation:
 						</Comment>
 					</SubVar>
 				</Var>
-				<Var>
-					<Name>MAIN.ams23Enc</Name>
-					<Type GUID="{18071995-0000-0000-0000-000000000042}">AMSADDR</Type>
-				</Var>
 			</Vars>
 			<Vars VarGrpType="2">
 				<Name>PlcTask Outputs</Name>
@@ -1325,15 +1369,18 @@ External Setpoint Generation:
 	<Mappings>
 		<OwnerA Name="TestProject Instance">
 			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 2 (EL7031)">
-				<Link VarA="PlcTask Inputs^MAIN.bLimitBwdM2" VarB="STM Status^Status^Digital input 2"/>
-				<Link VarA="PlcTask Inputs^MAIN.bLimitFwdM2" VarB="STM Status^Status^Digital input 1"/>
+				<Link VarA="PlcTask Inputs^MAIN.M2.bLimitBwd" VarB="STM Status^Status^Digital input 2"/>
+				<Link VarA="PlcTask Inputs^MAIN.M2.bLimitFwd" VarB="STM Status^Status^Digital input 1"/>
+				<Link VarA="PlcTask Inputs^MAIN.M2.fbLink.InfoData_State" VarB="InfoData^State"/>
 			</OwnerB>
 			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 3 (EL7041)">
-				<Link VarA="PlcTask Inputs^MAIN.bLimitBwdM3" VarB="STM Status^Status^Digital input 2"/>
-				<Link VarA="PlcTask Inputs^MAIN.bLimitFwdM3" VarB="STM Status^Status^Digital input 1"/>
+				<Link VarA="PlcTask Inputs^MAIN.M3.bLimitBwd" VarB="STM Status^Status^Digital input 2"/>
+				<Link VarA="PlcTask Inputs^MAIN.M3.bLimitFwd" VarB="STM Status^Status^Digital input 1"/>
+				<Link VarA="PlcTask Inputs^MAIN.M3.fbLink.InfoData_State" VarB="InfoData^State"/>
 			</OwnerB>
 			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 4 (EL5042)">
-				<Link VarA="PlcTask Inputs^MAIN.ams23Enc" VarB="InfoData^AdsAddr"/>
+				<Link VarA="PlcTask Inputs^MAIN.M2.amsEncAddr" VarB="InfoData^AdsAddr"/>
+				<Link VarA="PlcTask Inputs^MAIN.M3.amsEncAddr" VarB="InfoData^AdsAddr"/>
 			</OwnerB>
 			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^Axis 1">
 				<Link VarA="PlcTask Inputs^MAIN.M1.fbLink.Axis.NcToPlc" VarB="Outputs^ToPlc"/>

@@ -4,6 +4,7 @@
     <Declaration><![CDATA[FUNCTION_BLOCK FB_AxisMaster
 VAR_INPUT
 	bEnable: BOOL;
+	stConfigSet: ST_AxisParams;
 	bInitCfg: BOOL := TRUE;
 	bCfgRO: BOOL := FALSE;
 	bUseLimits: BOOL;
@@ -15,7 +16,6 @@ VAR_OUTPUT
 	stConfigGet: ST_AxisParams;
 END_VAR
 VAR
-	stConfigSet: ST_AxisParams;
 	bLimitFwd AT %I*: BOOL;
 	bLimitBwd AT %I*: BOOL;
 	bHomeSensor AT %I*: BOOL;
