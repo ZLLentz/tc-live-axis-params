@@ -1368,6 +1368,9 @@ External Setpoint Generation:
 	</Project>
 	<Mappings>
 		<OwnerA Name="TestProject Instance">
+			<OwnerB Name="TIID^Device 1 (EtherCAT)">
+				<Link VarA="PlcTask Inputs^MAIN.fbAxisEthMaster.amsNetID" VarB="InfoData^AmsNetId"/>
+			</OwnerB>
 			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 2 (EL7031)">
 				<Link VarA="PlcTask Inputs^MAIN.M2.bLimitBwd" VarB="STM Status^Status^Digital input 2"/>
 				<Link VarA="PlcTask Inputs^MAIN.M2.bLimitFwd" VarB="STM Status^Status^Digital input 1"/>

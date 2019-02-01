@@ -59,7 +59,13 @@ fbRead(bExecute:=bDoRead,
 	stConfig=>stConfigGet,
 	bValid=>bValid);
 // Set the status outputs
-bDone := fbWrite.bDone AND NOT fbRead.bBusy;
+IF bExecute THEN
+	bDone := fbWrite.bDone AND NOT fbRead.bBusy;
+ELSIF bExecGet THEN
+	bDone := NOT fbRead.bBusy;
+ELSE
+	bDone := FALSE;
+END_IF
 bBusy := fbWrite.bBusy OR fbRead.bBusy;
 bError := fbWrite.bError OR fbRead.bError;
 IF fbWrite.nErrorID > 0 THEN
@@ -90,7 +96,11 @@ END_IF]]></ST>
       <LineId Id="9" Count="0" />
       <LineId Id="113" Count="0" />
       <LineId Id="19" Count="2" />
-      <LineId Id="61" Count="5" />
+      <LineId Id="61" Count="0" />
+      <LineId Id="210" Count="1" />
+      <LineId Id="213" Count="3" />
+      <LineId Id="212" Count="0" />
+      <LineId Id="63" Count="3" />
       <LineId Id="68" Count="1" />
       <LineId Id="67" Count="0" />
       <LineId Id="144" Count="5" />

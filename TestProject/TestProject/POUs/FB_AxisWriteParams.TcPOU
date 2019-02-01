@@ -49,7 +49,7 @@ fbCoEWrite(bExecute:=fbNCWrite.bExecute,
 	stConfig:=stConfig,
 	Axis:=Axis);
 // Move to INIT and back to PRE-OP for params that need a full restart
-fbInitState(bExecute:=fbNCWrite.bDone AND NOT fbNCWrite.bError AND fbCoEWrite.bBusy AND NOT fbCoEWrite.bError,
+fbInitState(bExecute:=fbNCWrite.bDone AND NOT fbNCWrite.bError AND NOT fbCoEWrite.bBusy AND NOT fbCoEWrite.bError,
 	stHardware:=stHardware,
 	reqState:=EC_DEVICE_STATE_INIT);
 fbPreOpState(bExecute:=fbInitState.bDone AND NOT fbInitState.bError,
