@@ -12,64 +12,81 @@ VAR_IN_OUT
 	Axis: AXIS_REF;
 END_VAR
 VAR_OUTPUT
+	bInitPreOp: BOOL;
 	bDone: BOOL;
 	bBusy: BOOL;
-	bWriting: BOOL;
 	bError: BOOL;
 	nErrorID: UDINT;
 END_VAR
 VAR
+	bDoWrite: BOOL;
 	fbNCWrite: FB_AxisWriteNC;
 	fbCoEWrite: FB_AxisWriteCoE;
-	fbWriteReqRisingEdge: R_TRIG;
-	fbWriteDoneRisingEdge: R_TRIG;
-	bDoWrite: BOOL;
+	fbPrepWrite: FB_AxisSetSlaveState;
+	fbInitState: FB_AxisSetSlaveState;
+	fbPreOpState: FB_AxisSetSlaveState;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[// Report bWriting := TRUE when a write is asked for so we can disable the axis
-fbWriteReqRisingEdge(CLK:=bExecute);
-IF fbWriteReqRisingEdge.Q THEN
-	bWriting := TRUE;
-END_IF
-// Do not write unless axis is disabled. Leave TRUE after done to avoid resetting errors, etc.
+      <ST><![CDATA[// Do not write unless axis is disabled. Leave TRUE after done to avoid resetting errors, etc.
 bDoWrite := bExecute AND (Axis.Status.MotionState = MC_AXISSTATE_DISABLED OR bDone);
-fbNCWrite(bExecute:=bDoWrite,
+// Move to PREOP to prepare for writing
+fbPrepWrite(bExecute:=bDoWrite,
+	stHardware:=stHardware,
+	reqState:=EC_DEVICE_STATE_PREOP);
+// The first time we're here, report that we've set to PREOP so master can move to OP
+IF fbPrepWrite.bDone AND NOT fbPrepWrite.bError THEN
+	bInitPreOP := TRUE;
+END_IF
+// Do the write
+fbNCWrite(bExecute:=fbPrepWrite.bDone AND NOT fbPrepWrite.bError,
 	bReset:=bReset,
 	stConfig:=stConfig,
 	Axis:=Axis);
-fbCoEWrite(bExecute:=bDoWrite,
+fbCoEWrite(bExecute:=fbNCWrite.bExecute,
 	bReset:=bReset,
 	stHardware:=stHardware,
 	stConfig:=stConfig,
 	Axis:=Axis);
-// Report bWriting := FALSE when a write ends so we can enable the axis
-bDone := fbNCWrite.bDone AND NOT fbCoEWrite.bBusy AND bDoWrite;
-bBusy := fbNCWrite.bBusy OR fbCoEWrite.bBusy;
-bError := fbNCWrite.bError OR fbCoEWrite.bError;
+// Move to INIT and back to PRE-OP for params that need a full restart
+fbInitState(bExecute:=fbNCWrite.bDone AND NOT fbNCWrite.bError AND fbCoEWrite.bBusy AND NOT fbCoEWrite.bError,
+	stHardware:=stHardware,
+	reqState:=EC_DEVICE_STATE_INIT);
+fbPreOpState(bExecute:=fbInitState.bDone AND NOT fbInitState.bError,
+	stHardware:=stHardware,
+	reqSTate:=EC_DEVICE_STATE_PREOP);
+bDone := fbPreOpState.bDone;
+bBusy := fbNCWrite.bBusy OR fbCoEWrite.bBusy OR fbPrepWrite.bBusy OR fbInitState.bBusy OR fbPreOpState.bBusy;
+bError := fbNCWrite.bError OR fbCoEWrite.bError OR fbPrepWrite.bError OR fbInitState.bError OR fbPreOpState.bError;
 IF fbNCWrite.nErrorID > 0 THEN
 	nErrorID := fbNCWrite.nErrorID;
-ELSE
+ELSIF fbCoeWrite.nErrorID > 0 THEN
 	nErrorID := fbCoEWrite.nErrorID;
-END_IF
-fbWriteDoneRisingEdge(CLK:=bDone);
-IF fbWriteDoneRisingEdge.Q THEN
-	bWriting := FALSE;
+ELSIF fbPrepWrite.nErrId > 0 THEN
+	nErrorID := fbPrepWrite.nErrId;
+ELSIF fbInitSTate.nErrId > 0 THEN
+	nErrorID := fbInitState.nErrId;
+ELSE
+	nErrorID := fbPreOpState.nErrId;
 END_IF]]></ST>
     </Implementation>
     <LineIds Name="FB_AxisWriteParams">
-      <LineId Id="48" Count="3" />
-      <LineId Id="43" Count="0" />
       <LineId Id="47" Count="0" />
+      <LineId Id="165" Count="1" />
+      <LineId Id="146" Count="1" />
+      <LineId Id="167" Count="0" />
+      <LineId Id="151" Count="0" />
+      <LineId Id="169" Count="2" />
       <LineId Id="38" Count="0" />
       <LineId Id="29" Count="1" />
       <LineId Id="32" Count="0" />
       <LineId Id="82" Count="4" />
-      <LineId Id="52" Count="0" />
+      <LineId Id="123" Count="0" />
+      <LineId Id="172" Count="5" />
       <LineId Id="89" Count="4" />
       <LineId Id="95" Count="1" />
+      <LineId Id="179" Count="5" />
       <LineId Id="94" Count="0" />
-      <LineId Id="54" Count="3" />
       <LineId Id="9" Count="0" />
     </LineIds>
   </POU>

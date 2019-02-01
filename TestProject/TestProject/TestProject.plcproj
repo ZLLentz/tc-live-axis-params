@@ -30,10 +30,10 @@
     <Compile Include="POUs\FB_AxisConfig.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\FB_AxisHardware.TcPOU">
+    <Compile Include="POUs\FB_AxisEthMaster.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\FB_AxisOP.TcPOU">
+    <Compile Include="POUs\FB_AxisHardware.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\FB_AxisRead5042.TcPOU">
@@ -49,6 +49,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\FB_AxisReadParams.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\FB_AxisSetSlaveState.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\FB_AxisWrite5042.TcPOU">
@@ -69,7 +72,7 @@
     <Compile Include="POUs\MAIN.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\PCDSMotion.TcPOU">
+    <Compile Include="POUs\FB_AxisMaster.TcPOU">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

@@ -12,6 +12,7 @@ VAR_IN_OUT
 	Axis: AXIS_REF;
 END_VAR
 VAR_OUTPUT
+	bDone: BOOL;
 	bBusy: BOOL;
 	bError: BOOL;
 	nErrorID: UDINT;
@@ -75,6 +76,7 @@ CASE stHardware.enc_type OF
 		iErrorEncCAN := 0;
 END_CASE
 bBusy := bBusyDrive OR bBusyEnc;
+bDone := bExecute AND NOT bBusy;
 bError := bErrorDrive OR bErrorEnc;
 IF iErrorDriveAds > 0 THEN
 	nErrorID := iErrorDriveAds;
@@ -88,7 +90,9 @@ END_IF
 ]]></ST>
     </Implementation>
     <LineIds Name="FB_AxisWriteCoE">
-      <LineId Id="43" Count="54" />
+      <LineId Id="43" Count="43" />
+      <LineId Id="126" Count="0" />
+      <LineId Id="87" Count="10" />
       <LineId Id="9" Count="0" />
     </LineIds>
   </POU>

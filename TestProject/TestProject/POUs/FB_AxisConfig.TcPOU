@@ -16,10 +16,10 @@ VAR_OUTPUT
 	bDone: BOOL;
 	bValid: BOOL;
 	bBusy: BOOL;
-	bWriting: BOOL;
 	bError: BOOL;
 	nErrorID: UDINT;
-	bInit: BOOL;
+	bInitDone: BOOL;
+	bInitPreOp: BOOL;
 	stConfigGet: ST_AxisParams;
 END_VAR
 VAR
@@ -35,7 +35,7 @@ fbWrite(bExecute:=bExecute,
 	stConfig:=stConfigSet,
 	stHardware:=stHardware,
 	Axis:=Axis,
-	bWriting=>bWriting);
+	bInitPreOp=>bInitPreOp);
 // Reset bDoRead if both execs are false
 IF NOT bExecute AND NOT bExecGet THEN
 	bDoRead := FALSE;
@@ -45,6 +45,11 @@ IF bExecute THEN
 	bDoRead := fbWrite.bDone;
 ELSE
 	bDoRead := bExecGet;
+END_IF
+// Notify that its ok to set master to OP.
+// This block is really only used if we skip the write step.
+IF bDoRead THEN
+	bInitPreOP := TRUE;
 END_IF
 // Read now
 fbRead(bExecute:=bDoRead,
@@ -63,22 +68,24 @@ ELSE
 	nErrorID := fbRead.nErrorID;
 END_IF
 IF bDone THEN
-	bInit := TRUE;
+	bInitDone := TRUE;
 END_IF
 IF bError THEN
-	bInit := FALSE;
+	bInitDone := FALSE;
 END_IF]]></ST>
     </Implementation>
     <LineIds Name="FB_AxisConfig">
       <LineId Id="57" Count="2" />
       <LineId Id="112" Count="0" />
       <LineId Id="60" Count="0" />
-      <LineId Id="86" Count="0" />
+      <LineId Id="183" Count="0" />
       <LineId Id="78" Count="4" />
       <LineId Id="72" Count="0" />
       <LineId Id="74" Count="0" />
       <LineId Id="76" Count="1" />
       <LineId Id="75" Count="0" />
+      <LineId Id="181" Count="1" />
+      <LineId Id="177" Count="2" />
       <LineId Id="30" Count="1" />
       <LineId Id="9" Count="0" />
       <LineId Id="113" Count="0" />
