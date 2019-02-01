@@ -27,7 +27,6 @@ VAR
 	fbMasterGetOP: FB_EcGetMasterState;
 	fbAxisSetOP: FB_AxisSetSlaveState;
 	fbDrive: FB_DriveVirtual;
-	stAxisStatus: DUT_AxisStatus_v0_01;
 	bExecConfig: BOOL;
 	nDelayCycles: USINT := 0;
 	bOpReady: BOOL;
@@ -99,7 +98,6 @@ fbDrive(En:=bEnable,
 	bLimitBwd:=bLimitBwd,
 	bHomeSensor:=bHomeSensor,
 	Axis:=fbLink.Axis);
-stAxisStatus := fbDrive.stAxisStatus;
 // Reset the execute bool
 IF fbDrive.bDone AND NOT fbDrive.bError THEN
 	fbDrive.bExecute := FALSE;
@@ -153,7 +151,6 @@ END_IF]]></ST>
       <LineId Id="47" Count="0" />
       <LineId Id="451" Count="2" />
       <LineId Id="65" Count="0" />
-      <LineId Id="77" Count="0" />
       <LineId Id="17" Count="0" />
       <LineId Id="158" Count="0" />
       <LineId Id="18" Count="1" />
