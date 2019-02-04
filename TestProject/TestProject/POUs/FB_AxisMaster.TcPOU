@@ -9,7 +9,7 @@ VAR_INPUT
 	bCfgRO: BOOL := FALSE;
 	bUseLimits: BOOL;
 	nEncCh: USINT;
-	nDelayInit: USINT := 100;
+	nDelayInit: USINT := 10;
 END_VAR
 VAR_OUTPUT
 	bBrakeOut AT %I*: BOOL;
