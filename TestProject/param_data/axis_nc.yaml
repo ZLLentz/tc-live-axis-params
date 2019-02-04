@@ -10,13 +10,13 @@ max_acc:
 max_dec:
   mc: "MaxDecelerationSystem"
   type: "float"
-acc:
+def_acc:
   mc: "AxisAcc"
   type: "float"
-dec:
+def_dec:
   mc: "AxisDec"
   type: "float"
-jerk:
+def_jerk:
   mc: "AxisJerk"
   type: "float"
 home_search:

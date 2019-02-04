@@ -8,9 +8,9 @@ STRUCT
 	max_vel: LREAL;
 	max_acc: LREAL := 15000;
 	max_dec: LREAL := 15000;
-	acc: LREAL := 1500;
-	dec: LREAL := 1500;
-	jerk: LREAL := 2250;
+	def_acc: LREAL := 1500;
+	def_dec: LREAL := 1500;
+	def_jerk: LREAL := 2250;
 	home_search: LREAL;
 	home_sync: LREAL;
 	man_fast: LREAL;

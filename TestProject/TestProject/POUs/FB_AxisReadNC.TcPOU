@@ -28,12 +28,12 @@ VAR
   	fbReadMaxAccRisingEdge: R_TRIG;
 	fbReadMaxDec: MC_ReadParameter;
   	fbReadMaxDecRisingEdge: R_TRIG;
-	fbReadAcc: MC_ReadParameter;
-  	fbReadAccRisingEdge: R_TRIG;
-	fbReadDec: MC_ReadParameter;
-  	fbReadDecRisingEdge: R_TRIG;
-	fbReadJerk: MC_ReadParameter;
-  	fbReadJerkRisingEdge: R_TRIG;
+	fbReadDefAcc: MC_ReadParameter;
+  	fbReadDefAccRisingEdge: R_TRIG;
+	fbReadDefDec: MC_ReadParameter;
+  	fbReadDefDecRisingEdge: R_TRIG;
+	fbReadDefJerk: MC_ReadParameter;
+  	fbReadDefJerkRisingEdge: R_TRIG;
 	fbReadHomeSearch: MC_ReadParameter;
   	fbReadHomeSearchRisingEdge: R_TRIG;
 	fbReadHomeSync: MC_ReadParameter;
@@ -99,29 +99,29 @@ fbReadMaxDecRisingEdge(CLK:=fbReadMaxDec.Valid AND NOT fbReadMaxDec.Busy);
 IF fbReadMaxDecRisingEdge.Q AND NOT fbReadMaxDec.Error THEN
 	stConfig.max_dec := fbReadMaxDec.Value;
 END_IF
-fbReadAcc(Enable:=bInnerExec,
+fbReadDefAcc(Enable:=bInnerExec,
 	ParameterNumber:=MC_AxisParameter.AxisAcc,
 	ReadMode:=E_ReadMode.READMODE_ONCE,
 	Axis:=Axis);
-fbReadAccRisingEdge(CLK:=fbReadAcc.Valid AND NOT fbReadAcc.Busy);
-IF fbReadAccRisingEdge.Q AND NOT fbReadAcc.Error THEN
-	stConfig.acc := fbReadAcc.Value;
+fbReadDefAccRisingEdge(CLK:=fbReadDefAcc.Valid AND NOT fbReadDefAcc.Busy);
+IF fbReadDefAccRisingEdge.Q AND NOT fbReadDefAcc.Error THEN
+	stConfig.def_acc := fbReadDefAcc.Value;
 END_IF
-fbReadDec(Enable:=bInnerExec,
+fbReadDefDec(Enable:=bInnerExec,
 	ParameterNumber:=MC_AxisParameter.AxisDec,
 	ReadMode:=E_ReadMode.READMODE_ONCE,
 	Axis:=Axis);
-fbReadDecRisingEdge(CLK:=fbReadDec.Valid AND NOT fbReadDec.Busy);
-IF fbReadDecRisingEdge.Q AND NOT fbReadDec.Error THEN
-	stConfig.dec := fbReadDec.Value;
+fbReadDefDecRisingEdge(CLK:=fbReadDefDec.Valid AND NOT fbReadDefDec.Busy);
+IF fbReadDefDecRisingEdge.Q AND NOT fbReadDefDec.Error THEN
+	stConfig.def_dec := fbReadDefDec.Value;
 END_IF
-fbReadJerk(Enable:=bInnerExec,
+fbReadDefJerk(Enable:=bInnerExec,
 	ParameterNumber:=MC_AxisParameter.AxisJerk,
 	ReadMode:=E_ReadMode.READMODE_ONCE,
 	Axis:=Axis);
-fbReadJerkRisingEdge(CLK:=fbReadJerk.Valid AND NOT fbReadJerk.Busy);
-IF fbReadJerkRisingEdge.Q AND NOT fbReadJerk.Error THEN
-	stConfig.jerk := fbReadJerk.Value;
+fbReadDefJerkRisingEdge(CLK:=fbReadDefJerk.Valid AND NOT fbReadDefJerk.Busy);
+IF fbReadDefJerkRisingEdge.Q AND NOT fbReadDefJerk.Error THEN
+	stConfig.def_jerk := fbReadDefJerk.Value;
 END_IF
 fbReadHomeSearch(Enable:=bInnerExec,
 	ParameterNumber:=MC_AxisParameter.AxisCalibrationVelocityForward,
@@ -187,9 +187,9 @@ fbReadMotInvertRisingEdge(CLK:=fbReadMotInvert.Valid AND NOT fbReadMotInvert.Bus
 IF fbReadMotInvertRisingEdge.Q AND NOT fbReadMotInvert.Error THEN
 	stConfig.mot_invert := fbReadMotInvert.Value;
 END_IF
-bValid := fbReadRefVel.Valid AND fbReadMaxVel.Valid AND fbReadMaxAcc.Valid AND fbReadMaxDec.Valid AND fbReadAcc.Valid AND fbReadDec.Valid AND fbReadJerk.Valid AND fbReadHomeSearch.Valid AND fbReadHomeSync.Valid AND fbReadManFast.Valid AND fbReadManSlow.Valid AND fbReadDeadTime.Valid AND fbReadEncScale.Valid AND fbReadEncInvert.Valid AND fbReadMotInvert.Valid;
-bBusy := fbReadRefVel.Busy OR fbReadMaxVel.Busy OR fbReadMaxAcc.Busy OR fbReadMaxDec.Busy OR fbReadAcc.Busy OR fbReadDec.Busy OR fbReadJerk.Busy OR fbReadHomeSearch.Busy OR fbReadHomeSync.Busy OR fbReadManFast.Busy OR fbReadManSlow.Busy OR fbReadDeadTime.Busy OR fbReadEncScale.Busy OR fbReadEncInvert.Busy OR fbReadMotInvert.Busy;
-bError := fbReadRefVel.Error OR fbReadMaxVel.Error OR fbReadMaxAcc.Error OR fbReadMaxDec.Error OR fbReadAcc.Error OR fbReadDec.Error OR fbReadJerk.Error OR fbReadHomeSearch.Error OR fbReadHomeSync.Error OR fbReadManFast.Error OR fbReadManSlow.Error OR fbReadDeadTime.Error OR fbReadEncScale.Error OR fbReadEncInvert.Error OR fbReadMotInvert.Error;
+bValid := fbReadRefVel.Valid AND fbReadMaxVel.Valid AND fbReadMaxAcc.Valid AND fbReadMaxDec.Valid AND fbReadDefAcc.Valid AND fbReadDefDec.Valid AND fbReadDefJerk.Valid AND fbReadHomeSearch.Valid AND fbReadHomeSync.Valid AND fbReadManFast.Valid AND fbReadManSlow.Valid AND fbReadDeadTime.Valid AND fbReadEncScale.Valid AND fbReadEncInvert.Valid AND fbReadMotInvert.Valid;
+bBusy := fbReadRefVel.Busy OR fbReadMaxVel.Busy OR fbReadMaxAcc.Busy OR fbReadMaxDec.Busy OR fbReadDefAcc.Busy OR fbReadDefDec.Busy OR fbReadDefJerk.Busy OR fbReadHomeSearch.Busy OR fbReadHomeSync.Busy OR fbReadManFast.Busy OR fbReadManSlow.Busy OR fbReadDeadTime.Busy OR fbReadEncScale.Busy OR fbReadEncInvert.Busy OR fbReadMotInvert.Busy;
+bError := fbReadRefVel.Error OR fbReadMaxVel.Error OR fbReadMaxAcc.Error OR fbReadMaxDec.Error OR fbReadDefAcc.Error OR fbReadDefDec.Error OR fbReadDefJerk.Error OR fbReadHomeSearch.Error OR fbReadHomeSync.Error OR fbReadManFast.Error OR fbReadManSlow.Error OR fbReadDeadTime.Error OR fbReadEncScale.Error OR fbReadEncInvert.Error OR fbReadMotInvert.Error;
 IF NOT bError THEN
 	nErrorID := 0;
 ELSIF fbReadRefVel.ErrorID > 0 THEN
@@ -200,12 +200,12 @@ ELSIF fbReadMaxAcc.ErrorID > 0 THEN
 	nErrorID := fbReadMaxAcc.ErrorID;
 ELSIF fbReadMaxDec.ErrorID > 0 THEN
 	nErrorID := fbReadMaxDec.ErrorID;
-ELSIF fbReadAcc.ErrorID > 0 THEN
-	nErrorID := fbReadAcc.ErrorID;
-ELSIF fbReadDec.ErrorID > 0 THEN
-	nErrorID := fbReadDec.ErrorID;
-ELSIF fbReadJerk.ErrorID > 0 THEN
-	nErrorID := fbReadJerk.ErrorID;
+ELSIF fbReadDefAcc.ErrorID > 0 THEN
+	nErrorID := fbReadDefAcc.ErrorID;
+ELSIF fbReadDefDec.ErrorID > 0 THEN
+	nErrorID := fbReadDefDec.ErrorID;
+ELSIF fbReadDefJerk.ErrorID > 0 THEN
+	nErrorID := fbReadDefJerk.ErrorID;
 ELSIF fbReadHomeSearch.ErrorID > 0 THEN
 	nErrorID := fbReadHomeSearch.ErrorID;
 ELSIF fbReadHomeSync.ErrorID > 0 THEN
