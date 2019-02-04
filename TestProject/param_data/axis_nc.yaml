@@ -31,11 +31,32 @@ man_fast:
 man_slow:
   mc: "AxisManualVelocitySlow"
   type: "float"
+enable_min_soft_limit:
+  mc: "EnableLimitNeg"
+  type: "bool"
+enable_max_soft_limit:
+  mc: "EnableLimitPos"
+  type: "bool"
+min_soft_limit:
+  mc: "SWLimitNeg"
+  type: "float"
+max_soft_limit:
+  mc: "SWLimitPos"
+  type: "float"
+max_pos_lag_value:
+  mc: "MaxPositionLag"
+  type: "float"
+max_pos_lag_filter_time:
+  mc: "AxisMaxPosLagFilterTime"
+  type: "float"
 dead_time:
   mc: "AxisDelayTimeVeloPosition"
   type: "float"
 enc_scale:
   mc: "AxisEncoderScalingFactor"
+  type: "float"
+enc_offset:
+  mc: "AxisEncoderOffset"
   type: "float"
 enc_invert:
   mc: "AxisEncoderDirectionInverse"

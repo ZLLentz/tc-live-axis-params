@@ -15,8 +15,15 @@ STRUCT
 	home_sync: LREAL;
 	man_fast: LREAL;
 	man_slow: LREAL;
+	enable_min_soft_limit: BOOL;
+	enable_max_soft_limit: BOOL;
+	min_soft_limit: LREAL;
+	max_soft_limit: LREAL;
+	max_pos_lag_value: LREAL := 5;
+	max_pos_lag_filter_time: LREAL := 0.02;
 	dead_time: LREAL := 0.008;
 	enc_scale: LREAL;
+	enc_offset: LREAL;
 	enc_invert: BOOL;
 	mot_invert: BOOL;
 	max_current: UINT;

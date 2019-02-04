@@ -31,8 +31,15 @@ VAR
 	fbWriteHomeSync: MC_WriteParameter;
 	fbWriteManFast: MC_WriteParameter;
 	fbWriteManSlow: MC_WriteParameter;
+	fbWriteEnableMinSoftLimit: MC_WriteBoolParameter;
+	fbWriteEnableMaxSoftLimit: MC_WriteBoolParameter;
+	fbWriteMinSoftLimit: MC_WriteParameter;
+	fbWriteMaxSoftLimit: MC_WriteParameter;
+	fbWriteMaxPosLagValue: MC_WriteParameter;
+	fbWriteMaxPosLagFilterTime: MC_WriteParameter;
 	fbWriteDeadTime: MC_WriteParameter;
 	fbWriteEncScale: MC_WriteParameter;
+	fbWriteEncOffset: MC_WriteParameter;
 	fbWriteEncInvert: MC_WriteBoolParameter;
 	fbWriteMotInvert: MC_WriteBoolParameter;
 END_VAR
@@ -96,6 +103,30 @@ fbWriteManSlow(Execute:=bInnerExec,
 	ParameterNumber:=MC_AxisParameter.AxisManualVelocitySlow,
 	Value:=stConfig.man_slow,
 	Axis:=Axis);
+fbWriteEnableMinSoftLimit(Execute:=bInnerExec,
+	ParameterNumber:=MC_AxisParameter.EnableLimitNeg,
+	Value:=stConfig.enable_min_soft_limit,
+	Axis:=Axis);
+fbWriteEnableMaxSoftLimit(Execute:=bInnerExec,
+	ParameterNumber:=MC_AxisParameter.EnableLimitPos,
+	Value:=stConfig.enable_max_soft_limit,
+	Axis:=Axis);
+fbWriteMinSoftLimit(Execute:=bInnerExec,
+	ParameterNumber:=MC_AxisParameter.SWLimitNeg,
+	Value:=stConfig.min_soft_limit,
+	Axis:=Axis);
+fbWriteMaxSoftLimit(Execute:=bInnerExec,
+	ParameterNumber:=MC_AxisParameter.SWLimitPos,
+	Value:=stConfig.max_soft_limit,
+	Axis:=Axis);
+fbWriteMaxPosLagValue(Execute:=bInnerExec,
+	ParameterNumber:=MC_AxisParameter.MaxPositionLag,
+	Value:=stConfig.max_pos_lag_value,
+	Axis:=Axis);
+fbWriteMaxPosLagFilterTime(Execute:=bInnerExec,
+	ParameterNumber:=MC_AxisParameter.AxisMaxPosLagFilterTime,
+	Value:=stConfig.max_pos_lag_filter_time,
+	Axis:=Axis);
 fbWriteDeadTime(Execute:=bInnerExec,
 	ParameterNumber:=MC_AxisParameter.AxisDelayTimeVeloPosition,
 	Value:=stConfig.dead_time,
@@ -103,6 +134,10 @@ fbWriteDeadTime(Execute:=bInnerExec,
 fbWriteEncScale(Execute:=bInnerExec,
 	ParameterNumber:=MC_AxisParameter.AxisEncoderScalingFactor,
 	Value:=stConfig.enc_scale,
+	Axis:=Axis);
+fbWriteEncOffset(Execute:=bInnerExec,
+	ParameterNumber:=MC_AxisParameter.AxisEncoderOffset,
+	Value:=stConfig.enc_offset,
 	Axis:=Axis);
 fbWriteEncInvert(Execute:=bInnerExec,
 	ParameterNumber:=MC_AxisParameter.AxisEncoderDirectionInverse,
@@ -112,9 +147,9 @@ fbWriteMotInvert(Execute:=bInnerExec,
 	ParameterNumber:=MC_AxisParameter.AxisMotorDirectionInverse,
 	Value:=stConfig.mot_invert,
 	Axis:=Axis);
-bDone := fbWriteRefVel.Done AND fbWriteMaxVel.Done AND fbWriteMaxAcc.Done AND fbWriteMaxDec.Done AND fbWriteDefAcc.Done AND fbWriteDefDec.Done AND fbWriteDefJerk.Done AND fbWriteHomeSearch.Done AND fbWriteHomeSync.Done AND fbWriteManFast.Done AND fbWriteManSlow.Done AND fbWriteDeadTime.Done AND fbWriteEncScale.Done AND fbWriteEncInvert.Done AND fbWriteMotInvert.Done;
-bBusy := fbWriteRefVel.Busy OR fbWriteMaxVel.Busy OR fbWriteMaxAcc.Busy OR fbWriteMaxDec.Busy OR fbWriteDefAcc.Busy OR fbWriteDefDec.Busy OR fbWriteDefJerk.Busy OR fbWriteHomeSearch.Busy OR fbWriteHomeSync.Busy OR fbWriteManFast.Busy OR fbWriteManSlow.Busy OR fbWriteDeadTime.Busy OR fbWriteEncScale.Busy OR fbWriteEncInvert.Busy OR fbWriteMotInvert.Busy;
-bError := fbWriteRefVel.Error OR fbWriteMaxVel.Error OR fbWriteMaxAcc.Error OR fbWriteMaxDec.Error OR fbWriteDefAcc.Error OR fbWriteDefDec.Error OR fbWriteDefJerk.Error OR fbWriteHomeSearch.Error OR fbWriteHomeSync.Error OR fbWriteManFast.Error OR fbWriteManSlow.Error OR fbWriteDeadTime.Error OR fbWriteEncScale.Error OR fbWriteEncInvert.Error OR fbWriteMotInvert.Error;
+bDone := fbWriteRefVel.Done AND fbWriteMaxVel.Done AND fbWriteMaxAcc.Done AND fbWriteMaxDec.Done AND fbWriteDefAcc.Done AND fbWriteDefDec.Done AND fbWriteDefJerk.Done AND fbWriteHomeSearch.Done AND fbWriteHomeSync.Done AND fbWriteManFast.Done AND fbWriteManSlow.Done AND fbWriteEnableMinSoftLimit.Done AND fbWriteEnableMaxSoftLimit.Done AND fbWriteMinSoftLimit.Done AND fbWriteMaxSoftLimit.Done AND fbWriteMaxPosLagValue.Done AND fbWriteMaxPosLagFilterTime.Done AND fbWriteDeadTime.Done AND fbWriteEncScale.Done AND fbWriteEncOffset.Done AND fbWriteEncInvert.Done AND fbWriteMotInvert.Done;
+bBusy := fbWriteRefVel.Busy OR fbWriteMaxVel.Busy OR fbWriteMaxAcc.Busy OR fbWriteMaxDec.Busy OR fbWriteDefAcc.Busy OR fbWriteDefDec.Busy OR fbWriteDefJerk.Busy OR fbWriteHomeSearch.Busy OR fbWriteHomeSync.Busy OR fbWriteManFast.Busy OR fbWriteManSlow.Busy OR fbWriteEnableMinSoftLimit.Busy OR fbWriteEnableMaxSoftLimit.Busy OR fbWriteMinSoftLimit.Busy OR fbWriteMaxSoftLimit.Busy OR fbWriteMaxPosLagValue.Busy OR fbWriteMaxPosLagFilterTime.Busy OR fbWriteDeadTime.Busy OR fbWriteEncScale.Busy OR fbWriteEncOffset.Busy OR fbWriteEncInvert.Busy OR fbWriteMotInvert.Busy;
+bError := fbWriteRefVel.Error OR fbWriteMaxVel.Error OR fbWriteMaxAcc.Error OR fbWriteMaxDec.Error OR fbWriteDefAcc.Error OR fbWriteDefDec.Error OR fbWriteDefJerk.Error OR fbWriteHomeSearch.Error OR fbWriteHomeSync.Error OR fbWriteManFast.Error OR fbWriteManSlow.Error OR fbWriteEnableMinSoftLimit.Error OR fbWriteEnableMaxSoftLimit.Error OR fbWriteMinSoftLimit.Error OR fbWriteMaxSoftLimit.Error OR fbWriteMaxPosLagValue.Error OR fbWriteMaxPosLagFilterTime.Error OR fbWriteDeadTime.Error OR fbWriteEncScale.Error OR fbWriteEncOffset.Error OR fbWriteEncInvert.Error OR fbWriteMotInvert.Error;
 IF NOT bError THEN
 	nErrorID := 0;
 ELSIF fbWriteRefVel.ErrorID > 0 THEN
@@ -139,10 +174,24 @@ ELSIF fbWriteManFast.ErrorID > 0 THEN
 	nErrorID := fbWriteManFast.ErrorID;
 ELSIF fbWriteManSlow.ErrorID > 0 THEN
 	nErrorID := fbWriteManSlow.ErrorID;
+ELSIF fbWriteEnableMinSoftLimit.ErrorID > 0 THEN
+	nErrorID := fbWriteEnableMinSoftLimit.ErrorID;
+ELSIF fbWriteEnableMaxSoftLimit.ErrorID > 0 THEN
+	nErrorID := fbWriteEnableMaxSoftLimit.ErrorID;
+ELSIF fbWriteMinSoftLimit.ErrorID > 0 THEN
+	nErrorID := fbWriteMinSoftLimit.ErrorID;
+ELSIF fbWriteMaxSoftLimit.ErrorID > 0 THEN
+	nErrorID := fbWriteMaxSoftLimit.ErrorID;
+ELSIF fbWriteMaxPosLagValue.ErrorID > 0 THEN
+	nErrorID := fbWriteMaxPosLagValue.ErrorID;
+ELSIF fbWriteMaxPosLagFilterTime.ErrorID > 0 THEN
+	nErrorID := fbWriteMaxPosLagFilterTime.ErrorID;
 ELSIF fbWriteDeadTime.ErrorID > 0 THEN
 	nErrorID := fbWriteDeadTime.ErrorID;
 ELSIF fbWriteEncScale.ErrorID > 0 THEN
 	nErrorID := fbWriteEncScale.ErrorID;
+ELSIF fbWriteEncOffset.ErrorID > 0 THEN
+	nErrorID := fbWriteEncOffset.ErrorID;
 ELSIF fbWriteEncInvert.ErrorID > 0 THEN
 	nErrorID := fbWriteEncInvert.ErrorID;
 ELSIF fbWriteMotInvert.ErrorID > 0 THEN

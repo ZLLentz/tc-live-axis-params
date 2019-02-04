@@ -42,10 +42,24 @@ VAR
   	fbReadManFastRisingEdge: R_TRIG;
 	fbReadManSlow: MC_ReadParameter;
   	fbReadManSlowRisingEdge: R_TRIG;
+	fbReadEnableMinSoftLimit: MC_ReadBoolParameter;
+  	fbReadEnableMinSoftLimitRisingEdge: R_TRIG;
+	fbReadEnableMaxSoftLimit: MC_ReadBoolParameter;
+  	fbReadEnableMaxSoftLimitRisingEdge: R_TRIG;
+	fbReadMinSoftLimit: MC_ReadParameter;
+  	fbReadMinSoftLimitRisingEdge: R_TRIG;
+	fbReadMaxSoftLimit: MC_ReadParameter;
+  	fbReadMaxSoftLimitRisingEdge: R_TRIG;
+	fbReadMaxPosLagValue: MC_ReadParameter;
+  	fbReadMaxPosLagValueRisingEdge: R_TRIG;
+	fbReadMaxPosLagFilterTime: MC_ReadParameter;
+  	fbReadMaxPosLagFilterTimeRisingEdge: R_TRIG;
 	fbReadDeadTime: MC_ReadParameter;
   	fbReadDeadTimeRisingEdge: R_TRIG;
 	fbReadEncScale: MC_ReadParameter;
   	fbReadEncScaleRisingEdge: R_TRIG;
+	fbReadEncOffset: MC_ReadParameter;
+  	fbReadEncOffsetRisingEdge: R_TRIG;
 	fbReadEncInvert: MC_ReadBoolParameter;
   	fbReadEncInvertRisingEdge: R_TRIG;
 	fbReadMotInvert: MC_ReadBoolParameter;
@@ -155,6 +169,54 @@ fbReadManSlowRisingEdge(CLK:=fbReadManSlow.Valid AND NOT fbReadManSlow.Busy);
 IF fbReadManSlowRisingEdge.Q AND NOT fbReadManSlow.Error THEN
 	stConfig.man_slow := fbReadManSlow.Value;
 END_IF
+fbReadEnableMinSoftLimit(Enable:=bInnerExec,
+	ParameterNumber:=MC_AxisParameter.EnableLimitNeg,
+	ReadMode:=E_ReadMode.READMODE_ONCE,
+	Axis:=Axis);
+fbReadEnableMinSoftLimitRisingEdge(CLK:=fbReadEnableMinSoftLimit.Valid AND NOT fbReadEnableMinSoftLimit.Busy);
+IF fbReadEnableMinSoftLimitRisingEdge.Q AND NOT fbReadEnableMinSoftLimit.Error THEN
+	stConfig.enable_min_soft_limit := fbReadEnableMinSoftLimit.Value;
+END_IF
+fbReadEnableMaxSoftLimit(Enable:=bInnerExec,
+	ParameterNumber:=MC_AxisParameter.EnableLimitPos,
+	ReadMode:=E_ReadMode.READMODE_ONCE,
+	Axis:=Axis);
+fbReadEnableMaxSoftLimitRisingEdge(CLK:=fbReadEnableMaxSoftLimit.Valid AND NOT fbReadEnableMaxSoftLimit.Busy);
+IF fbReadEnableMaxSoftLimitRisingEdge.Q AND NOT fbReadEnableMaxSoftLimit.Error THEN
+	stConfig.enable_max_soft_limit := fbReadEnableMaxSoftLimit.Value;
+END_IF
+fbReadMinSoftLimit(Enable:=bInnerExec,
+	ParameterNumber:=MC_AxisParameter.SWLimitNeg,
+	ReadMode:=E_ReadMode.READMODE_ONCE,
+	Axis:=Axis);
+fbReadMinSoftLimitRisingEdge(CLK:=fbReadMinSoftLimit.Valid AND NOT fbReadMinSoftLimit.Busy);
+IF fbReadMinSoftLimitRisingEdge.Q AND NOT fbReadMinSoftLimit.Error THEN
+	stConfig.min_soft_limit := fbReadMinSoftLimit.Value;
+END_IF
+fbReadMaxSoftLimit(Enable:=bInnerExec,
+	ParameterNumber:=MC_AxisParameter.SWLimitPos,
+	ReadMode:=E_ReadMode.READMODE_ONCE,
+	Axis:=Axis);
+fbReadMaxSoftLimitRisingEdge(CLK:=fbReadMaxSoftLimit.Valid AND NOT fbReadMaxSoftLimit.Busy);
+IF fbReadMaxSoftLimitRisingEdge.Q AND NOT fbReadMaxSoftLimit.Error THEN
+	stConfig.max_soft_limit := fbReadMaxSoftLimit.Value;
+END_IF
+fbReadMaxPosLagValue(Enable:=bInnerExec,
+	ParameterNumber:=MC_AxisParameter.MaxPositionLag,
+	ReadMode:=E_ReadMode.READMODE_ONCE,
+	Axis:=Axis);
+fbReadMaxPosLagValueRisingEdge(CLK:=fbReadMaxPosLagValue.Valid AND NOT fbReadMaxPosLagValue.Busy);
+IF fbReadMaxPosLagValueRisingEdge.Q AND NOT fbReadMaxPosLagValue.Error THEN
+	stConfig.max_pos_lag_value := fbReadMaxPosLagValue.Value;
+END_IF
+fbReadMaxPosLagFilterTime(Enable:=bInnerExec,
+	ParameterNumber:=MC_AxisParameter.AxisMaxPosLagFilterTime,
+	ReadMode:=E_ReadMode.READMODE_ONCE,
+	Axis:=Axis);
+fbReadMaxPosLagFilterTimeRisingEdge(CLK:=fbReadMaxPosLagFilterTime.Valid AND NOT fbReadMaxPosLagFilterTime.Busy);
+IF fbReadMaxPosLagFilterTimeRisingEdge.Q AND NOT fbReadMaxPosLagFilterTime.Error THEN
+	stConfig.max_pos_lag_filter_time := fbReadMaxPosLagFilterTime.Value;
+END_IF
 fbReadDeadTime(Enable:=bInnerExec,
 	ParameterNumber:=MC_AxisParameter.AxisDelayTimeVeloPosition,
 	ReadMode:=E_ReadMode.READMODE_ONCE,
@@ -170,6 +232,14 @@ fbReadEncScale(Enable:=bInnerExec,
 fbReadEncScaleRisingEdge(CLK:=fbReadEncScale.Valid AND NOT fbReadEncScale.Busy);
 IF fbReadEncScaleRisingEdge.Q AND NOT fbReadEncScale.Error THEN
 	stConfig.enc_scale := fbReadEncScale.Value;
+END_IF
+fbReadEncOffset(Enable:=bInnerExec,
+	ParameterNumber:=MC_AxisParameter.AxisEncoderOffset,
+	ReadMode:=E_ReadMode.READMODE_ONCE,
+	Axis:=Axis);
+fbReadEncOffsetRisingEdge(CLK:=fbReadEncOffset.Valid AND NOT fbReadEncOffset.Busy);
+IF fbReadEncOffsetRisingEdge.Q AND NOT fbReadEncOffset.Error THEN
+	stConfig.enc_offset := fbReadEncOffset.Value;
 END_IF
 fbReadEncInvert(Enable:=bInnerExec,
 	ParameterNumber:=MC_AxisParameter.AxisEncoderDirectionInverse,
@@ -187,9 +257,9 @@ fbReadMotInvertRisingEdge(CLK:=fbReadMotInvert.Valid AND NOT fbReadMotInvert.Bus
 IF fbReadMotInvertRisingEdge.Q AND NOT fbReadMotInvert.Error THEN
 	stConfig.mot_invert := fbReadMotInvert.Value;
 END_IF
-bValid := fbReadRefVel.Valid AND fbReadMaxVel.Valid AND fbReadMaxAcc.Valid AND fbReadMaxDec.Valid AND fbReadDefAcc.Valid AND fbReadDefDec.Valid AND fbReadDefJerk.Valid AND fbReadHomeSearch.Valid AND fbReadHomeSync.Valid AND fbReadManFast.Valid AND fbReadManSlow.Valid AND fbReadDeadTime.Valid AND fbReadEncScale.Valid AND fbReadEncInvert.Valid AND fbReadMotInvert.Valid;
-bBusy := fbReadRefVel.Busy OR fbReadMaxVel.Busy OR fbReadMaxAcc.Busy OR fbReadMaxDec.Busy OR fbReadDefAcc.Busy OR fbReadDefDec.Busy OR fbReadDefJerk.Busy OR fbReadHomeSearch.Busy OR fbReadHomeSync.Busy OR fbReadManFast.Busy OR fbReadManSlow.Busy OR fbReadDeadTime.Busy OR fbReadEncScale.Busy OR fbReadEncInvert.Busy OR fbReadMotInvert.Busy;
-bError := fbReadRefVel.Error OR fbReadMaxVel.Error OR fbReadMaxAcc.Error OR fbReadMaxDec.Error OR fbReadDefAcc.Error OR fbReadDefDec.Error OR fbReadDefJerk.Error OR fbReadHomeSearch.Error OR fbReadHomeSync.Error OR fbReadManFast.Error OR fbReadManSlow.Error OR fbReadDeadTime.Error OR fbReadEncScale.Error OR fbReadEncInvert.Error OR fbReadMotInvert.Error;
+bValid := fbReadRefVel.Valid AND fbReadMaxVel.Valid AND fbReadMaxAcc.Valid AND fbReadMaxDec.Valid AND fbReadDefAcc.Valid AND fbReadDefDec.Valid AND fbReadDefJerk.Valid AND fbReadHomeSearch.Valid AND fbReadHomeSync.Valid AND fbReadManFast.Valid AND fbReadManSlow.Valid AND fbReadEnableMinSoftLimit.Valid AND fbReadEnableMaxSoftLimit.Valid AND fbReadMinSoftLimit.Valid AND fbReadMaxSoftLimit.Valid AND fbReadMaxPosLagValue.Valid AND fbReadMaxPosLagFilterTime.Valid AND fbReadDeadTime.Valid AND fbReadEncScale.Valid AND fbReadEncOffset.Valid AND fbReadEncInvert.Valid AND fbReadMotInvert.Valid;
+bBusy := fbReadRefVel.Busy OR fbReadMaxVel.Busy OR fbReadMaxAcc.Busy OR fbReadMaxDec.Busy OR fbReadDefAcc.Busy OR fbReadDefDec.Busy OR fbReadDefJerk.Busy OR fbReadHomeSearch.Busy OR fbReadHomeSync.Busy OR fbReadManFast.Busy OR fbReadManSlow.Busy OR fbReadEnableMinSoftLimit.Busy OR fbReadEnableMaxSoftLimit.Busy OR fbReadMinSoftLimit.Busy OR fbReadMaxSoftLimit.Busy OR fbReadMaxPosLagValue.Busy OR fbReadMaxPosLagFilterTime.Busy OR fbReadDeadTime.Busy OR fbReadEncScale.Busy OR fbReadEncOffset.Busy OR fbReadEncInvert.Busy OR fbReadMotInvert.Busy;
+bError := fbReadRefVel.Error OR fbReadMaxVel.Error OR fbReadMaxAcc.Error OR fbReadMaxDec.Error OR fbReadDefAcc.Error OR fbReadDefDec.Error OR fbReadDefJerk.Error OR fbReadHomeSearch.Error OR fbReadHomeSync.Error OR fbReadManFast.Error OR fbReadManSlow.Error OR fbReadEnableMinSoftLimit.Error OR fbReadEnableMaxSoftLimit.Error OR fbReadMinSoftLimit.Error OR fbReadMaxSoftLimit.Error OR fbReadMaxPosLagValue.Error OR fbReadMaxPosLagFilterTime.Error OR fbReadDeadTime.Error OR fbReadEncScale.Error OR fbReadEncOffset.Error OR fbReadEncInvert.Error OR fbReadMotInvert.Error;
 IF NOT bError THEN
 	nErrorID := 0;
 ELSIF fbReadRefVel.ErrorID > 0 THEN
@@ -214,10 +284,24 @@ ELSIF fbReadManFast.ErrorID > 0 THEN
 	nErrorID := fbReadManFast.ErrorID;
 ELSIF fbReadManSlow.ErrorID > 0 THEN
 	nErrorID := fbReadManSlow.ErrorID;
+ELSIF fbReadEnableMinSoftLimit.ErrorID > 0 THEN
+	nErrorID := fbReadEnableMinSoftLimit.ErrorID;
+ELSIF fbReadEnableMaxSoftLimit.ErrorID > 0 THEN
+	nErrorID := fbReadEnableMaxSoftLimit.ErrorID;
+ELSIF fbReadMinSoftLimit.ErrorID > 0 THEN
+	nErrorID := fbReadMinSoftLimit.ErrorID;
+ELSIF fbReadMaxSoftLimit.ErrorID > 0 THEN
+	nErrorID := fbReadMaxSoftLimit.ErrorID;
+ELSIF fbReadMaxPosLagValue.ErrorID > 0 THEN
+	nErrorID := fbReadMaxPosLagValue.ErrorID;
+ELSIF fbReadMaxPosLagFilterTime.ErrorID > 0 THEN
+	nErrorID := fbReadMaxPosLagFilterTime.ErrorID;
 ELSIF fbReadDeadTime.ErrorID > 0 THEN
 	nErrorID := fbReadDeadTime.ErrorID;
 ELSIF fbReadEncScale.ErrorID > 0 THEN
 	nErrorID := fbReadEncScale.ErrorID;
+ELSIF fbReadEncOffset.ErrorID > 0 THEN
+	nErrorID := fbReadEncOffset.ErrorID;
 ELSIF fbReadEncInvert.ErrorID > 0 THEN
 	nErrorID := fbReadEncInvert.ErrorID;
 ELSIF fbReadMotInvert.ErrorID > 0 THEN
