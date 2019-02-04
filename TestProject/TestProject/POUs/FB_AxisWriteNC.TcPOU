@@ -17,9 +17,6 @@ VAR_OUTPUT
 	nErrorID: UDINT;
 END_VAR
 VAR
-	iCycles: INT := 0;
-	bReadOk: BOOL := FALSE;
-	bInnerExec: BOOL := FALSE;
 	fbWriteRefVel: MC_WriteParameter;
 	fbWriteMaxVel: MC_WriteParameter;
 	fbWriteMaxAcc: MC_WriteParameter;
@@ -51,99 +48,91 @@ IF bReset THEN
 	bExecute := FALSE;
 	bReset := FALSE;
 END_IF
-// Fails in the first n cycles depending on terminals, wait a bit
-IF NOT bReadOk THEN
-	iCycles := iCycles + 1;
-	IF iCycles > 100 THEN
-		bReadOk := TRUE;
-	END_IF
-END_IF
-bInnerExec := bExecute AND bReadOk;
-fbWriteRefVel(Execute:=bInnerExec,
+fbWriteRefVel(Execute:=bExecute,
 	ParameterNumber:=MC_AxisParameter.AxisRefVeloOnRefOutput,
 	Value:=stConfig.ref_vel,
 	Axis:=Axis);
-fbWriteMaxVel(Execute:=bInnerExec,
+fbWriteMaxVel(Execute:=bExecute,
 	ParameterNumber:=MC_AxisParameter.AxisMaxVelocity,
 	Value:=stConfig.max_vel,
 	Axis:=Axis);
-fbWriteMaxAcc(Execute:=bInnerExec,
+fbWriteMaxAcc(Execute:=bExecute,
 	ParameterNumber:=MC_AxisParameter.MaxAccelerationSystem,
 	Value:=stConfig.max_acc,
 	Axis:=Axis);
-fbWriteMaxDec(Execute:=bInnerExec,
+fbWriteMaxDec(Execute:=bExecute,
 	ParameterNumber:=MC_AxisParameter.MaxDecelerationSystem,
 	Value:=stConfig.max_dec,
 	Axis:=Axis);
-fbWriteDefAcc(Execute:=bInnerExec,
+fbWriteDefAcc(Execute:=bExecute,
 	ParameterNumber:=MC_AxisParameter.AxisAcc,
 	Value:=stConfig.def_acc,
 	Axis:=Axis);
-fbWriteDefDec(Execute:=bInnerExec,
+fbWriteDefDec(Execute:=bExecute,
 	ParameterNumber:=MC_AxisParameter.AxisDec,
 	Value:=stConfig.def_dec,
 	Axis:=Axis);
-fbWriteDefJerk(Execute:=bInnerExec,
+fbWriteDefJerk(Execute:=bExecute,
 	ParameterNumber:=MC_AxisParameter.AxisJerk,
 	Value:=stConfig.def_jerk,
 	Axis:=Axis);
-fbWriteHomeSearch(Execute:=bInnerExec,
+fbWriteHomeSearch(Execute:=bExecute,
 	ParameterNumber:=MC_AxisParameter.AxisCalibrationVelocityForward,
 	Value:=stConfig.home_search,
 	Axis:=Axis);
-fbWriteHomeSync(Execute:=bInnerExec,
+fbWriteHomeSync(Execute:=bExecute,
 	ParameterNumber:=MC_AxisParameter.AxisCalibrationVelocityBackward,
 	Value:=stConfig.home_sync,
 	Axis:=Axis);
-fbWriteManFast(Execute:=bInnerExec,
+fbWriteManFast(Execute:=bExecute,
 	ParameterNumber:=MC_AxisParameter.AxisManualVelocityFast,
 	Value:=stConfig.man_fast,
 	Axis:=Axis);
-fbWriteManSlow(Execute:=bInnerExec,
+fbWriteManSlow(Execute:=bExecute,
 	ParameterNumber:=MC_AxisParameter.AxisManualVelocitySlow,
 	Value:=stConfig.man_slow,
 	Axis:=Axis);
-fbWriteEnableMinSoftLimit(Execute:=bInnerExec,
+fbWriteEnableMinSoftLimit(Execute:=bExecute,
 	ParameterNumber:=MC_AxisParameter.EnableLimitNeg,
 	Value:=stConfig.enable_min_soft_limit,
 	Axis:=Axis);
-fbWriteEnableMaxSoftLimit(Execute:=bInnerExec,
+fbWriteEnableMaxSoftLimit(Execute:=bExecute,
 	ParameterNumber:=MC_AxisParameter.EnableLimitPos,
 	Value:=stConfig.enable_max_soft_limit,
 	Axis:=Axis);
-fbWriteMinSoftLimit(Execute:=bInnerExec,
+fbWriteMinSoftLimit(Execute:=bExecute,
 	ParameterNumber:=MC_AxisParameter.SWLimitNeg,
 	Value:=stConfig.min_soft_limit,
 	Axis:=Axis);
-fbWriteMaxSoftLimit(Execute:=bInnerExec,
+fbWriteMaxSoftLimit(Execute:=bExecute,
 	ParameterNumber:=MC_AxisParameter.SWLimitPos,
 	Value:=stConfig.max_soft_limit,
 	Axis:=Axis);
-fbWriteMaxPosLagValue(Execute:=bInnerExec,
+fbWriteMaxPosLagValue(Execute:=bExecute,
 	ParameterNumber:=MC_AxisParameter.MaxPositionLag,
 	Value:=stConfig.max_pos_lag_value,
 	Axis:=Axis);
-fbWriteMaxPosLagFilterTime(Execute:=bInnerExec,
+fbWriteMaxPosLagFilterTime(Execute:=bExecute,
 	ParameterNumber:=MC_AxisParameter.AxisMaxPosLagFilterTime,
 	Value:=stConfig.max_pos_lag_filter_time,
 	Axis:=Axis);
-fbWriteDeadTime(Execute:=bInnerExec,
+fbWriteDeadTime(Execute:=bExecute,
 	ParameterNumber:=MC_AxisParameter.AxisDelayTimeVeloPosition,
 	Value:=stConfig.dead_time,
 	Axis:=Axis);
-fbWriteEncScale(Execute:=bInnerExec,
+fbWriteEncScale(Execute:=bExecute,
 	ParameterNumber:=MC_AxisParameter.AxisEncoderScalingFactor,
 	Value:=stConfig.enc_scale,
 	Axis:=Axis);
-fbWriteEncOffset(Execute:=bInnerExec,
+fbWriteEncOffset(Execute:=bExecute,
 	ParameterNumber:=MC_AxisParameter.AxisEncoderOffset,
 	Value:=stConfig.enc_offset,
 	Axis:=Axis);
-fbWriteEncInvert(Execute:=bInnerExec,
+fbWriteEncInvert(Execute:=bExecute,
 	ParameterNumber:=MC_AxisParameter.AxisEncoderDirectionInverse,
 	Value:=stConfig.enc_invert,
 	Axis:=Axis);
-fbWriteMotInvert(Execute:=bInnerExec,
+fbWriteMotInvert(Execute:=bExecute,
 	ParameterNumber:=MC_AxisParameter.AxisMotorDirectionInverse,
 	Value:=stConfig.mot_invert,
 	Axis:=Axis);

@@ -18,9 +18,6 @@ VAR_OUTPUT
 	iCANopenErrId: UINT;
 END_VAR
 VAR
-	iCycles: INT := 0;
-	bReadOk: BOOL := FALSE;
-	bInnerExec: BOOL := FALSE;
 	fbReadMaxCurrent: FB_CoERead_ByDriveRef;
 	nIndMaxCurrent: WORD;
 	fbReadHoldingCurrent: FB_CoERead_ByDriveRef;
@@ -43,58 +40,50 @@ IF bReset THEN
 	bExecute := FALSE;
 	bReset := FALSE;
 END_IF
-// Fails in the first n cycles depending on terminals, wait a bit
-IF NOT bReadOk THEN
-	iCycles := iCycles + 1;
-	IF iCycles > 100 THEN
-		bReadOk := TRUE;
-	END_IF
-END_IF
-bInnerExec := bExecute AND bReadOk;
 nIndMaxCurrent := 16#8010;
-fbReadMaxCurrent(bExecute:=bInnerExec,
+fbReadMaxCurrent(bExecute:=bExecute,
 	stDriveRef:=stDriveRef,
 	nindex:=nIndMaxCurrent,
 	nSubIndex:=16#01,
 	pDstBuf:=ADR(stConfig.max_current),
 	cbBufLen:=SIZEOF(stConfig.max_current));
 nIndHoldingCurrent := 16#8010;
-fbReadHoldingCurrent(bExecute:=bInnerExec,
+fbReadHoldingCurrent(bExecute:=bExecute,
 	stDriveRef:=stDriveRef,
 	nindex:=nIndHoldingCurrent,
 	nSubIndex:=16#02,
 	pDstBuf:=ADR(stConfig.holding_current),
 	cbBufLen:=SIZEOF(stConfig.holding_current));
 nIndVoltage := 16#8010;
-fbReadVoltage(bExecute:=bInnerExec,
+fbReadVoltage(bExecute:=bExecute,
 	stDriveRef:=stDriveRef,
 	nindex:=nIndVoltage,
 	nSubIndex:=16#03,
 	pDstBuf:=ADR(stConfig.voltage),
 	cbBufLen:=SIZEOF(stConfig.voltage));
 nIndResistance := 16#8010;
-fbReadResistance(bExecute:=bInnerExec,
+fbReadResistance(bExecute:=bExecute,
 	stDriveRef:=stDriveRef,
 	nindex:=nIndResistance,
 	nSubIndex:=16#04,
 	pDstBuf:=ADR(stConfig.resistance),
 	cbBufLen:=SIZEOF(stConfig.resistance));
 nIndEmf := 16#8010;
-fbReadEmf(bExecute:=bInnerExec,
+fbReadEmf(bExecute:=bExecute,
 	stDriveRef:=stDriveRef,
 	nindex:=nIndEmf,
 	nSubIndex:=16#05,
 	pDstBuf:=ADR(stConfig.emf),
 	cbBufLen:=SIZEOF(stConfig.emf));
 nIndFullSteps := 16#8010;
-fbReadFullSteps(bExecute:=bInnerExec,
+fbReadFullSteps(bExecute:=bExecute,
 	stDriveRef:=stDriveRef,
 	nindex:=nIndFullSteps,
 	nSubIndex:=16#06,
 	pDstBuf:=ADR(stConfig.full_steps),
 	cbBufLen:=SIZEOF(stConfig.full_steps));
 nIndSpeedRange := 16#8012;
-fbReadSpeedRange(bExecute:=bInnerExec,
+fbReadSpeedRange(bExecute:=bExecute,
 	stDriveRef:=stDriveRef,
 	nindex:=nIndSpeedRange,
 	nSubIndex:=16#05,

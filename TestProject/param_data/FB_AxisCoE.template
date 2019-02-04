@@ -19,9 +19,6 @@ VAR_OUTPUT
 	iCANopenErrId: UINT;
 END_VAR
 VAR
-	iCycles: INT := 0;
-	bReadOk: BOOL := FALSE;
-	bInnerExec: BOOL := FALSE;
 {% for item in coe_params %}
 {% if read %}
 	{{ item.fb_name }}: FB_CoERead_ByDriveRef;
@@ -38,14 +35,6 @@ IF bReset THEN
 	bExecute := FALSE;
 	bReset := FALSE;
 END_IF
-// Fails in the first n cycles depending on terminals, wait a bit
-IF NOT bReadOk THEN
-	iCycles := iCycles + 1;
-	IF iCycles > 100 THEN
-		bReadOk := TRUE;
-	END_IF
-END_IF
-bInnerExec := bExecute AND bReadOk;
 {% for item in coe_params %}
 {% if item.multi_channel %}
 CASE stDriveRef.nDriveNo OF
@@ -57,7 +46,7 @@ END_CASE
 {% else %}
 {{ item.nindex }} := 16#{{ item.index }};
 {% endif %}
-{{ item.fb_name }}(bExecute:=bInnerExec,
+{{ item.fb_name }}(bExecute:=bExecute,
 	stDriveRef:=stDriveRef,
 	nindex:={{ item.nindex }},
 	nSubIndex:=16#{{ item.subindex }},

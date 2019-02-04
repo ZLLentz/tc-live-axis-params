@@ -17,9 +17,6 @@ VAR_OUTPUT
 	nErrorID: UDINT;
 END_VAR
 VAR
-	iCycles: INT := 0;
-	bReadOk: BOOL := FALSE;
-	bInnerExec: BOOL := FALSE;
 {% for item in nc_params %}
   {% if item.is_bool %}
 	{{ item.fb_read }}: MC_ReadBoolParameter;
@@ -37,16 +34,8 @@ IF bReset THEN
 	bExecute := FALSE;
 	bReset := FALSE;
 END_IF
-// Fails in the first n cycles depending on terminals, wait a bit
-IF NOT bReadOk THEN
-	iCycles := iCycles + 1;
-	IF iCycles > 100 THEN
-		bReadOk := TRUE;
-	END_IF
-END_IF
-bInnerExec := bExecute AND bReadOk;
 {% for item in nc_params %}
-{{ item.fb_read }}(Enable:=bInnerExec,
+{{ item.fb_read }}(Enable:=bExecute,
 	ParameterNumber:=MC_AxisParameter.{{ item.MC_AxisParameter }},
 	ReadMode:=E_ReadMode.READMODE_ONCE,
 	Axis:=Axis);

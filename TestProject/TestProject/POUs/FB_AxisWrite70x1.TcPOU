@@ -18,9 +18,6 @@ VAR_OUTPUT
 	iCANopenErrId: UINT;
 END_VAR
 VAR
-	iCycles: INT := 0;
-	bReadOk: BOOL := FALSE;
-	bInnerExec: BOOL := FALSE;
 	fbWriteMaxCurrent: FB_CoEWrite_ByDriveRef;
 	nIndMaxCurrent: WORD;
 	fbWriteHoldingCurrent: FB_CoEWrite_ByDriveRef;
@@ -43,58 +40,50 @@ IF bReset THEN
 	bExecute := FALSE;
 	bReset := FALSE;
 END_IF
-// Fails in the first n cycles depending on terminals, wait a bit
-IF NOT bReadOk THEN
-	iCycles := iCycles + 1;
-	IF iCycles > 100 THEN
-		bReadOk := TRUE;
-	END_IF
-END_IF
-bInnerExec := bExecute AND bReadOk;
 nIndMaxCurrent := 16#8010;
-fbWriteMaxCurrent(bExecute:=bInnerExec,
+fbWriteMaxCurrent(bExecute:=bExecute,
 	stDriveRef:=stDriveRef,
 	nindex:=nIndMaxCurrent,
 	nSubIndex:=16#01,
 	pSrcBuf:=ADR(stConfig.max_current),
 	cbBufLen:=SIZEOF(stConfig.max_current));
 nIndHoldingCurrent := 16#8010;
-fbWriteHoldingCurrent(bExecute:=bInnerExec,
+fbWriteHoldingCurrent(bExecute:=bExecute,
 	stDriveRef:=stDriveRef,
 	nindex:=nIndHoldingCurrent,
 	nSubIndex:=16#02,
 	pSrcBuf:=ADR(stConfig.holding_current),
 	cbBufLen:=SIZEOF(stConfig.holding_current));
 nIndVoltage := 16#8010;
-fbWriteVoltage(bExecute:=bInnerExec,
+fbWriteVoltage(bExecute:=bExecute,
 	stDriveRef:=stDriveRef,
 	nindex:=nIndVoltage,
 	nSubIndex:=16#03,
 	pSrcBuf:=ADR(stConfig.voltage),
 	cbBufLen:=SIZEOF(stConfig.voltage));
 nIndResistance := 16#8010;
-fbWriteResistance(bExecute:=bInnerExec,
+fbWriteResistance(bExecute:=bExecute,
 	stDriveRef:=stDriveRef,
 	nindex:=nIndResistance,
 	nSubIndex:=16#04,
 	pSrcBuf:=ADR(stConfig.resistance),
 	cbBufLen:=SIZEOF(stConfig.resistance));
 nIndEmf := 16#8010;
-fbWriteEmf(bExecute:=bInnerExec,
+fbWriteEmf(bExecute:=bExecute,
 	stDriveRef:=stDriveRef,
 	nindex:=nIndEmf,
 	nSubIndex:=16#05,
 	pSrcBuf:=ADR(stConfig.emf),
 	cbBufLen:=SIZEOF(stConfig.emf));
 nIndFullSteps := 16#8010;
-fbWriteFullSteps(bExecute:=bInnerExec,
+fbWriteFullSteps(bExecute:=bExecute,
 	stDriveRef:=stDriveRef,
 	nindex:=nIndFullSteps,
 	nSubIndex:=16#06,
 	pSrcBuf:=ADR(stConfig.full_steps),
 	cbBufLen:=SIZEOF(stConfig.full_steps));
 nIndSpeedRange := 16#8012;
-fbWriteSpeedRange(bExecute:=bInnerExec,
+fbWriteSpeedRange(bExecute:=bExecute,
 	stDriveRef:=stDriveRef,
 	nindex:=nIndSpeedRange,
 	nSubIndex:=16#05,
