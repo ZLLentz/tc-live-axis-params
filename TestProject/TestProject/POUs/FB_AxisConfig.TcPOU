@@ -34,8 +34,11 @@ fbWrite(bExecute:=bExecute,
 	bReset:=bReset,
 	stConfig:=stConfigSet,
 	stHardware:=stHardware,
-	Axis:=Axis,
-	bInitPreOp=>bInitPreOp);
+	Axis:=Axis);
+// Can only be turned on! Not back off!
+IF fbWrite.bInitPreOp THEN
+	bInitPreOP := TRUE;
+END_IF
 // Reset bDoRead if both execs are false
 IF NOT bExecute AND NOT bExecGet THEN
 	bDoRead := FALSE;
@@ -78,13 +81,17 @@ IF bDone THEN
 END_IF
 IF bError THEN
 	bInitDone := FALSE;
+END_IF
+IF bReset THEN
+	bReset := FALSE;
 END_IF]]></ST>
     </Implementation>
     <LineIds Name="FB_AxisConfig">
       <LineId Id="57" Count="2" />
       <LineId Id="112" Count="0" />
       <LineId Id="60" Count="0" />
-      <LineId Id="183" Count="0" />
+      <LineId Id="249" Count="0" />
+      <LineId Id="246" Count="2" />
       <LineId Id="78" Count="4" />
       <LineId Id="72" Count="0" />
       <LineId Id="74" Count="0" />
@@ -104,6 +111,7 @@ END_IF]]></ST>
       <LineId Id="68" Count="1" />
       <LineId Id="67" Count="0" />
       <LineId Id="144" Count="5" />
+      <LineId Id="243" Count="2" />
       <LineId Id="29" Count="0" />
     </LineIds>
   </POU>

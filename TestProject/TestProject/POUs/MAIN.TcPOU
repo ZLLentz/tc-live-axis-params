@@ -10,7 +10,7 @@ VAR
 	bFirstCycle: BOOL := TRUE;
 END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[// Set the initial configs
+      <ST><![CDATA[// Set the initial configs and enable, but only once so we can change configs or disable later
 IF bFirstCycle THEN
 	M2.stConfigSet.ref_vel := 10;
 	M2.stConfigSet.max_vel := 20;
@@ -24,23 +24,23 @@ IF bFirstCycle THEN
 	M3.stConfigSet.man_slow := 6;
 	M3.stConfigSet.enc_scale := 0.002;
 	M3.stConfigSet.max_current := 1234;
+	
+	M1.bEnable := TRUE;
+	M2.bEnable := TRUE;
+	M3.bEnable := TRUE;
 	bFirstCycle := FALSE;
 END_IF
-
 // Bring MASTER to OP once SLAVEs are PRE-OP
 fbAxisEthMaster(bExecute:=M1.bInitPreOp AND M2.bInitPreOp AND M3.bInitPreOp);
 
 // Enable and pass Cfg
-M1(bEnable:=TRUE,
+M1(bLimitSwitch:=FALSE,
 	bInitCfg:=FALSE,
-	bCfgRO:=FALSE,
-	bUseLimits:=FALSE);
-M2(bEnable:=TRUE,
-	bInitCfg:=TRUE,
+	bCfgRO:=FALSE);
+M2(bInitCfg:=TRUE,
 	bCfgRO:=FALSE,
 	nEncCh:=1);
-M3(bEnable:=TRUE,
-	bInitCfg:=TRUE,
+M3(bInitCfg:=TRUE,
 	bCfgRO:=TRUE,
 	nEncCh:=2);]]></ST>
     </Implementation>
@@ -50,9 +50,9 @@ M3(bEnable:=TRUE,
       <LineId Id="82" Count="0" />
       <LineId Id="77" Count="4" />
       <LineId Id="83" Count="0" />
+      <LineId Id="292" Count="3" />
       <LineId Id="170" Count="0" />
       <LineId Id="71" Count="0" />
-      <LineId Id="280" Count="0" />
       <LineId Id="244" Count="0" />
       <LineId Id="246" Count="0" />
       <LineId Id="250" Count="0" />
@@ -60,12 +60,11 @@ M3(bEnable:=TRUE,
       <LineId Id="48" Count="0" />
       <LineId Id="171" Count="0" />
       <LineId Id="173" Count="0" />
-      <LineId Id="275" Count="0" />
       <LineId Id="59" Count="0" />
-      <LineId Id="175" Count="1" />
+      <LineId Id="176" Count="0" />
       <LineId Id="277" Count="0" />
       <LineId Id="60" Count="0" />
-      <LineId Id="177" Count="1" />
+      <LineId Id="178" Count="0" />
       <LineId Id="278" Count="0" />
       <LineId Id="2" Count="0" />
     </LineIds>
